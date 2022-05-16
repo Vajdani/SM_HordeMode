@@ -72,7 +72,7 @@ function PotatoShotgun:client_onToggle()
 end
 
 function PotatoShotgun:sv_onToggle( pos )
-	
+	sm.unit.createUnit(unit_farmbot, pos)
 end
 
 function PotatoShotgun:client_onFixedUpdate( dt )

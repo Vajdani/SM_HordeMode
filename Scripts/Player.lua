@@ -3,7 +3,9 @@ Player = class( nil )
 local airControlImpulse = 500
 local dashCooldown = 40
 local dashImpulse = 2500
-local armourDamageReduction = 0.50
+local armourDamageReduction = 0.75
+local PoisonDamage = 10
+local PoisonDamageCooldown = 40
 
 --Server
 function Player.server_onCreate( self )
@@ -24,11 +26,16 @@ function Player.server_onCreate( self )
 		hasTriggered = false
 	}
 
+	self.sv.poisonDamageCooldown = Timer()
+	self.sv.poisonDamageCooldown:start()
+
 	self.network:setClientData( self.sv )
 	self.player:setPublicData( self.sv )
 end
 
 function Player:server_onFixedUpdate( dt )
+	self.sv.poisonDamageCooldown:tick()
+
 	self.sv.statsTimer:tick()
 	if self.sv.statsTimer:done() then
 		self.sv.statsTimer:start( 40 )
@@ -108,6 +115,17 @@ end
 
 function Player.server_onExplosion( self, center, destructionLevel )
 	self:sv_takeDamage(destructionLevel * 2, nil)
+	if self.player.character:isTumbling() then
+		local knockbackDirection = ( self.player.character.worldPosition - center ):normalize()
+		ApplyKnockback( self.player.character, knockbackDirection, 5000 )
+	end
+end
+
+function Player.sv_e_onStayPesticide( self )
+	if self.sv.poisonDamageCooldown:done() then
+		self:sv_takeDamage( PoisonDamage, "poison" )
+		self.sv.poisonDamageCooldown:start( PoisonDamageCooldown )
+	end
 end
 
 function Player.sv_takeDamage( self, damage, source )

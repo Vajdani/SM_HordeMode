@@ -71,6 +71,8 @@ function World.server_onCreate( self )
 end
 
 function World:server_onFixedUpdate( dt )
+    g_pesticideManager:sv_onWorldFixedUpdate( self )
+
 	if not self.sv.progressWaves then return end
 
     self:sv_handleWaves()
@@ -407,4 +409,8 @@ end
 
 function World:cl_displayMsg( args )
 	sm.gui.displayAlertText(args.msg, args.dur)
+end
+
+function World.cl_n_pesticideMsg( self, msg )
+	g_pesticideManager[msg.fn]( g_pesticideManager, msg )
 end
