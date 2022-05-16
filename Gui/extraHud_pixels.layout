@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Widget" skin="PanelEmpty" position="0 0 1920 1080" name="BackPanel">
+        <Property key="NeedKey" value="false"/>
+        <Property key="NeedMouse" value="false"/>
+        <Widget type="Canvas" skin="StyledButtonDressbot" position="1665 980 250 75">
+            <Widget type="ImageBox" skin="ImageBox" position="12 12 50 50" name="ammoIcon"/>
+            <Widget type="TextBox" skin="TextBox" position="62 12 176 50" name="ammoAmount">
+                <Property key="FontName" value="InventoryItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Caption" value="1000"/>
+                <Property key="FontHeight" value="20"/>
+            </Widget>
+        </Widget>
+    </Widget>
+</MyGUI>

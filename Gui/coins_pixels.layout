@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Widget" skin="PanelEmpty" position="0 0 1920 1080" name="BackPanel">
+        <Property key="NeedKey" value="false"/>
+        <Property key="NeedMouse" value="false"/>
+        <Widget type="Canvas" skin="StyledButtonDressbot" position="918 650 85 25">
+            <Widget type="ImageBox" skin="BeaconIconColor" position="15 7 10 10" name="coin1">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="1 0 0"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position="30 7 10 10" name="coin2">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="1 0 0"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position="45 7 10 10" name="coin3">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="1 0 0"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position="60 7 10 10" name="coin4">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="1 0 0"/>
+            </Widget>
+        </Widget>
+    </Widget>
+</MyGUI>

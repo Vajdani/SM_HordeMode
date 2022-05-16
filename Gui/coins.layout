@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Widget" skin="PanelEmpty" position_real="0 0 1 1" name="BackPanel">
+        <Property key="NeedKey" value="false"/>
+        <Property key="NeedMouse" value="false"/>
+        <Widget type="Canvas" skin="StyledButtonDressbot" position_real="0.478125 0.601852 0.0442708 0.0231481">
+            <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.176471 0.28 0.117647 0.4" name="coin1">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="#ffffff"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.352941 0.28 0.117647 0.4" name="coin2">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="#ffffff"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.529412 0.28 0.117647 0.4" name="coin3">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="#ffffff"/>
+            </Widget>
+            <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.705882 0.28 0.117647 0.4" name="coin4">
+                <Property key="NeedMouse" value="false"/>
+                <Property key="NeedKey" value="false"/>
+                <Property key="Colour" value="#ffffff"/>
+            </Widget>
+        </Widget>
+    </Widget>
+</MyGUI>

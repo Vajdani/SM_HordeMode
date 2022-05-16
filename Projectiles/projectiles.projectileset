@@ -1,0 +1,60 @@
+{
+    "projectiles": [
+        {
+			"uuid": "d48f73b3-521a-4f60-b4d3-0ff08b145cff",
+			"name": "sniperpotato",
+			"mass": 3.0,
+			"radius": 0.25,
+			"friction": 0.2,
+			"spin": 7.0,
+			"mesh": "$GAME_DATA/Projectiles/Renderables/potato.rend",
+			"effect": "PotatoProjectile - Hit",
+			"audiomass": 250.0,
+			"effectmaterial": "Potato",
+			"ammo": 
+			{ 
+				"uuid": "bfcfac34-db0f-42d6-bd0c-74a7a5c95e82", 
+				"cost": 12
+			},
+			"destruction":
+			{
+				"destructionLevels":
+				[
+					{
+						"qualityLevel": 1,
+						"chance": 1.0
+					}
+				]
+			},
+			"enableImpactEffect": true
+		},
+		{
+			"uuid": "2abc4c0c-dd91-48be-96a6-4d69bc5d8276",
+			"name": "exptape_cost",
+			"mass": 3.0,
+			"radius": 0.25,
+			"spin": 7.0,
+			"mesh": "$GAME_DATA/Projectiles/Renderables/projectile_explosivetape.rend",
+			"effect": "TapeProjectile - Hit",
+			"audiomass": 250.0,
+			"effectmaterial": "Tape",
+			"attachedEffect": "TapeProjectile - Attached",
+			"ammo": 
+			{ 
+				"uuid": "bfcfac34-db0f-42d6-bd0c-74a7a5c95e82", 
+				"cost": 20
+			},
+			"destruction":
+			{
+				"destructionLevels":
+				[
+					{
+						"qualityLevel": 1,
+						"chance": 1.0
+					}
+				]
+			},
+			"enableImpactEffect": true
+		}
+    ]
+}
