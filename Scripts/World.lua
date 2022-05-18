@@ -120,7 +120,7 @@ function World:sv_pickup_onPickup( trigger, result )
     for v, k in pairs(result) do
         if sm.exists(k) then
             local player = k:getPlayer()
-            if player ~= nil and not player.character:isDowned() then
+            if player ~= nil and not player.character:isDowned() and not player.character:isSwimming() and not player.character:isDiving() then
                 local publicData = player:getPublicData()
                 local compare = pickupData.type == "ammo" and sm.container.totalQuantity( player:getInventory(), obj_plantables_potato ) or publicData.stats[pickupData.type]
                 if compare < publicData.stats["max"..pickupData.type] then
@@ -252,17 +252,18 @@ function World:sv_handleWaves()
                 self.sv.currentWave = self.sv.currentWave + 1
 
                 self.sv.unitsInCurrentWave = {}
+                local hostPos = sm.player.getAllPlayers()[1].character:getWorldPosition()
                 for v, k in pairs(g_waves[self.sv.currentWave]) do
                     local pos = type(k.pos) == "function" and k.pos() or k.pos
-                    local dir = sm.vec3.zero() - pos
+                    local dir = hostPos - pos
                     self.sv.unitsInCurrentWave[#self.sv.unitsInCurrentWave+1] = sm.unit.createUnit( k.unit, pos, math.atan2( dir.y, dir.x ) - math.pi / 2 )
                 end
 
                 local bewareMsg = ""
                 if self.sv.currentWave == tapebotWavesStart then
-                    bewareMsg = "#0000ffBeware of tapebots!"
+                    bewareMsg = "#0044ccBeware of tapebots!"
                 elseif self.sv.currentWave == farmbotWavesStart then
-                    bewareMsg = "#ff0000Beware of farmbots!"
+                    bewareMsg = "#dd0000Beware of farmbots!"
                 end
 
                 self.network:sendToClients("cl_displayMsg", { msg = "WAVE #df7f00"..tostring(self.sv.currentWave).."#ffffff/#df7f00"..tostring(#g_waves).."\n"..bewareMsg, dur = 2.5 })
