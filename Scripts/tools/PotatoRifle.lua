@@ -23,10 +23,10 @@ local coinColours = {
 	full = sm.color.new("#16e30b")
 }
 local mods = {
-	{ name = "Charged Burst", prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
+	{ name = "Charged Burst", fpCol = sm.color.new(1,1,0), tpCol = sm.color.new(1,1,0), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
 	--{ name = "Coins", prim_projectile = "hitscan", sec_projectile = "hitscan", damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
 	--{ name = "Sniper", prim_projectile = projectile_potato, sec_projectile = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff"), damage = { 20, 164 }, cost = { 1, 12 }, auto = true },
-	{ name = "Spread Shot", prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true }
+	{ name = "Spread Shot", fpCol = sm.color.new(1,0,1), tpCol = sm.color.new(1,0,1), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true }
 }
 
 local function colourLerp(c1, c2, t)
@@ -40,7 +40,10 @@ PotatoRifle = class()
 
 local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Base/char_spudgun_base_basic.rend",
-	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_basic/char_spudgun_barrel_basic.rend",
+
+	--"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_basic/char_spudgun_barrel_basic.rend",
+	"$CONTENT_DATA/Characters/char_spudgun_barrel_basic.rend",
+
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Sight/Sight_basic/char_spudgun_sight_basic.rend",
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Stock/Stock_broom/char_spudgun_stock_broom.rend",
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Tank/Tank_basic/char_spudgun_tank_basic.rend"
@@ -57,6 +60,7 @@ function PotatoRifle.client_onCreate( self )
 	self.shootEffect = sm.effect.createEffect( "SpudgunBasic - BasicMuzzel" )
 	self.shootEffectFP = sm.effect.createEffect( "SpudgunBasic - FPBasicMuzzel" )
 
+	if not self.tool:isLocal() then return end
 	self.cl = {}
 	self.cl.mod = 1
 	self.cl.primState = nil
@@ -81,6 +85,27 @@ function PotatoRifle.client_onCreate( self )
 			needsCursor = false
 		}
 	)
+
+	--[[self.cl.chargeHud = sm.gui.createGuiFromLayout( "$CONTENT_DATA/Gui/charge.layout", false,
+		{
+			isHud = true,
+			isInteractive = false,
+			needsCursor = false
+		}
+	)]]
+	--self.cl.chargeHud:createHorizontalSlider("chargeSlider", maxBlastCharge, 0, false, "cl_bruh")
+end
+
+function PotatoRifle:cl_bruh()
+
+end
+
+function PotatoRifle:client_onDestroy()
+	self.cl.coin.hud:close()
+	self.cl.chargeHud:close()
+
+	self.cl.coin.hud:destroy()
+	self.cl.chargeHud:destroy()
 end
 
 function PotatoRifle:client_onReload()
@@ -88,11 +113,14 @@ function PotatoRifle:client_onReload()
 	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
 	sm.audio.play("PaintTool - ColorPick")
 
+	self.tool:setFpColor(mods[self.cl.mod].fpCol)
+	self.tool:setTpColor(mods[self.cl.mod].tpCol)
+
 	return true
 end
 
 function PotatoRifle:client_onFixedUpdate( dt )
-	if not sm.exists(self.tool) or not self.tool:isEquipped() or not self.tool:isLocal() then return end
+	if not sm.exists(self.tool) or not self.tool:isLocal() then return end
 
 	if self.cl.coin.ammo < 4 then
 		self.cl.coin.recharge = self.cl.coin.recharge - 1
@@ -112,6 +140,8 @@ function PotatoRifle:client_onFixedUpdate( dt )
 
 	if not self.tool:isEquipped() then
 		self.cl.coin.hud:close()
+		--self.cl.chargeHud:close()
+
 		return
 	end
 
@@ -166,6 +196,14 @@ function PotatoRifle:client_onFixedUpdate( dt )
 		self.cl.blasting = false
 		self.cl.useCD.active = true
 	end
+
+	--[[if mods[self.cl.mod].name == "Charged Burst" then
+		self.cl.chargeHud:open()
+		--self.cl.chargeHud:setSliderPosition("chargeSlider", self.cl.blastCharge)
+		self.cl.chargeHud:setSliderData( "chargeSlider", maxBlastCharge * 10 + 1, self.cl.blastCharge * 10 )
+	else
+		self.cl.chargeHud:close()
+	end]]
 
 	if not self.aimFireMode then return end
 
