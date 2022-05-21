@@ -86,7 +86,9 @@ function World:server_onFixedUpdate( dt )
 
     if everyoneDied and self.sv.sendDeadMessage then
         self.sv.sendDeadMessage = false
-        self.network:sendToClients("cl_displayMsg", { msg = "Everyone is dead! #df7f00Game over. #ffffffYou survived for #df7f00"..tostring(self.sv.currentWave).." #ffffffwaves out of #df7f00"..tostring(#g_waves) })
+        for v, k in pairs(sm.player.getAllPlayers()) do
+            sm.event.sendToPlayer(k, "sv_queueMsg", "#ffffffEveryone is dead! #df7f00Game over. #ffffffYou survived for #df7f00"..tostring(self.sv.currentWave).." #ffffffwaves out of #df7f00"..tostring(#g_waves))
+        end
         self.sv.progressWaves = false
     end
 
@@ -235,7 +237,9 @@ function World:sv_handleWaves()
 
     if self.sv.currentWave == #g_waves and #remainingUnits == 0 then
         if not self.sv.hasSentCompleteMessage then
-            self.network:sendToClients("cl_displayMsg", { msg = "#df7f00Congratulations! You survived all waves.", dur = 2.5 })
+            for v, k in pairs(sm.player.getAllPlayers()) do
+                sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Congratulations! You survived all waves.")
+            end
         end
         self.sv.hasSentCompleteMessage = true
         self.sv.progressWaves = false
@@ -266,7 +270,9 @@ function World:sv_handleWaves()
                     bewareMsg = "#dd0000Beware of farmbots!"
                 end
 
-                self.network:sendToClients("cl_displayMsg", { msg = "WAVE #df7f00"..tostring(self.sv.currentWave).."#ffffff/#df7f00"..tostring(#g_waves).."\n"..bewareMsg, dur = 2.5 })
+                for v, k in pairs(sm.player.getAllPlayers()) do
+                    sm.event.sendToPlayer(k, "sv_queueMsg", "#ffffffWAVE #df7f00"..tostring(self.sv.currentWave).."#ffffff/#df7f00"..tostring(#g_waves).."\t"..bewareMsg)
+                end
                 self:sv_resetPickups()
             end
         end
@@ -276,12 +282,16 @@ end
 function World:sv_startWaves()
     if not self.sv.progressWaves and self.sv.currentWave == 0 then
         self.sv.progressWaves = true --not self.sv.progressWaves
-        self.network:sendToClients("cl_displayMsg", { msg = "#df7f00Let the waves begin!", dur = 2.5 })
+        for v, k in pairs(sm.player.getAllPlayers()) do
+            sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Let the waves begin!")
+        end
 
         self:sv_generateWaves()
         self:sv_createPickups()
     else
-        self.network:sendToClients("cl_displayMsg", { msg = "Use #df7f00/restart #ffffffto restart the waves!", dur = 2.5 })
+        for v, k in pairs(sm.player.getAllPlayers()) do
+            sm.event.sendToPlayer(k, "sv_queueMsg", "Use #df7f00/restart #ffffffto restart the waves!")
+        end
     end
 end
 
@@ -291,7 +301,6 @@ function World:sv_resetWaves()
     self.sv.hasSentCompleteMessage = false
     self.sv.progressWaves = false
     self.sv.sendDeadMessage = true
-    --self.network:sendToClients("cl_displayMsg", { msg = "Type #df7f00/start #ffffffin chat to start the game again!", dur = 5 })
 
     for v, k in pairs(sm.player.getAllPlayers()) do
         sm.event.sendToPlayer(k, "sv_resetPlayer")
@@ -406,10 +415,6 @@ function World:client_onUpdate( dt )
 			k = nil
 		end
 	end
-end
-
-function World:cl_displayMsg( args )
-	sm.gui.displayAlertText(args.msg, args.dur)
 end
 
 function World.cl_n_pesticideMsg( self, msg )

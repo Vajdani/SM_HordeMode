@@ -1,6 +1,7 @@
 {
    "custom_icons" : false,
-   "description" : "This mod doesn't have a description",
+   "description" : "Horde Mode for Scrap Mechanic.\nDefeat waves of enemies with powerful guns!\n\nCommands:\n-[b]/start[/b]: starts the waves\n-[b]/restart[/b]: restart the waves\n-[b]/god[/b]: toggles god mode\n-[b]/inv[/b]: toggles creative inventory",
+   "fileId" : 2811012789,
    "localId" : "988bc7a1-0885-436b-beb9-2b9fc659d005",
    "name" : "Horde Mode",
    "type" : "Custom Game",

@@ -12,5 +12,14 @@
                 <Property key="FontHeight" value="20"/>
             </Widget>
         </Widget>
+        <Widget type="Canvas" skin="StyledButtonDressbot" position="1665 940 250 40">
+            <Widget type="TextBox" skin="TextBox" position="12 6 225 28" name="weaponMod">
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Caption" value="Explosive Shot"/>
+                <Property key="FontHeight" value="15"/>
+            </Widget>
+        </Widget>
     </Widget>
+    <CodeGeneratorSettings/>
 </MyGUI>

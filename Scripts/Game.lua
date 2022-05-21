@@ -17,46 +17,46 @@ g_gatling = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff")
 
 function Game.server_onCreate( self )
 	print("Game.server_onCreate")
-    self.sv = {}
+	self.sv = {}
 	self.sv.saved = self.storage:load()
-    if self.sv.saved == nil then
+	if self.sv.saved == nil then
 		self.sv.saved = {}
 		self.sv.saved.world = sm.world.createWorld( "$CONTENT_DATA/Scripts/World.lua", "World" )
 		self.storage:save( self.sv.saved )
 	end
 
-    g_unitManager = UnitManager()
+	g_unitManager = UnitManager()
 	g_unitManager:sv_onCreate( self.sv.saved.overworld )
 
-    self.network:sendToClients("cl_bindCommands")
+	self.network:sendToClients("cl_bindCommands")
 end
 
 function Game:cl_bindCommands()
-    sm.game.bindChatCommand( "/god", {}, "cl_onChatCommand", "Mechanic characters will take no damage" )
-    sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
-    sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
-    sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
+	sm.game.bindChatCommand( "/god", {}, "cl_onChatCommand", "Mechanic characters will take no damage" )
+	sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
+	sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
+	sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
 end
 
 function Game:cl_onChatCommand( params )
-    if params[1] == "/god" then
+	if params[1] == "/god" then
 		self.network:sendToServer( "sv_switchGodMode" )
-    elseif params[1] == "/restart" then
-        self.network:sendToServer( "sv_restartWaves" )
-    elseif params[1] == "/start" then
+	elseif params[1] == "/restart" then
+		self.network:sendToServer( "sv_restartWaves" )
+	elseif params[1] == "/start" then
 		self.network:sendToServer( "sv_startWaves" )
-    elseif params[1] == "/inv" then
+	elseif params[1] == "/inv" then
 		self.network:sendToServer( "sv_toggleInv" )
-    end
+	end
 end
 
 function Game:sv_switchGodMode()
-    g_god = not g_god
+	g_god = not g_god
 
-    local mode = g_god and "ON" or "OFF"
-    for v, k in pairs(sm.player.getAllPlayers()) do
-        sm.event.sendToPlayer(k, "sv_displayMsg", { msg = "God mode is now #df7f00"..mode, dur = 2.5 })
-    end
+	local mode = g_god and "ON" or "OFF"
+	for v, k in pairs(sm.player.getAllPlayers()) do
+		sm.event.sendToPlayer(k, "sv_chatMsg", "God mode is now #df7f00"..mode)
+	end
 end
 
 function Game:sv_restartWaves()
@@ -64,37 +64,29 @@ function Game:sv_restartWaves()
 end
 
 function Game:sv_startWaves()
-    sm.event.sendToWorld( self.sv.saved.world, "sv_startWaves" )
+	sm.event.sendToWorld( self.sv.saved.world, "sv_startWaves" )
 end
 
 function Game:sv_toggleInv()
-    sm.game.setLimitedInventory( not sm.game.getLimitedInventory() )
+	sm.game.setLimitedInventory( not sm.game.getLimitedInventory() )
 
-    local mode = sm.game.getLimitedInventory() and "ON" or "OFF"
-    for v, k in pairs(sm.player.getAllPlayers()) do
-        sm.event.sendToPlayer(k, "sv_displayMsg", { msg = "Limited inventory mode is now #df7f00"..mode, dur = 2.5 })
-    end
+	local mode = sm.game.getLimitedInventory() and "ON" or "OFF"
+	for v, k in pairs(sm.player.getAllPlayers()) do
+		sm.event.sendToPlayer(k, "sv_chatMsg", "Limited inventory mode is now #df7f00"..mode)
+	end
 end
 
 function Game.server_onPlayerJoined( self, player, isNewPlayer )
-    print("Game.server_onPlayerJoined")
+	print("Game.server_onPlayerJoined")
 
-    if isNewPlayer then
+	if isNewPlayer then
         if not sm.exists( self.sv.saved.world ) then
             sm.world.loadWorld( self.sv.saved.world )
         end
+        self.sv.saved.world:loadCell( 0, 0, player, "sv_createPlayerCharacter" )
     end
 
-    self.sv.saved.world:loadCell( 0, 0, player, "sv_createPlayerCharacter" )
-    g_unitManager:sv_onPlayerJoined( player )
-end
-
-function Game.sv_createPlayerCharacter( self, world, x, y, player, params )
-    local character = sm.character.createCharacter( player, world, sm.vec3.new( 0, 0, 5 ), 0, 0 )
-	player:setCharacter( character )
-
-    --sm.event.sendToWorld(self.sv.saved.world, "sv_resetPlayerInv", player)
-    local container = player:getInventory()
+	local container = player:getInventory()
 	sm.container.beginTransaction()
 	sm.container.spend( container, obj_plantables_potato, sm.container.totalQuantity( container, obj_plantables_potato ) )
 	sm.container.spend( container, g_spudgun, sm.container.totalQuantity( container, g_spudgun ) )
@@ -106,23 +98,33 @@ function Game.sv_createPlayerCharacter( self, world, x, y, player, params )
 	sm.container.collect( container, obj_plantables_potato, 100 )
 	sm.container.endTransaction()
 
-    if #sm.player.getAllPlayers() == 1 then
-        sm.gui.chatMessage("Type #df7f00/start #ffffffin chat to start the game!")
-    end
+	if #sm.player.getAllPlayers() == 1 then
+		sm.gui.chatMessage("Type #df7f00/start #ffffffin chat to start the game!")
+	end
+
+	g_unitManager:sv_onPlayerJoined( player )
+end
+
+function Game.sv_createPlayerCharacter( self, world, x, y, player, params )
+	local character = sm.character.createCharacter( player, world, sm.vec3.new( 0, 0, 5 ), 0, 0 )
+	player:setCharacter( character )
+
+	--sm.event.sendToWorld(self.sv.saved.world, "sv_resetPlayerInv", player)
+	
 end
 
 function Game:server_onFixedUpdate( dt )
-    g_unitManager:sv_onFixedUpdate()
+	g_unitManager:sv_onFixedUpdate()
 
-    for v, k in ipairs(g_coins) do
-        if not sm.exists(k) then
-            table.remove(g_coins, v)
-        end
-    end
+	for v, k in ipairs(g_coins) do
+		if not sm.exists(k) then
+			table.remove(g_coins, v)
+		end
+	end
 end
 
 function Game:client_onCreate()
-    if g_unitManager == nil then
+	if g_unitManager == nil then
 		assert( not sm.isHost )
 		g_unitManager = UnitManager()
 	end

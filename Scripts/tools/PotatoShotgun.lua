@@ -11,16 +11,19 @@ local hookRange = 30 --meters?
 local hookForceMult = 250
 local hookDetachDistance = 1.5
 local mods = {
-	{ name = "Full Auto", prim_projectile = projectile_fries, sec_projectile = projectile_fries, auto = true },
-	{ name = "Explosive Shot", prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), auto = false },
-	--{ name = "Meathook", prim_projectile = projectile_fries, sec_projectile = "hook", auto = false }
+	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, auto = true },
+	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), auto = false },
+	--{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", auto = false }
 }
 
 PotatoShotgun = class()
 
 local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Base/char_spudgun_base_basic.rend",
-	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier.rend",
+
+	--"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier.rend",
+	"$CONTENT_DATA/Characters/char_spudgun_barrel_frier.rend",
+
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Sight/Sight_basic/char_spudgun_sight_basic.rend",
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Stock/Stock_broom/char_spudgun_stock_broom.rend",
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Tank/Tank_basic/char_spudgun_tank_basic.rend"
@@ -36,7 +39,10 @@ sm.tool.preloadRenderables( renderablesFp )
 function PotatoShotgun.client_onCreate( self )
 	self.shootEffect = sm.effect.createEffect( "SpudgunFrier - FrierMuzzel" )
 	self.shootEffectFP = sm.effect.createEffect( "SpudgunFrier - FPFrierMuzzel" )
+	self.tool:setFpColor(mods[1].fpCol)
+	self.tool:setTpColor(mods[1].tpCol)
 
+	if not self.tool:isLocal() then return end
 	self.cl = {}
 	self.cl.mod = 1
 	self.cl.hooks = {}
@@ -55,24 +61,35 @@ function PotatoShotgun:server_onCreate()
 	self.sv.hookTarget = nil
 end
 
+function PotatoShotgun:cl_setWpnModGui()
+	local player = sm.localPlayer.getPlayer()
+	local data = player:getClientPublicData()
+	data.weaponMod = {
+		name = mods[self.cl.mod].name,
+		colour = mods[self.cl.mod].fpCol
+	}
+
+	player:setClientPublicData( data )
+end
+
+function PotatoShotgun:sv_changeColour( index )
+	self.network:sendToClients("cl_changeColour", index)
+end
+
+function PotatoShotgun:cl_changeColour( index )
+	self.tool:setFpColor(mods[index].fpCol)
+	self.tool:setTpColor(mods[index].tpCol)
+end
+
 function PotatoShotgun:client_onReload()
 	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
 	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
 	sm.audio.play("PaintTool - ColorPick")
 
-	return true
-end
-
-function PotatoShotgun:client_onToggle()
-	local hit, result = sm.localPlayer.getRaycast( hookRange )
-	self.network:sendToServer("sv_onToggle", result.pointWorld)
-	sm.gui.displayAlertText("onToggle - spawned enemy", 2.5)
+	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self:cl_setWpnModGui()
 
 	return true
-end
-
-function PotatoShotgun:sv_onToggle( pos )
-	sm.unit.createUnit(unit_farmbot, pos)
 end
 
 function PotatoShotgun:client_onFixedUpdate( dt )
@@ -597,7 +614,9 @@ function PotatoShotgun.client_onUpdate( self, dt )
 end
 
 function PotatoShotgun.client_onEquip( self, animate )
-	
+	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self:cl_setWpnModGui()
+
 	if animate then
 		sm.audio.play( "PotatoRifle - Equip", self.tool:getPosition() )
 	end

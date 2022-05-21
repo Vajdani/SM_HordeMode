@@ -6,6 +6,7 @@ local dashImpulse = 2500
 local armourDamageReduction = 0.75
 local PoisonDamage = 10
 local PoisonDamageCooldown = 40
+local queuedMsgRemoveTime = 60
 
 --Server
 function Player.server_onCreate( self )
@@ -166,7 +167,8 @@ function Player:sv_restorehealth( amount )
 	self.sv.stats.health = sm.util.clamp(self.sv.stats.health + amount, 0, self.sv.stats.maxhealth)
 
 	local restored = self.sv.stats.health - prevHealth
-	self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.health:getHexStr():sub(1,6).."Restored "..tostring(restored).." health", dur = 2.5 } )
+	--self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.health:getHexStr():sub(1,6).."Restored "..tostring(restored).." health", dur = 2.5 } )
+	self.network:sendToClient(self.player, "cl_queueMsg", "#"..g_pickupColours.health:getHexStr():sub(1,6).."Restored "..tostring(restored).." health")
 	self.network:setClientData( self.sv )
 end
 
@@ -175,7 +177,8 @@ function Player:sv_restorearmour( amount )
 	self.sv.stats.armour = sm.util.clamp(self.sv.stats.armour + amount, 0, self.sv.stats.maxarmour)
 
 	local restored = self.sv.stats.armour - prevArmour
-	self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.armour:getHexStr():sub(1,6).."Restored "..tostring(restored).." armour", dur = 2.5 } )
+	--self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.armour:getHexStr():sub(1,6).."Restored "..tostring(restored).." armour", dur = 2.5 } )
+	self.network:sendToClient(self.player, "cl_queueMsg", "#"..g_pickupColours.armour:getHexStr():sub(1,6).."Restored "..tostring(restored).." armour" )
 	self.network:setClientData( self.sv )
 end
 
@@ -187,7 +190,8 @@ function Player:sv_restoreammo( amount )
 	sm.container.collect( container, obj_plantables_potato, tocollect )
 	sm.container.endTransaction()
 
-	self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.ammo:getHexStr():sub(1,6).."Picked up "..tostring(tocollect).." ammunition", dur = 2.5 } )
+	--self.network:sendToClient(self.player, "cl_displayMsg", { msg = "#"..g_pickupColours.ammo:getHexStr():sub(1,6).."Picked up "..tostring(tocollect).." ammunition", dur = 2.5 } )
+	self.network:sendToClient(self.player, "cl_queueMsg", "#"..g_pickupColours.ammo:getHexStr():sub(1,6).."Picked up "..tostring(tocollect).." ammunition" )
 	self.network:setClientData( self.sv )
 end
 
@@ -217,12 +221,16 @@ function Player:sv_resetPlayer()
 	self.player.character:setMovementSpeedFraction( 1 )
 end
 
+function Player:sv_queueMsg(msg)
+	self.network:sendToClient(self.player, "cl_queueMsg", msg)
+end
+
 function Player:sv_displayMsg( args )
 	self.network:sendToClient(self.player, "cl_displayMsg", args)
 end
 
-function Player:sv_displayMsg_toAll( args )
-	self.network:sendToClients("cl_displayMsg", args)
+function Player:sv_chatMsg(msg)
+	self.network:sendToClient(self.player, "cl_chatMsg", msg)
 end
 
 function Player:sv_respawn( sendToClients )
@@ -283,6 +291,8 @@ end
 
 --Client
 function Player:client_onCreate()
+	if sm.localPlayer.getPlayer() ~= self.player then return end
+
 	self.cl = {}
 	self.cl.data = nil
 
@@ -300,6 +310,18 @@ function Player:client_onCreate()
 	)
 	self.cl.extraHud:setIconImage( "ammoIcon", obj_plantables_potato)
 	self.cl.extraHud:open()
+
+	self.cl.queuedMsgs = {}
+	self.cl.queuedMsgRemoveTimer = Timer()
+	self.cl.queuedMsgRemoveTimer:start(queuedMsgRemoveTime)
+
+	sm.localPlayer.getPlayer():setClientPublicData(
+		{
+			weaponMod = {
+
+			}
+		}
+	)
 end
 
 function Player.client_onClientDataUpdate( self, data )
@@ -318,7 +340,32 @@ function Player.client_onClientDataUpdate( self, data )
 end
 
 function Player:client_onFixedUpdate( dt )
+	if sm.localPlayer.getPlayer() ~= self.player then return end
 
+	if #self.cl.queuedMsgs > 0 then
+		self.cl.queuedMsgRemoveTimer:tick()
+
+		if self.cl.queuedMsgRemoveTimer:done() then
+			local new = {}
+			for i = 2, #self.cl.queuedMsgs  do
+				new[i-1] = self.cl.queuedMsgs[i]
+			end
+			self.cl.queuedMsgs = new
+			self.cl.queuedMsgRemoveTimer:start(queuedMsgRemoveTime)
+		end
+
+		local message = ""
+		for i = sm.util.clamp(#self.cl.queuedMsgs-1, 1, 10000), #self.cl.queuedMsgs do
+			message = message..self.cl.queuedMsgs[i].."\n"
+		end
+		self:cl_displayMsg( { msg = message, dur = 2.5 } )
+	end
+
+	local clientData = self.player:getClientPublicData()
+	if clientData.weaponMod.name == nil then return end
+
+	local weaponModName = "#df7f00"..clientData.weaponMod.name --"#"..clientData.weaponMod.colour:getHexStr():sub(1,6)..clientData.weaponMod.name
+	self.cl.extraHud:setText("weaponMod", weaponModName)
 end
 
 function Player:client_onUpdate()
@@ -339,8 +386,17 @@ function Player:cl_vis( dir )
 	sm.particle.createParticle("paint_smoke", self.player:getCharacter():getWorldPosition() + dir)
 end
 
+function Player:cl_queueMsg(msg)
+	table.insert(self.cl.queuedMsgs, msg)
+	self.cl.queuedMsgRemoveTimer:reset()
+end
+
 function Player:cl_displayMsg( args )
 	sm.gui.displayAlertText(args.msg, args.dur)
+end
+
+function Player:cl_chatMsg(msg)
+	sm.gui.chatMessage( msg )
 end
 
 function Player:client_onInteract( char, state )

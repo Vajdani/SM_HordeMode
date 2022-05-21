@@ -1,0 +1,24 @@
+{
+	"lodList": [{
+		"mesh": "$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier_geo.dae",
+		"subMeshMap" : {
+			"barrel": {
+				"textureList": [	
+					"$CONTENT_DATA/Characters/transparent1024x1024.tga",
+					"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier_asg.tga",
+					"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier_nor.tga"
+				],
+				"material" : "DifAsgNor"
+			},
+			"fryeroil": {
+				"textureList": [
+					"$GAME_DATA/Character/Char_Tools/Char_spudgun/Barrel/Barrel_frier/char_spudgun_barrel_frier_oil_dif.tga",
+					"$GAME_DATA/Objects/Textures/Blocks/blk_glass_asg.tga",
+					"$GAME_DATA/Textures/Materialtextures/normal_nor.tga"
+				],
+				"material" : "Liquid"
+			}
+		},
+		"maxViewDistance": 1000.0
+	}]
+}

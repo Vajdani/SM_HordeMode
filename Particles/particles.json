@@ -1,5 +1,3 @@
 {
-   "particleSystemList" : [
-      "$CONTENT_DATA/Particles/hitscanShot.json"
-   ]
+   "particleSystemList" : []
 }

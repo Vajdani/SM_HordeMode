@@ -23,10 +23,10 @@ local coinColours = {
 	full = sm.color.new("#16e30b")
 }
 local mods = {
-	{ name = "Charged Burst", fpCol = sm.color.new(1,1,0), tpCol = sm.color.new(1,1,0), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
+	{ name = "Charged Burst", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 24, 24 }, cost = { 1, 1 }, auto = true },
 	--{ name = "Coins", prim_projectile = "hitscan", sec_projectile = "hitscan", damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
 	--{ name = "Sniper", prim_projectile = projectile_potato, sec_projectile = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff"), damage = { 20, 164 }, cost = { 1, 12 }, auto = true },
-	{ name = "Spread Shot", fpCol = sm.color.new(1,0,1), tpCol = sm.color.new(1,0,1), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 20, 20 }, cost = { 1, 1 }, auto = true }
+	{ name = "Spread Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 24, 24 }, cost = { 1, 1 }, auto = true }
 }
 
 local function colourLerp(c1, c2, t)
@@ -59,6 +59,8 @@ sm.tool.preloadRenderables( renderablesFp )
 function PotatoRifle.client_onCreate( self )
 	self.shootEffect = sm.effect.createEffect( "SpudgunBasic - BasicMuzzel" )
 	self.shootEffectFP = sm.effect.createEffect( "SpudgunBasic - FPBasicMuzzel" )
+	self.tool:setFpColor(mods[1].fpCol)
+	self.tool:setTpColor(mods[1].tpCol)
 
 	if not self.tool:isLocal() then return end
 	self.cl = {}
@@ -108,13 +110,34 @@ function PotatoRifle:client_onDestroy()
 	self.cl.chargeHud:destroy()
 end
 
+function PotatoRifle:cl_setWpnModGui()
+	local player = sm.localPlayer.getPlayer()
+	local data = player:getClientPublicData()
+
+	data.weaponMod = {
+		name = mods[self.cl.mod].name,
+		colour = mods[self.cl.mod].fpCol
+	}
+
+	player:setClientPublicData( data )
+end
+
+function PotatoRifle:sv_changeColour( index )
+	self.network:sendToClients("cl_changeColour", index)
+end
+
+function PotatoRifle:cl_changeColour( index )
+	self.tool:setFpColor(mods[index].fpCol)
+	self.tool:setTpColor(mods[index].tpCol)
+end
+
 function PotatoRifle:client_onReload()
 	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
 	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
 	sm.audio.play("PaintTool - ColorPick")
 
-	self.tool:setFpColor(mods[self.cl.mod].fpCol)
-	self.tool:setTpColor(mods[self.cl.mod].tpCol)
+	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self:cl_setWpnModGui()
 
 	return true
 end
@@ -677,6 +700,8 @@ function PotatoRifle.client_onUpdate( self, dt )
 end
 
 function PotatoRifle.client_onEquip( self, animate )
+	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self:cl_setWpnModGui()
 
 	if animate then
 		sm.audio.play( "PotatoRifle - Equip", self.tool:getPosition() )
@@ -874,7 +899,7 @@ function PotatoRifle.cl_onPrimaryUse( self, state )
 end
 
 function PotatoRifle.cl_onSecondaryUse( self, state )
-	if mods[self.cl.mod].name ~= "Sniper" then
+	if mods[self.cl.mod].name ~= "Sniper" and mods[self.cl.mod].name ~= "Spread Shot" then
 		if state == 1 then
 			if mods[self.cl.mod].name == "Coins" and self.cl.coin.ammo > 0 then
 				local dir = sm.localPlayer.getDirection()
