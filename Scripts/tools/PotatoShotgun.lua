@@ -43,10 +43,11 @@ function PotatoShotgun.client_onCreate( self )
 	self.tool:setFpColor(mods[1].fpCol)
 	self.tool:setTpColor(mods[1].tpCol)
 
+	self.cl.hooks = {}
+
 	if not self.tool:isLocal() then return end
 	self.cl = {}
 	self.cl.mod = 1
-	self.cl.hooks = {}
 	self.cl.primState = nil
 	self.cl.secState = nil
 	self.cl.autoFire = Timer()
@@ -647,8 +648,10 @@ function PotatoShotgun.client_onUpdate( self, dt )
 end
 
 function PotatoShotgun.client_onEquip( self, animate )
-	self.network:sendToServer("sv_changeColour", self.cl.mod)
-	self:cl_setWpnModGui()
+	if self.tool:isLocal() then
+		self.network:sendToServer("sv_changeColour", self.cl.mod)
+		self:cl_setWpnModGui()
+	end
 
 	if animate then
 		sm.audio.play( "PotatoRifle - Equip", self.tool:getPosition() )
@@ -682,7 +685,9 @@ function PotatoShotgun.client_onEquip( self, animate )
 end
 
 function PotatoShotgun.client_onUnequip( self, animate )
-	self.cl.hookGui:close()
+	if self.tool:isLocal() then
+		self.cl.hookGui:close()
+	end
 
 	self.wantEquipped = false
 	self.equipped = false

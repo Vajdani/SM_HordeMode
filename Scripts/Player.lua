@@ -157,8 +157,7 @@ function Player:sv_resetPlayer()
 	sm.container.collect( container, obj_plantables_potato, 100 )
 	sm.container.endTransaction()
 
-	local newChar = sm.character.createCharacter(self.player, self.player.character:getWorld(), sm.vec3.new(0,0,10))
-	self.player:setCharacter(newChar)
+	self.player.character:setWorldPosition(sm.vec3.new(0,0,10))
 	self.player.character:setMovementSpeedFraction( 1 )
 end
 

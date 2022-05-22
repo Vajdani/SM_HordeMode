@@ -700,8 +700,10 @@ function PotatoRifle.client_onUpdate( self, dt )
 end
 
 function PotatoRifle.client_onEquip( self, animate )
-	self.network:sendToServer("sv_changeColour", self.cl.mod)
-	self:cl_setWpnModGui()
+	if self.tool:isLocal() then
+		self.network:sendToServer("sv_changeColour", self.cl.mod)
+		self:cl_setWpnModGui()
+	end
 
 	if animate then
 		sm.audio.play( "PotatoRifle - Equip", self.tool:getPosition() )
