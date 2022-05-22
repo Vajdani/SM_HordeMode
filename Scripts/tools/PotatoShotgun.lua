@@ -10,10 +10,11 @@ local autoFireRate = 12 --ticks
 local hookRange = 30 --meters?
 local hookForceMult = 250
 local hookDetachDistance = 1.5
+local meathookDetachImpulse = 1000
 local mods = {
 	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, auto = true },
 	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), auto = false },
-	--{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", auto = false }
+	{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", auto = false }
 }
 
 PotatoShotgun = class()
@@ -92,8 +93,23 @@ function PotatoShotgun:client_onReload()
 	return true
 end
 
+function PotatoShotgun:client_onToggle()
+	local hit, result = sm.localPlayer.getRaycast( 25 )
+	if hit then
+		self.network:sendToServer("sv_onToggle", result.pointWorld)
+	end
+
+	return true
+end
+
+function PotatoShotgun:sv_onToggle( pos )
+	sm.unit.createUnit(unit_totebot_green, pos)
+end
+
 function PotatoShotgun:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() or not self.tool:isLocal() then return end
+
+	local player = sm.localPlayer.getPlayer()
 
 	if mods[self.cl.mod].auto and (self.cl.primState == 1 or self.cl.primState == 2) and (self.cl.secState == 1 or self.cl.secState == 2) then
 		self.cl.autoFire:tick()
@@ -114,10 +130,17 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 		return
 	end
 
+	local clientData = player:getClientPublicData()
+	if clientData.meathookState and clientData.input[sm.interactable.actions.jump] then
+		self.network:sendToServer("sv_applyImpulse", { char = player.character, dir = g_up * meathookDetachImpulse } )
+		self.cl.hookTarget = nil
+		self.network:sendToServer("sv_setHookTarget", { target = nil, player = player })
+	end
+
 	if self.cl.hookTarget ~= nil and sm.exists(self.cl.hookTarget) then
 		if self.cl.secState == 1 then
 			self.cl.hookTarget = nil
-			self.network:sendToServer("sv_setHookTarget", { target = nil, player = sm.localPlayer.getPlayer() })
+			self.network:sendToServer("sv_setHookTarget", { target = nil, player = player })
 		end
 
 		return
@@ -134,7 +157,8 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 
 			if self.cl.secState == 1 then
 				self.cl.hookTarget = char
-				self.network:sendToServer("sv_setHookTarget", { target = char, player = sm.localPlayer.getPlayer() })
+				player:getClientPublicData().meathookState = true
+				self.network:sendToServer("sv_setHookTarget", { target = char, player = player })
 				self.cl.hookGui:close()
 			end
 		else
@@ -156,6 +180,12 @@ function PotatoShotgun:cl_createHook( args )
 	if args.delete then
 		self.cl.hooks[id].effect:stopImmediate()
 		self.cl.hooks[id] = nil
+
+		local player = sm.localPlayer.getPlayer()
+		if args.player == player then
+			player:getClientPublicData().meathookState = false
+		end
+
 		return
 	end
 
@@ -170,7 +200,6 @@ function PotatoShotgun:cl_createHook( args )
 end
 
 function PotatoShotgun:server_onFixedUpdate( dt )
-	--print("sv",self.sv.hookTarget, "\n")
 	if self.sv.hookTarget ~= nil and sm.exists(self.sv.hookTarget) then
 		local playerChar = self.tool:getOwner():getCharacter()
 		local dir = self.sv.hookTarget:getWorldPosition() - playerChar:getWorldPosition()
@@ -186,6 +215,10 @@ function PotatoShotgun:server_onFixedUpdate( dt )
 		self:sv_setHookTarget( { target = nil, player = self.tool:getOwner() })
 		self.network:sendToClients("cl_reset")
 	end
+end
+
+function PotatoShotgun:sv_applyImpulse( args )
+	sm.physics.applyImpulse(args.char, args.dir, true)
 end
 
 function PotatoShotgun:cl_reset()
@@ -649,6 +682,7 @@ function PotatoShotgun.client_onEquip( self, animate )
 end
 
 function PotatoShotgun.client_onUnequip( self, animate )
+	self.cl.hookGui:close()
 
 	self.wantEquipped = false
 	self.equipped = false

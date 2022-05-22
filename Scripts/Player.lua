@@ -1,6 +1,6 @@
 Player = class( nil )
 
-local airControlImpulse = 500
+local airControlImpulse = 30
 local dashCooldown = 40
 local dashImpulse = 2500
 local armourDamageReduction = 0.75
@@ -19,13 +19,6 @@ function Player.server_onCreate( self )
 	self.sv.dead = false
 	self.sv.statsTimer = Timer()
 	self.sv.statsTimer:start( 40 )
-	self.sv.dash = {
-		useCD = {
-			active = false,
-			count = dashCooldown
-		},
-		hasTriggered = false
-	}
 
 	self.sv.poisonDamageCooldown = Timer()
 	self.sv.poisonDamageCooldown:start()
@@ -44,62 +37,10 @@ function Player:server_onFixedUpdate( dt )
 		self.network:setClientData( self.sv )
 		self.player:setPublicData( self.sv )
 	end
-
-	if self.sv.dash.useCD.active then
-		self.sv.dash.useCD.count = self.sv.dash.useCD.count - 1
-		if self.sv.dash.useCD.count <= 0 then
-			self.sv.dash.useCD.count = dashCooldown
-			self.sv.dash.useCD.active = false
-		end
-	end
-
-	local char = self.player:getCharacter()
-	if char == nil then return end
-
-	--no air control for me :(((((
-	--[[if not char:isOnGround() then
-		sm.physics.applyImpulse(char, self:sv_getMoveDir( char ) * airControlImpulse, true)
-	end]]
-
-	--[[local moveDir = self:sv_getMoveDir( char )
-	if moveDir == sm.vec3.zero() then return end
-
-	if char:isCrouching() and not self.sv.dash.hasTriggered and not self.sv.dash.useCD.active then
-		sm.physics.applyImpulse(char, moveDir * dashImpulse, true)
-		self.sv.dash.hasTriggered = true
-		self.sv.dash.useCD.active = true
-	elseif not char:isCrouching() then
-		self.sv.dash.hasTriggered = false
-	end]]
 end
 
-function Player:sv_getMoveDir( char )
-	local moveDir = sm.vec3.zero()
-
-	local dir = char:getDirection()
-	local camUp = dir:rotate(math.rad(90), dir:cross(g_up))
-
-	local left = camUp:cross(dir)
-	local right = left * -1
-	local fwd = g_up:cross(right)
-	local bwd = fwd * -1
-
-	local moveDirs = {
-		{ name = "run", dir = fwd },
-		{ name = "run_bwd", dir = bwd },
-		{ name = "run_right", dir = right },
-		{ name = "run_left", dir = left },
-	}
-
-	for v, k in pairs(char:getActiveAnimations()) do
-		for i, j in pairs(moveDirs) do
-			if k.name == j.name then
-				moveDir = moveDir + j.dir
-			end
-		end
-	end
-
-	return moveDir
+function Player:sv_applyImpulse( dir )
+	sm.physics.applyImpulse(self.player.character, dir, true)
 end
 
 function Player.server_onProjectile( self, position, airTime, velocity, projectileName, attacker, damage, customData, normal, uuid )
@@ -233,6 +174,10 @@ function Player:sv_chatMsg(msg)
 	self.network:sendToClient(self.player, "cl_chatMsg", msg)
 end
 
+function Player:sv_toggleAirControl()
+	self.network:sendToClient(self.player, "cl_toggleAirControl")
+end
+
 function Player:sv_respawn( sendToClients )
 	if not self.sv.dead then return end
 
@@ -291,7 +236,8 @@ end
 
 --Client
 function Player:client_onCreate()
-	if sm.localPlayer.getPlayer() ~= self.player then return end
+	local player = sm.localPlayer.getPlayer()
+	if player ~= self.player then return end
 
 	self.cl = {}
 	self.cl.data = nil
@@ -311,15 +257,34 @@ function Player:client_onCreate()
 	self.cl.extraHud:setIconImage( "ammoIcon", obj_plantables_potato)
 	self.cl.extraHud:open()
 
+	self.cl.airControl = true
+
+	self.cl.dash = {
+		useCD = {
+			active = false,
+			count = dashCooldown
+		},
+		hasTriggered = false
+	}
+
 	self.cl.queuedMsgs = {}
 	self.cl.queuedMsgRemoveTimer = Timer()
 	self.cl.queuedMsgRemoveTimer:start(queuedMsgRemoveTime)
 
-	sm.localPlayer.getPlayer():setClientPublicData(
+	player:setClientPublicData(
 		{
 			weaponMod = {
 
-			}
+			},
+			input = {
+				[sm.interactable.actions.forward] = false,
+                [sm.interactable.actions.backward] = false,
+                [sm.interactable.actions.left] = false,
+                [sm.interactable.actions.right] = false,
+				[sm.interactable.actions.jump] = false,
+                [sm.interactable.actions.use] = false,
+			},
+			meathookState = false
 		}
 	)
 end
@@ -340,7 +305,8 @@ function Player.client_onClientDataUpdate( self, data )
 end
 
 function Player:client_onFixedUpdate( dt )
-	if sm.localPlayer.getPlayer() ~= self.player then return end
+	local player = sm.localPlayer.getPlayer()
+	if player ~= self.player then return end
 
 	if #self.cl.queuedMsgs > 0 then
 		self.cl.queuedMsgRemoveTimer:tick()
@@ -366,6 +332,36 @@ function Player:client_onFixedUpdate( dt )
 
 	local weaponModName = "#df7f00"..clientData.weaponMod.name --"#"..clientData.weaponMod.colour:getHexStr():sub(1,6)..clientData.weaponMod.name
 	self.cl.extraHud:setText("weaponMod", weaponModName)
+
+
+	--movement
+	if self.cl.dash.useCD.active then
+		self.cl.dash.useCD.count = self.cl.dash.useCD.count - 1
+		if self.cl.dash.useCD.count <= 0 then
+			self.cl.dash.useCD.count = dashCooldown
+			self.cl.dash.useCD.active = false
+		end
+	end
+
+	local char = player.character
+	if char == nil then return end
+
+	local moveDir = self:cl_getMoveDir( char )
+	if moveDir == sm.vec3.zero() then return end
+
+	if self.cl.airControl then
+		if not char:isOnGround() and char:getVelocity():length2() < 64 then
+			self.network:sendToServer("sv_applyImpulse", moveDir * airControlImpulse)
+		end
+	end
+
+	if char:isCrouching() and not self.cl.dash.hasTriggered and not self.cl.dash.useCD.active then
+		self.network:sendToServer("sv_applyImpulse", moveDir * dashImpulse)
+		self.cl.dash.hasTriggered = true
+		self.cl.dash.useCD.active = true
+	elseif not char:isCrouching() then
+		self.cl.dash.hasTriggered = false
+	end
 end
 
 function Player:client_onUpdate()
@@ -380,6 +376,39 @@ function Player:client_onUpdate()
 
 	local container = sm.localPlayer.getInventory()
 	self.cl.extraHud:setText("ammoAmount", "#df7f00"..tostring(sm.container.totalQuantity( container, obj_plantables_potato )).." #ffffff/ "..tostring(self.cl.data.stats.maxammo) )
+end
+
+function Player:cl_getMoveDir( char )
+	local moveDir = sm.vec3.zero()
+
+	local dir = char:getDirection()
+	local camUp = dir:rotate(math.rad(90), dir:cross(g_up))
+
+	local left = camUp:cross(dir)
+	local right = left * -1
+	local fwd = g_up:cross(right)
+	local bwd = fwd * -1
+
+	local moveDirs = {
+		{ id = sm.interactable.actions.forward, dir = fwd },
+		{ id = sm.interactable.actions.backward, dir = bwd },
+		{ id = sm.interactable.actions.left, dir = left },
+		{ id = sm.interactable.actions.right, dir = right },
+	}
+
+	local publicData = sm.localPlayer.getPlayer():getClientPublicData()
+	for v, k in pairs(moveDirs) do
+		if publicData.input[k.id] then
+			moveDir = moveDir + k.dir
+		end
+	end
+
+	return moveDir
+end
+
+function Player:cl_toggleAirControl()
+	self.cl.airControl = not self.cl.airControl
+	self:cl_queueMsg("Air Control: #df7f00"..(self.cl.airControl and "ON" or "OFF"))
 end
 
 function Player:cl_vis( dir )

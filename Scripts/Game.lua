@@ -36,9 +36,12 @@ function Game:cl_bindCommands()
 	sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
 	sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
 	sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
+	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control" )
+	sm.game.bindChatCommand( "/movement", {}, "cl_onChatCommand", "Toggle advanced movement" )
 end
 
 function Game:cl_onChatCommand( params )
+	local player = sm.localPlayer.getPlayer()
 	if params[1] == "/god" then
 		self.network:sendToServer( "sv_switchGodMode" )
 	elseif params[1] == "/restart" then
@@ -47,6 +50,10 @@ function Game:cl_onChatCommand( params )
 		self.network:sendToServer( "sv_startWaves" )
 	elseif params[1] == "/inv" then
 		self.network:sendToServer( "sv_toggleInv" )
+	elseif params[1] == "/aircontrol" then
+		self.network:sendToServer( "sv_toggleAirControl", player )
+	elseif params[1] == "/movement" then
+		self.network:sendToServer( "sv_toggleMovement", player )
 	end
 end
 
@@ -74,6 +81,15 @@ function Game:sv_toggleInv()
 	for v, k in pairs(sm.player.getAllPlayers()) do
 		sm.event.sendToPlayer(k, "sv_chatMsg", "Limited inventory mode is now #df7f00"..mode)
 	end
+end
+
+function Game:sv_toggleAirControl( player )
+	sm.event.sendToPlayer(player, "sv_toggleAirControl")
+end
+
+function Game:sv_toggleMovement( player )
+	if not g_inputManager then return end
+	sm.event.sendToInteractable(g_inputManager, "sv_manageIgnoredPlayer", player)
 end
 
 function Game.server_onPlayerJoined( self, player, isNewPlayer )
@@ -110,7 +126,6 @@ function Game.sv_createPlayerCharacter( self, world, x, y, player, params )
 	player:setCharacter( character )
 
 	--sm.event.sendToWorld(self.sv.saved.world, "sv_resetPlayerInv", player)
-	
 end
 
 function Game:server_onFixedUpdate( dt )

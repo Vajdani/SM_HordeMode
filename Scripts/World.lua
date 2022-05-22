@@ -68,6 +68,15 @@ function World.server_onCreate( self )
     self.sv.hasSentCompleteMessage = false
     self.sv.progressWaves = false
     self.sv.sendDeadMessage = true
+
+
+    local manager = sm.storage.load( "INPUTMANAGER" )
+    if manager == nil then
+        manager = sm.shape.createPart( sm.uuid.new("8d3c62be-852d-475e-a8d1-f9cacf88cbf9"), sm.vec3.new(0,0,1000), sm.quat.identity(), false, true ):getInteractable()
+        sm.storage.save( "INPUTMANAGER", manager )
+    end
+
+    g_inputManager = manager
 end
 
 function World:server_onFixedUpdate( dt )
