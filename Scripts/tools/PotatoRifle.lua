@@ -103,11 +103,13 @@ function PotatoRifle:cl_bruh()
 end
 
 function PotatoRifle:client_onDestroy()
-	self.cl.coin.hud:close()
-	self.cl.chargeHud:close()
+	if self.tool:isLocal() then
+		self.cl.coin.hud:close()
+		self.cl.chargeHud:close()
 
-	self.cl.coin.hud:destroy()
-	self.cl.chargeHud:destroy()
+		self.cl.coin.hud:destroy()
+		self.cl.chargeHud:destroy()
+	end
 end
 
 function PotatoRifle:cl_setWpnModGui()

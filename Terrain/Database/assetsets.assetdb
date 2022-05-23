@@ -2,7 +2,7 @@
    "assetSetList" : [
       {
          "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/example.assetset",
-         "categories" : []
+         "categories" : [ "Dustpot" ]
       }
    ]
 }

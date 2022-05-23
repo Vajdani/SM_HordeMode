@@ -436,3 +436,7 @@ end
 function Player:cl_fade( dur )
 	sm.gui.startFadeToBlack( dur, 0 )
 end
+
+function Player:client_onReload()
+	return true
+end

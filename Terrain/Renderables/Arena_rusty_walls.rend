@@ -1,0 +1,17 @@
+{
+   "lodList" : [
+      {
+         "mesh" : "$CONTENT_DATA/Terrain/Mesh/arena/dustpot/rusty_walls.fbx",
+         "subMeshList" : [
+            {
+               "material" : "DifAsgNor",
+               "textureList" : [
+                  "$CONTENT_DATA/Terrain/Textures/arena/dustpot/t_tiled_galvanizedmetal_dif.tga",
+                  "$CONTENT_DATA/Terrain/Textures/arena/dustpot/t_tiled_galvanizedmetal_asg.tga",
+                  "$CONTENT_DATA/Terrain/Textures/arena/dustpot/t_tiled_galvanizedmetal_nor.tga"
+               ]
+            }
+         ]
+      }
+   ]
+}

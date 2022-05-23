@@ -1,3 +1,9 @@
 {
-   "assetListRenderable" : []
+   "assetListRenderable" : [
+      {
+         "name" : "Arena_rusy_walls",
+         "renderable" : "$CONTENT_DATA/Terrain/Renderables/Arena_rusty_walls.rend",
+         "uuid" : "832dac28-cf3f-49e5-bb38-2bae87b22f3d"
+      }
+   ]
 }

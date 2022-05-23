@@ -9,6 +9,7 @@
 			"spin": 7.0,
 			"mesh": "$GAME_DATA/Projectiles/Renderables/potato.rend",
 			"effect": "PotatoProjectile - Hit",
+			"attachedEffect": "PotatoProjectile - Hit",
 			"audiomass": 250.0,
 			"effectmaterial": "Potato",
 			"ammo": 
@@ -26,13 +27,15 @@
 					}
 				]
 			},
-			"enableImpactEffect": true
+			"enableImpactEffect": true,
+			"enableGravity": true
 		},
 		{
 			"uuid": "2abc4c0c-dd91-48be-96a6-4d69bc5d8276",
 			"name": "exptape_cost",
 			"mass": 3.0,
 			"radius": 0.25,
+			"friction": 0.2,
 			"spin": 7.0,
 			"mesh": "$GAME_DATA/Projectiles/Renderables/projectile_explosivetape.rend",
 			"effect": "TapeProjectile - Hit",
@@ -54,7 +57,8 @@
 					}
 				]
 			},
-			"enableImpactEffect": true
+			"enableImpactEffect": true,
+			"enableGravity": true
 		}
     ]
 }

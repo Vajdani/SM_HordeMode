@@ -1,0 +1,67 @@
+{
+    "empty":
+    {
+        "gameMode": "pve",
+        "world": "$CONTENT_DATA/Terrain/Worlds/example.world",
+        "enemySpawnPoints": [
+
+        ],
+        "pickups": [
+            {
+                "pos": {
+                    "x": 10,
+                    "y": 10,
+                    "z": 0.25
+                },
+                "type": "health",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 400
+            },
+            {
+                "pos": {
+                    "x": -10,
+                    "y": -10,
+                    "z": 0.25
+                },
+                "type": "health",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 400
+            },
+            {
+                "pos": {
+                    "x": -10,
+                    "y": 10,
+                    "z": 0.25
+                },
+                "type": "armour",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 200
+            },
+            {
+                "pos": {
+                    "x": 10,
+                    "y": -10,
+                    "z": 0.25
+                },
+                "type": "armour",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 200
+            },
+            {
+                "pos": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.25
+                },
+                "type": "ammo",
+                "amount": 100,
+                "maxUses": 2,
+                "respawnTime": 600
+            }
+        ]
+    }
+}

@@ -43,10 +43,10 @@ function PotatoShotgun.client_onCreate( self )
 	self.tool:setFpColor(mods[1].fpCol)
 	self.tool:setTpColor(mods[1].tpCol)
 
+	self.cl = {}
 	self.cl.hooks = {}
 
 	if not self.tool:isLocal() then return end
-	self.cl = {}
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
