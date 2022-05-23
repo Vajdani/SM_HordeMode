@@ -1,7 +1,7 @@
 {
    "lodList" : [
       {
-         "mesh" : "$CONTENT_DATA/Terrain/Mesh/arena/dustpot/rusty_walls.fbx",
+         "mesh" : "$CONTENT_DATA/Terrain/Mesh/arena/dustpot/rusty_walls_big.fbx",
          "subMeshList" : [
             {
                "material" : "DifAsgNor",
