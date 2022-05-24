@@ -10,11 +10,11 @@ local autoFireRate = 12 --ticks
 local hookRange = 30 --meters?
 local hookForceMult = 250
 local hookDetachDistance = 1.5
-local meathookDetachImpulse = 1000
+local meathookDetachImpulse = 1250
 local mods = {
-	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, auto = true },
-	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), auto = false },
-	{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", auto = false }
+	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, fireVels = { 130, 130 }, auto = true },
+	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), fireVels = { 130, 30 }, auto = false },
+	{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", fireVels = { 130, 130 }, auto = false }
 }
 
 PotatoShotgun = class()
@@ -56,6 +56,9 @@ function PotatoShotgun.client_onCreate( self )
 	self.cl.hookGui = sm.gui.createWorldIconGui( 50, 50 )
 	self.cl.hookGui:setImage("Icon", "$CONTENT_DATA/susshake.png")
 	self.cl.hookTarget = nil
+
+	self.cl.baseGun = BaseGun()
+	self.cl.baseGun.cl_create( self, mods )
 end
 
 function PotatoShotgun:server_onCreate()
@@ -95,6 +98,10 @@ function PotatoShotgun:client_onReload()
 end
 
 function PotatoShotgun:client_onToggle()
+	return true
+end
+
+function PotatoShotgun:client_onToggle()
 	local hit, result = sm.localPlayer.getRaycast( 25 )
 	if hit then
 		self.network:sendToServer("sv_onToggle", result.pointWorld)
@@ -109,6 +116,8 @@ end
 
 function PotatoShotgun:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() or not self.tool:isLocal() then return end
+
+	self.cl.baseGun.cl_fixedUpdate( self )
 
 	local player = sm.localPlayer.getPlayer()
 
@@ -231,7 +240,8 @@ end
 
 function PotatoShotgun:cl_shoot()
 	local aiming = (self.cl.secState == 1 or self.cl.secState == 2)
-	if aiming and mods[self.cl.mod].sec_projectile == "hook" then return end
+	local mod = mods[self.cl.mod]
+	if aiming and mod.sec_projectile == "hook" then return end
 
 	if not sm.game.getEnableAmmoConsumption() or sm.container.canSpend( sm.localPlayer.getInventory(), obj_plantables_potato, 2 ) then
 
@@ -277,8 +287,8 @@ function PotatoShotgun:cl_shoot()
 
 		local owner = self.tool:getOwner()
 		if owner then
-			local projectile = aiming and mods[self.cl.mod].sec_projectile or mods[self.cl.mod].prim_projectile
-			sm.projectile.projectileAttack( projectile, Damage, firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+			local projectile = aiming and mod.sec_projectile or mod.prim_projectile
+			sm.projectile.projectileAttack( projectile, Damage, firePos, dir * mod.fireVels[aiming and 2 or 1], owner, fakePosition, fakePositionSelf )
 		end
 
 		-- Timers
@@ -414,6 +424,8 @@ function PotatoShotgun.loadAnimations( self )
 end
 
 function PotatoShotgun.client_onUpdate( self, dt )
+	if not sm.exists(self.tool) then return end
+
 	for v, k in pairs(self.cl.hooks) do
 		if sm.exists(k.target) then
 			k.pos = k.player:getCharacter():getWorldPosition()

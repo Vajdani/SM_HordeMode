@@ -1,12 +1,20 @@
 Player = class( nil )
 
 local airControlImpulse = 30
-local dashCooldown = 40
+local dashCooldown = 40 --ticks
 local dashImpulse = 2500
-local armourDamageReduction = 0.75
+local armourDamageReduction = 0.75 --percent
 local PoisonDamage = 10
 local PoisonDamageCooldown = 40
 local queuedMsgRemoveTime = 60
+local pvpDamageReduction = 0.2
+
+local weaponWheelGuns = {
+	g_hammer,
+	g_spudgun,
+	g_shotgun,
+	g_gatling
+}
 
 --Server
 function Player.server_onCreate( self )
@@ -71,36 +79,36 @@ function Player.sv_e_onStayPesticide( self )
 end
 
 function Player.sv_takeDamage( self, damage, source )
-	if damage > 0 and not g_god then
-		damage = damage * GetDifficultySettings().playerTakeDamageMultiplier
+	local playerAttacker = type(source) == "Player"
+	if self.sv.dead or g_god or playerAttacker and not g_pvp or damage <= 0 then return end
 
-		local healthDamageIfTooMuchForArmour = 0
-		if self.sv.stats.armour > 0 then
-			self.sv.stats.armour = self.sv.stats.armour - damage * armourDamageReduction
-
-			if self.sv.stats.armour < 0 then
-				healthDamageIfTooMuchForArmour = math.abs(self.sv.stats.armour)
-				self.sv.stats.armour = 0
-			end
-		else
-			self.sv.stats.health = math.max( self.sv.stats.health - damage, 0 )
-		end
-
-		self.sv.stats.health = math.max( self.sv.stats.health - healthDamageIfTooMuchForArmour, 0 )
-
-		print( "Player took damage:", damage)
-
-		--self.player:sendCharacterEvent( "hit" )
-
-		if self.sv.stats.health <= 0 then
-			self.player.character:setTumbling( true )
-			self.player.character:setDowned( true )
-			self.sv.dead = true
-		end
-
-		self.network:setClientData( self.sv )
-		self.player:setPublicData( self.sv )
+	if playerAttacker then
+		damage = damage * pvpDamageReduction
 	end
+
+	if self.sv.stats.armour > 0 then
+		self.sv.stats.armour = self.sv.stats.armour - damage * armourDamageReduction
+
+		if self.sv.stats.armour < 0 then
+			self.sv.stats.health = math.max( self.sv.stats.health - math.abs(self.sv.stats.armour), 0 )
+			self.sv.stats.armour = 0
+		end
+	else
+		self.sv.stats.health = math.max( self.sv.stats.health - damage, 0 )
+	end
+
+	print( "Player took damage:", damage)
+
+	--self.player:sendCharacterEvent( "hit" )
+
+	if self.sv.stats.health <= 0 then
+		self.player.character:setTumbling( true )
+		self.player.character:setDowned( true )
+		self.sv.dead = true
+	end
+
+	self.network:setClientData( self.sv )
+	self.player:setPublicData( self.sv )
 end
 
 function Player:sv_restorehealth( amount )
@@ -148,12 +156,14 @@ function Player:sv_resetPlayer()
     for i = 1, container:getSize() do
         local item = container:getItem( i - 1 )
 	    if item.uuid ~= sm.uuid.getNil() then
-            sm.container.spend( container, item.uuid, item.quantity )
+            sm.container.spend( container, item.uuid, sm.container.totalQuantity( container, item.uuid ) )
         end
     end
 
+	sm.container.collect( container, g_hammer, 1 )
 	sm.container.collect( container, g_spudgun, 1 )
 	sm.container.collect( container, g_shotgun, 1 )
+	sm.container.collect( container, g_gatling, 1 )
 	sm.container.collect( container, obj_plantables_potato, 100 )
 	sm.container.endTransaction()
 
@@ -175,6 +185,19 @@ end
 
 function Player:sv_toggleAirControl()
 	self.network:sendToClient(self.player, "cl_toggleAirControl")
+end
+
+function Player:sv_weaponWheelClick( args )
+	sm.container.beginTransaction()
+	local prevItem = args.inv:getItem(args.slot)
+	for i = 1, args.inv:getSize() do
+		if args.inv:getItem(i-1).uuid == args.nextGun then
+			args.inv:setItem( args.slot, args.nextGun, 1 )
+			args.inv:setItem( i-1, prevItem.uuid, prevItem.quantity, prevItem.instance )
+			break
+		end
+	end
+	sm.container.endTransaction()
 end
 
 function Player:sv_respawn( sendToClients )
@@ -235,8 +258,17 @@ end
 
 --Client
 function Player:client_onCreate()
+	self:cl_init()
+end
+
+function Player:client_onRefresh()
+	self:cl_init()
+end
+
+function Player:cl_init()
 	local player = sm.localPlayer.getPlayer()
 	if player ~= self.player then return end
+	print(player, ": cl_init")
 
 	self.cl = {}
 	self.cl.data = nil
@@ -250,11 +282,31 @@ function Player:client_onCreate()
 		{
 			isHud = true,
 			isInteractive = false,
-			needsCursor = false
+			needsCursor = false,
+			hidesHotbar = false,
+			isOverlapped = false,
+			backgroundAlpha = 0.0,
 		}
 	)
 	self.cl.extraHud:setIconImage( "ammoIcon", obj_plantables_potato)
 	self.cl.extraHud:open()
+
+	self.cl.weaponWheel = sm.gui.createGuiFromLayout( "$CONTENT_DATA/Gui/weaponWheel.layout", false,
+		{
+			isHud = false,
+			isInteractive = true,
+			needsCursor = true,
+			hidesHotbar = false,
+			isOverlapped = false,
+			backgroundAlpha = 0.0,
+		}
+	)
+	for i = 1, 3 do
+		self.cl.weaponWheel:setButtonCallback("btn"..i, "cl_weaponWheelClick")
+		self.cl.weaponWheel:setIconImage("img"..i, weaponWheelGuns[i])
+	end
+	self.cl.blockWeaponWheel = false
+	self.cl.weaponWheel:setOnCloseCallback("cl_blockModWheel")
 
 	self.cl.airControl = true
 
@@ -282,6 +334,8 @@ function Player:client_onCreate()
                 [sm.interactable.actions.right] = false,
 				[sm.interactable.actions.jump] = false,
                 [sm.interactable.actions.use] = false,
+                [sm.interactable.actions.zoomIn] = false,
+                [sm.interactable.actions.zoomOut] = false,
 			},
 			meathookState = false
 		}
@@ -307,6 +361,7 @@ function Player:client_onFixedUpdate( dt )
 	local player = sm.localPlayer.getPlayer()
 	if player ~= self.player then return end
 
+	--gui
 	if #self.cl.queuedMsgs > 0 then
 		self.cl.queuedMsgRemoveTimer:tick()
 
@@ -327,10 +382,24 @@ function Player:client_onFixedUpdate( dt )
 	end
 
 	local clientData = self.player:getClientPublicData()
-	if clientData.weaponMod.name == nil then return end
+	if clientData == nil then return end
 
-	local weaponModName = "#df7f00"..clientData.weaponMod.name --"#"..clientData.weaponMod.colour:getHexStr():sub(1,6)..clientData.weaponMod.name
-	self.cl.extraHud:setText("weaponMod", weaponModName)
+	if clientData.weaponMod.name ~= nil then
+		local weaponModName = "#df7f00"..clientData.weaponMod.name --"#"..clientData.weaponMod.colour:getHexStr():sub(1,6)..clientData.weaponMod.name
+		self.cl.extraHud:setText("weaponMod", weaponModName)
+	end
+
+	local wheelBindActive = clientData.input[sm.interactable.actions.zoomIn]
+	local wheelActive = self.cl.weaponWheel:isActive()
+	if wheelBindActive and not wheelActive and not self.cl.blockWeaponWheel then
+		self.cl.weaponWheel:open()
+	elseif not wheelBindActive then
+		if wheelActive then
+			self.cl.weaponWheel:close()
+		end
+
+		self.cl.blockWeaponWheel = false
+	end
 
 
 	--movement
@@ -346,16 +415,16 @@ function Player:client_onFixedUpdate( dt )
 	if char == nil then return end
 
 	local moveDir = self:cl_getMoveDir( char )
-	if moveDir == sm.vec3.zero() then return end
-
-	if self.cl.airControl then
-		if not char:isOnGround() and char:getVelocity():length2() < 64 then
-			self.network:sendToServer("sv_applyImpulse", moveDir * airControlImpulse)
+	if moveDir == sm.vec3.zero() then
+		if self.cl.airControl then
+			if not char:isOnGround() and char:getVelocity():length2() < 64 then
+				self.network:sendToServer("sv_applyImpulse", moveDir * airControlImpulse)
+			end
 		end
 	end
 
 	if char:isCrouching() and not self.cl.dash.hasTriggered and not self.cl.dash.useCD.active then
-		self.network:sendToServer("sv_applyImpulse", moveDir * dashImpulse)
+		self.network:sendToServer("sv_applyImpulse", self:cl_getDashDir(char) * dashImpulse)
 		self.cl.dash.hasTriggered = true
 		self.cl.dash.useCD.active = true
 	elseif not char:isCrouching() then
@@ -364,7 +433,7 @@ function Player:client_onFixedUpdate( dt )
 end
 
 function Player:client_onUpdate()
-	if sm.localPlayer.getPlayer() ~= self.player then return end
+	if sm.localPlayer.getPlayer() ~= self.player or self.cl.data == nil then return end
 
 	if sm.camera.getCameraState() == sm.camera.state.forcedTP then
 		local keyBindingText =  sm.gui.getKeyBinding( "Use", true )
@@ -375,6 +444,33 @@ function Player:client_onUpdate()
 
 	local container = sm.localPlayer.getInventory()
 	self.cl.extraHud:setText("ammoAmount", "#df7f00"..tostring(sm.container.totalQuantity( container, obj_plantables_potato )).." #ffffff/ "..tostring(self.cl.data.stats.maxammo) )
+end
+
+function Player:cl_weaponWheelClick( button )
+	local id = tonumber(button:sub(4, 4))
+	local activeItem = sm.localPlayer.getActiveItem()
+	local nextGun = weaponWheelGuns[id]
+
+	if nextGun == activeItem then
+		--self:cl_queueMsg("#ff0000You already have that gun selected!")
+		sm.audio.play("RaftShark")
+		return
+	end
+
+	self.network:sendToServer("sv_weaponWheelClick",
+		{
+			nextGun = nextGun,
+			inv = sm.game.getLimitedInventory() and sm.localPlayer.getInventory() or sm.localPlayer.getHotbar(),
+			slot = sm.localPlayer.getSelectedHotbarSlot()
+		}
+	)
+	sm.audio.play("PaintTool - ColorPick")
+	self.cl.weaponWheel:close()
+	self.cl.blockWeaponWheel = true
+end
+
+function Player.cl_blockModWheel( self )
+    self.cl.blockWeaponWheel = true
 end
 
 function Player:cl_getMoveDir( char )
@@ -402,7 +498,16 @@ function Player:cl_getMoveDir( char )
 		end
 	end
 
-	return moveDir
+	return moveDir, moveDirs
+end
+
+function Player:cl_getDashDir( char )
+	local dir, dirs = self:cl_getMoveDir(char)
+	if dir == sm.vec3.zero() then
+		return dirs[1].dir
+	end
+
+	return dir
 end
 
 function Player:cl_toggleAirControl()

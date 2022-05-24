@@ -4,6 +4,7 @@ dofile( "$SURVIVAL_DATA/Scripts/game/survival_shapes.lua" )
 dofile( "$SURVIVAL_DATA/Scripts/game/survival_projectiles.lua" )
 
 dofile( "$SURVIVAL_DATA/Scripts/game/util/Timer.lua" )
+dofile "$CONTENT_DATA/Scripts/tools/BaseGun.lua"
 
 local autoFireRate = 8 --ticks
 local chargedBurstUseCD = 120
@@ -96,6 +97,9 @@ function PotatoRifle.client_onCreate( self )
 		}
 	)]]
 	--self.cl.chargeHud:createHorizontalSlider("chargeSlider", maxBlastCharge, 0, false, "cl_bruh")
+
+	self.cl.baseGun = BaseGun()
+	self.cl.baseGun.cl_create( self, mods )
 end
 
 function PotatoRifle:cl_bruh()
@@ -103,12 +107,12 @@ function PotatoRifle:cl_bruh()
 end
 
 function PotatoRifle:client_onDestroy()
-	if self.tool:isLocal() then
+	if self.cl ~= nil then
 		self.cl.coin.hud:close()
-		self.cl.chargeHud:close()
+		--self.cl.chargeHud:close()
 
 		self.cl.coin.hud:destroy()
-		self.cl.chargeHud:destroy()
+		--self.cl.chargeHud:destroy()
 	end
 end
 
@@ -144,6 +148,10 @@ function PotatoRifle:client_onReload()
 	return true
 end
 
+function PotatoRifle:client_onToggle()
+	return true
+end
+
 function PotatoRifle:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isLocal() then return end
 
@@ -169,6 +177,8 @@ function PotatoRifle:client_onFixedUpdate( dt )
 
 		return
 	end
+
+	self.cl.baseGun.cl_fixedUpdate( self )
 
 	if mods[self.cl.mod].name == "Coins" then
 		self.cl.coin.hud:open()
@@ -484,6 +494,8 @@ function PotatoRifle.loadAnimations( self )
 end
 
 function PotatoRifle.client_onUpdate( self, dt )
+	if not sm.exists(self.tool) then return end
+
 	-- First person animation
 	local isSprinting =  self.tool:isSprinting()
 	local isCrouching =  self.tool:isCrouching()

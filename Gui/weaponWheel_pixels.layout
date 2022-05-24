@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Widget" skin="PanelEmpty" position="0 0 500 510" name="BackPanel">
+        <Widget type="Widget" skin="BeaconBG" position="0 0 500 500">
+            <Widget type="TextBox" skin="TextBox" position="0 0 500 100">
+                <Property key="Caption" value="WEAPON WHEEL"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="FontName" value="SM_HeaderLarge_Wide"/>
+            </Widget>
+            <Widget type="Button" skin="SMButton" position="50 125 100 100" name="btn1">
+                <Widget type="ImageBox" skin="ImageBox" position="25 25 50 50" name="img1">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
+            <Widget type="Button" skin="SMButton" position="200 125 100 100" name="btn2">
+                <Widget type="ImageBox" skin="ImageBox" position="25 25 50 50" name="img2">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
+            <Widget type="Button" skin="SMButton" position="350 125 100 100" name="btn3">
+                <Widget type="ImageBox" skin="ImageBox" position="25 25 50 50" name="img3">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position="0 450 500 50">
+                <Property key="Caption" value="Click on one of the guns to switch to it!"/>
+                <Property key="FontName" value="SM_Header"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="FontHeight" value="15"/>
+            </Widget>
+        </Widget>
+    </Widget>
+    <CodeGeneratorSettings/>
+</MyGUI>

@@ -9,8 +9,10 @@ dofile( "$SURVIVAL_DATA/Scripts/game/managers/UnitManager.lua" )
 
 g_disableScrapHarvest = true
 g_god = false
+g_pvp = false
 g_up = sm.vec3.new(0,0,1)
 g_coins = {}
+g_hammer = sm.uuid.new("4b591539-4f1b-49f2-8ede-3d0aa07cb51e")
 g_spudgun = sm.uuid.new("fc1acd1b-611b-44b0-bff7-4b71509abe4c")
 g_shotgun = sm.uuid.new("117344bd-c628-485a-8e89-ab51d57e8528")
 g_gatling = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff")
@@ -32,12 +34,16 @@ function Game.server_onCreate( self )
 end
 
 function Game:cl_bindCommands()
-	sm.game.bindChatCommand( "/god", {}, "cl_onChatCommand", "Mechanic characters will take no damage" )
-	sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
-	sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
-	sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
-	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control" )
-	sm.game.bindChatCommand( "/movement", {}, "cl_onChatCommand", "Toggle advanced movement" )
+	if sm.isHost then
+		sm.game.bindChatCommand( "/god", {}, "cl_onChatCommand", "Mechanic characters will take no damage" )
+		sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
+		sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
+		sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
+		sm.game.bindChatCommand( "/pvp", {}, "cl_onChatCommand", "Toggle pvp" )
+	end
+
+	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control(more effective movement in the air)" )
+	sm.game.bindChatCommand( "/movement", {}, "cl_onChatCommand", "Toggle advanced movement(dashing, etc)" )
 end
 
 function Game:cl_onChatCommand( params )
@@ -50,6 +56,8 @@ function Game:cl_onChatCommand( params )
 		self.network:sendToServer( "sv_startWaves" )
 	elseif params[1] == "/inv" then
 		self.network:sendToServer( "sv_toggleInv" )
+	elseif params[1] == "/pvp" then
+		self.network:sendToServer( "sv_togglePvp" )
 	elseif params[1] == "/aircontrol" then
 		self.network:sendToServer( "sv_toggleAirControl", player )
 	elseif params[1] == "/movement" then
@@ -83,6 +91,15 @@ function Game:sv_toggleInv()
 	end
 end
 
+function Game:sv_togglePvp()
+	g_pvp = not g_pvp
+
+	local mode = g_pvp and "ON" or "OFF"
+	for v, k in pairs(sm.player.getAllPlayers()) do
+		sm.event.sendToPlayer(k, "sv_chatMsg", "PVP is now #df7f00"..mode)
+	end
+end
+
 function Game:sv_toggleAirControl( player )
 	sm.event.sendToPlayer(player, "sv_toggleAirControl")
 end
@@ -105,12 +122,15 @@ function Game.server_onPlayerJoined( self, player, isNewPlayer )
 	local container = player:getInventory()
 	sm.container.beginTransaction()
 	sm.container.spend( container, obj_plantables_potato, sm.container.totalQuantity( container, obj_plantables_potato ) )
+	sm.container.spend( container, g_hammer, sm.container.totalQuantity( container, g_hammer ) )
 	sm.container.spend( container, g_spudgun, sm.container.totalQuantity( container, g_spudgun ) )
 	sm.container.spend( container, g_shotgun, sm.container.totalQuantity( container, g_shotgun ) )
 	sm.container.spend( container, g_gatling, sm.container.totalQuantity( container, g_gatling ) )
 
+	sm.container.collect( container, g_hammer, 1 )
 	sm.container.collect( container, g_spudgun, 1 )
 	sm.container.collect( container, g_shotgun, 1 )
+	sm.container.collect( container, g_gatling, 1 )
 	sm.container.collect( container, obj_plantables_potato, 100 )
 	sm.container.endTransaction()
 

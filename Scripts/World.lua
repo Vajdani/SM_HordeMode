@@ -20,13 +20,6 @@ g_pickupColours = {
     armour = sm.color.new(0,1,0),
 	ammo = sm.color.new(1,1,0)
 }
-local pickups = {
-    { pos = sm.vec3.new(10,10,0.25),    type = "health",    amount = 20,    maxUses = 3,    respawnTime = 400 },
-    { pos = sm.vec3.new(10,-10,0.25),   type = "health",    amount = 20,    maxUses = 3,    respawnTime = 400 },
-    { pos = sm.vec3.new(-10,10,0.25),   type = "armour",    amount = 20,    maxUses = 3,    respawnTime = 200 },
-    { pos = sm.vec3.new(-10,-10,0.25),  type = "armour",    amount = 20,    maxUses = 3,    respawnTime = 200 },
-    { pos = sm.vec3.new(0,0,0.25),      type = "ammo",      amount = 75,    maxUses = 2,    respawnTime = 600 }
-}
 
 local waveCountDown = 200
 local mapBounds = {
@@ -59,6 +52,9 @@ function World.server_onCreate( self )
     self.sv = {}
     g_pesticideManager = PesticideManager()
 	g_pesticideManager:sv_onCreate()
+
+    self.sv.arenaData = sm.json.open("$CONTENT_DATA/Scripts/arenas.json").arenaList
+    self.sv.currentArena = 1
 
 	self.sv.pickups = {}
 
@@ -150,9 +146,12 @@ function World:sv_pickup_onPickup( trigger, result )
 end
 
 function World:sv_createPickups()
+    local pickups = self.sv.arenaData[self.sv.currentArena].pickups
+
     local dataToSend = {}
     for v, k in pairs(pickups) do
         local pickup = k
+        pickup.pos = sm.vec3.new(pickup.pos.x, pickup.pos.y, pickup.pos.z)
         pickup.trigger = sm.areaTrigger.createBox( pickupSize, pickup.pos, sm.quat.identity(), sm.areaTrigger.filter.character )
         pickup.trigger:bindOnStay( "sv_pickup_onPickup" )
         pickup.active = true

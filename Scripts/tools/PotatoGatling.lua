@@ -52,6 +52,10 @@ function PotatoGatling:client_onReload()
 	return true
 end
 
+function PotatoGatling:client_onToggle()
+	return true
+end
+
 function PotatoGatling:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() then return end
 end
@@ -177,6 +181,7 @@ function PotatoGatling.loadAnimations( self )
 end
 
 function PotatoGatling.client_onUpdate( self, dt )
+	if not sm.exists(self.tool) then return end
 
 	-- First person animation	
 	local isSprinting =  self.tool:isSprinting() 
