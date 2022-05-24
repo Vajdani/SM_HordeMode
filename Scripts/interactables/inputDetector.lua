@@ -8,6 +8,11 @@ local meathookConsumeActions = {
     sm.interactable.actions.jump
 }
 
+local consumeActions = {
+    sm.interactable.actions.zoomIn,
+    sm.interactable.actions.zoomOut
+}
+
 function Detector:server_onCreate()
     self.sv = {}
     self.sv.ignoredPlayers = {}
@@ -52,7 +57,7 @@ function Detector:client_onAction( action, state )
     publicData.input[action] = state
 
     local consume = false
-    if isAnyOf(action, meathookConsumeActions) and publicData.meathookState then consume = true end
+    if isAnyOf(action, meathookConsumeActions) and publicData.meathookState or isAnyOf(action, consumeActions) then consume = true end
 
     return consume
 end

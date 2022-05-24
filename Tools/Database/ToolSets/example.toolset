@@ -39,6 +39,19 @@
 
 				}
 			}
+		},
+		{
+			"uuid": "4b591539-4f1b-49f2-8ede-3d0aa07cb51e",
+			"name": "Hammer",
+			"previewRenderable": "$GAME_DATA/Character/Char_Tools/char_sledgehammer_preview.rend",
+			"previewRotation": [  -1, 0, 0, 0, 0, 1, 0, 1, 0 ],
+			"script": {
+				"file": "$CONTENT_DATA/Scripts/tools/Sledgehammer.lua",
+				"class": "Sledgehammer",
+				"data": {
+
+				}
+			}
 		}
 	]
 }

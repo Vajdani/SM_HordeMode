@@ -46,6 +46,10 @@ function Sledgehammer.client_onRefresh( self )
 	self:loadAnimations()
 end
 
+function Sledgehammer:client_onToggle()
+	return true
+end
+
 function Sledgehammer.init( self )
 	
 	self.attackCooldownTimer = 0.0
