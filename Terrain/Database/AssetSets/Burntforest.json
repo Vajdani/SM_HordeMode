@@ -29,7 +29,7 @@
 			"slope": "rotate"
         },
         {
-           "uuid": "a9fcf19a-7ee5-4829-bae1-fabb80298057",
+           "uuid": "a9fcf19a-7ee5-A4829-bae1-fabb80298057",
            "col": "$SURVIVAL_DATA/Terrain/Collision/Burntforest/env_burntforest_firepile01_col.obj",
             "name": "env_forest_firepile",
             "defaultColors": {
@@ -46,7 +46,7 @@
             "col": "$SURVIVAL_DATA/Terrain/Collision/Burntforest/env_burntforest_stump02_col.obj",
             "name": "env_forest_stump02",
 			"defaultColors": {
-				"bark": "3b3b38"
+				"bark": ["3b3b38"]
             },
             "physics": {
                 "mass": 10000,
@@ -58,7 +58,7 @@
         {
             "name": "env_burntforest_bush01",
 			"defaultColors": {
-				"bark": "3b3b38"
+				"bark": ["3b3b38"]
             },
             "physics": {
                 "mass": 10000,
@@ -69,7 +69,7 @@
         },
         {
             "defaultColors": {
-                "plant": "106167ff"
+                "plant": ["106167ff"]
             },
             "name": "env_burntforest_fern",
             "physics": {
@@ -81,7 +81,7 @@
         },
 		{
             "defaultColors": {
-                "leaves": "609218"
+                "leaves": ["609218"]
             },
             "name": "env_burntforest_perennial",
             "physics": {
@@ -93,7 +93,7 @@
         },
         {
             "defaultColors": {
-				"bark": "3b3b38"
+				"bark": ["3b3b38"]
             },
             "name": "env_burntforest_bush02",
             "physics": {
@@ -106,7 +106,7 @@
         {
             "name": "env_burnforest_smallbush01",
 			"defaultColors": {
-				"bark": "3b3b38"
+				"bark": ["3b3b38"]
             },
             "physics": {
                 "mass": 10000,
@@ -118,7 +118,7 @@
         {
             "name": "env_burnforest_smallbush02",
 			"defaultColors": {
-				"bark": "3b3b38"
+				"bark": ["3b3b38"]
             },
             "physics": {
                 "mass": 10000,
@@ -129,7 +129,7 @@
         },
         {
             "defaultColors": {
-                "thorn": "a62c06"
+                "thorn": ["a62c06"]
             },
             "name": "env_burntforest_thorn02",
             "physics": {
@@ -142,7 +142,7 @@
         },
 		{
             "defaultColors": {
-                "thorn": "a62c06"
+                "thorn": ["a62c06"]
             },
             "name": "env_burntforest_thorn01",
             "physics": {
@@ -157,8 +157,8 @@
             "col": "$SURVIVAL_DATA/Terrain/Collision/Forest/env_forest_dirtpatch01_col.obj",
             "name": "env_burntforest_dirtpatch01",
 			"defaultColors": {
-                "grass": "0a0808",
-				"dirt": "746237"
+                "grass": ["0a0808"],
+				"dirt": ["746237"]
             },
             "physics": {
                 "mass": 20000,
@@ -172,8 +172,8 @@
             "col": "$SURVIVAL_DATA/Terrain/Collision/Forest/env_forest_dirtpatch02_col.obj",
             "name": "env_burntforest_dirtpatch02",
 			"defaultColors": {
-                "grass": "0a0808",
-				"dirt": "746237"
+                "grass": ["0a0808"],
+				"dirt": ["746237"]
             },
             "physics": {
                 "mass": 20000,
@@ -187,8 +187,8 @@
             "col": "$SURVIVAL_DATA/Terrain/Collision/Forest/env_forest_dirtpatch03_col.obj",
             "name": "env_burntforest_dirtpatch03",
             "defaultColors": {
-                "grass": "0a0808",
-				"dirt": "746237"
+                "grass": ["0a0808"],
+				"dirt": ["746237"]
             },
             "physics": {
                 "mass": 20000,
