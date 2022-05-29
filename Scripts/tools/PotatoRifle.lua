@@ -209,23 +209,24 @@ function PotatoRifle:client_onFixedUpdate( dt )
 		self.cl.autoFire:reset()
 	end
 
-	if mods[self.cl.mod].name == "Charged Burst" and (self.cl.secState == 1 or self.cl.secState == 2) and not self.cl.blasting and not self.cl.useCD.active  then
-		self.cl.blastCharge = sm.util.clamp(self.cl.blastCharge + dt * 10, 0, maxBlastCharge)
-	elseif self.cl.blastCharge > 0 then
-		self.cl.blasting = true
-		self:cl_shoot()
-		self.cl.blastCharge = math.ceil(self.cl.blastCharge) - 1
-	elseif self.cl.blastCharge == 0 and self.cl.blasting then
-		self.cl.blasting = false
-		self.cl.useCD.active = true
-	end
+	--uncomment the if check to fix the funny spread shot trick
+	--if mods[self.cl.mod].name == "Charged Burst" then
+		if mods[self.cl.mod].name == "Charged Burst" and (self.cl.secState == 1 or self.cl.secState == 2) and not self.cl.blasting and not self.cl.useCD.active  then
+			self.cl.blastCharge = sm.util.clamp(self.cl.blastCharge + dt * 10, 0, maxBlastCharge)
+		elseif self.cl.blastCharge > 0 then
+			self.cl.blasting = true
+			self:cl_shoot()
+			self.cl.blastCharge = math.ceil(self.cl.blastCharge) - 1
+		elseif self.cl.blastCharge == 0 and self.cl.blasting then
+			self.cl.blasting = false
+			self.cl.useCD.active = true
+		end
 
-	--[[if mods[self.cl.mod].name == "Charged Burst" then
-		self.cl.chargeHud:open()
-		--self.cl.chargeHud:setSliderPosition("chargeSlider", self.cl.blastCharge)
+		--[[self.cl.chargeHud:open()
+		self.cl.chargeHud:setSliderPosition("chargeSlider", self.cl.blastCharge)
 		self.cl.chargeHud:setSliderData( "chargeSlider", maxBlastCharge * 10 + 1, self.cl.blastCharge * 10 )
 	else
-		self.cl.chargeHud:close()
+		--self.cl.chargeHud:close()
 	end]]
 
 	if not self.aimFireMode then return end
@@ -237,7 +238,7 @@ function PotatoRifle:client_onFixedUpdate( dt )
 	end
 end
 
-function PotatoRifle:sv_applyImpulse ( args )
+function PotatoRifle:sv_applyImpulse( args )
 	sm.physics.applyImpulse(args.body, args.dir * 1000, true)
 end
 
@@ -333,14 +334,13 @@ function PotatoRifle:cl_shoot()
 				self.network:sendToServer("sv_onHitscanShot", { pos = firePos + dir * (scale / 8), dir = dir, scale = scale })
 			else
 				if mods[self.cl.mod].name == "Spread Shot" then
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
-					
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
 				else
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )	
+					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
 				end
 			end
 		end
@@ -970,7 +970,7 @@ function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState
 		self.prevSecondaryState = secondaryState
 	end
 
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, false, nil )
 
 	return true, true
 end

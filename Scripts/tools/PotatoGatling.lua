@@ -61,7 +61,7 @@ function PotatoGatling.client_onCreate( self )
 
 	self.cl.visEffect = sm.effect.createEffect( "ShapeRenderable" )
 	self.cl.visEffect:setParameter("uuid", turretUUID)
-	--self.cl.visEffect:setParameter("visualization", true)
+	self.cl.visEffect:setParameter("visualization", true)
 	self.cl.visEffect:setScale(sm.vec3.one() / 4)
 
 	self.cl.rot = 1
@@ -805,7 +805,7 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 
 				--sm.particle.createParticle("paint_smoke", self.tool:getOwner().character:getWorldPosition() + dir)
 				self.cl.visEffect:setPosition( worldPos + sm.vec3.new(0,0,1) / 8 )
-				--self.cl.visEffect:setRotation( sm.vec3.getRotation(g_up, dir) )
+				--self.cl.visEffect:setRotation( rot )
 
 				if not self.cl.visEffect:isPlaying() then
 					self.cl.visEffect:start()
@@ -846,7 +846,7 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 		self.prevSecondaryState = secondaryState
 	end
 
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, false, nil )
 
 	return true, true
 end

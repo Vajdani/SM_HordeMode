@@ -902,7 +902,7 @@ function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondarySta
 		self.prevSecondaryState = secondaryState
 	end
 
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, true, "Meathook" )
 
 	return true, true
 end
