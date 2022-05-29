@@ -177,28 +177,40 @@ function World:sv_deletePickups()
 end
 
 function World:sv_generateWaves()
+    print("\n\n")
     g_waves = {}
     local waveData = self.sv.arenaData[self.sv.currentArena].waves
 
     for i = 1, math.random(waveData.min, waveData.max) do
+        print("GENERATING WAVE", i)
         local possibleEnemies = {}
 
+        print("GENERATING PREDETERMINED ENEMIES")
         for v, k in pairs(waveData.predefinedEnemies) do
 
         end
 
+        print("\n")
+
+        print("GENERATING RANDOM ENEMIES")
         for v, k in pairs(waveData.enemies) do
             local enemiesAdded = 0
             if i >= k.startWave then
-                for j = 1, math.floor(k.perWave * i / 2) do
-                    if enemiesAdded < k.maxAmount and math.random() < k.chance + k.spawnChanceIncrease * i then
-                        possibleEnemies[#possibleEnemies+1] = { uuid = sm.uuid.new(k.uuid) }
-                        enemiesAdded = enemiesAdded + 1
+                print("WAVE", i, "IS HIGH ENOUGH TO SPAWN", k.name)
+                print(math.floor(k.perWave * (i / 2)), k.name, "WILL HAVE A CHANCE TO SPAWN")
+                for j = 1, math.floor(k.perWave * (i / 2)) do
+                    if enemiesAdded < k.maxAmount then
+                        if math.random() < k.chance + waveData.spawnChanceIncrease * i then
+                            possibleEnemies[#possibleEnemies+1] = { uuid = sm.uuid.new(k.uuid) }
+                            enemiesAdded = enemiesAdded + 1
+                        end
                     else
                         break
                     end
                 end
             end
+
+            print("ADDED", enemiesAdded, k.name, "TO WAVE", i, "\n")
         end
 
         local wave = {}
@@ -219,7 +231,10 @@ function World:sv_generateWaves()
         end
 
         g_waves[#g_waves+1] = wave
+        print("\n\n")
     end
+
+    print("SUCCESSFULLY GENERATED ALL", #g_waves, "WAVES")
 end
 
 function World:sv_yeetBots()

@@ -71,8 +71,8 @@ function BaseGun.cl_fixedUpdate( self )
 	end
 end
 
-function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f )
-    if self.cl.useCD.active then
+function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f, cdVisCheck, mod )
+    if self.cl.useCD.active and ( not cdVisCheck or self.cl.weaponMods[self.cl.mod].name == mod) then
 		sm.gui.setProgressFraction( self.cl.useCD.cd/self.cl.useCD.max )
     end
 end
