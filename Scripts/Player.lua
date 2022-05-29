@@ -25,6 +25,7 @@ function Player.server_onCreate( self )
 		ammo = 100, maxammo = 1000,
 	}
 	self.sv.dead = false
+	self.sv.movementActive = true
 	self.sv.statsTimer = Timer()
 	self.sv.statsTimer:start( 40 )
 
@@ -167,8 +168,13 @@ function Player:sv_resetPlayer()
 	sm.container.collect( container, obj_plantables_potato, 100 )
 	sm.container.endTransaction()
 
-	self.player.character:setWorldPosition(sm.vec3.new(0,0,10))
-	self.player.character:setMovementSpeedFraction( 1 )
+	local char = self.player.character
+	char:setWorldPosition(sm.vec3.new(0,0,10))
+	char:setTumbling( false )
+	char:setSwimming( false )
+	char:setDiving( false )
+	char:setDowned( false )
+	char:setMovementSpeedFraction( 1 )
 end
 
 function Player:sv_queueMsg(msg)
@@ -423,7 +429,7 @@ function Player:client_onFixedUpdate( dt )
 		end
 	end
 
-	if char:isCrouching() and not self.cl.dash.hasTriggered and not self.cl.dash.useCD.active then
+	if char:isCrouching() and not self.cl.dash.hasTriggered and not self.cl.dash.useCD.active and char:getLockingInteractable() == g_inputManager then
 		self.network:sendToServer("sv_applyImpulse", self:cl_getDashDir(char) * dashImpulse)
 		self.cl.dash.hasTriggered = true
 		self.cl.dash.useCD.active = true

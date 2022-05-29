@@ -36,10 +36,22 @@ end
 function Game:cl_bindCommands()
 	if sm.isHost then
 		sm.game.bindChatCommand( "/god", {}, "cl_onChatCommand", "Mechanic characters will take no damage" )
-		sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
 		sm.game.bindChatCommand( "/start", {}, "cl_onChatCommand", "start waves" )
+		sm.game.bindChatCommand( "/stop", {}, "cl_onChatCommand", "stop waves" )
+		sm.game.bindChatCommand( "/restart", {}, "cl_onChatCommand", "Restarts waves" )
 		sm.game.bindChatCommand( "/inv", {}, "cl_onChatCommand", "Toggle limited inv" )
 		sm.game.bindChatCommand( "/pvp", {}, "cl_onChatCommand", "Toggle pvp" )
+		sm.game.bindChatCommand( "/goto",
+			{
+				{
+					"int",
+					"wave",
+					true
+				}
+			},
+			"cl_onChatCommand",
+			"go to specified wave"
+		)
 	end
 
 	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control(more effective movement in the air)" )
@@ -50,14 +62,27 @@ function Game:cl_onChatCommand( params )
 	local player = sm.localPlayer.getPlayer()
 	if params[1] == "/god" then
 		self.network:sendToServer( "sv_switchGodMode" )
-	elseif params[1] == "/restart" then
-		self.network:sendToServer( "sv_restartWaves" )
 	elseif params[1] == "/start" then
 		self.network:sendToServer( "sv_startWaves" )
+	elseif params[1] == "/stop" then
+		self.network:sendToServer( "sv_stopWaves" )
+	elseif params[1] == "/restart" then
+		self.network:sendToServer( "sv_restartWaves" )
 	elseif params[1] == "/inv" then
 		self.network:sendToServer( "sv_toggleInv" )
 	elseif params[1] == "/pvp" then
 		self.network:sendToServer( "sv_togglePvp" )
+	elseif params[1] == "/goto" then
+		if g_waves == nil or #g_waves == 0 then
+			sm.gui.displayAlertText("#df7f00Start the waves first!", 5)
+			return
+		end
+
+		if params[2] < #g_waves and params[2] > 0 then
+			self.network:sendToServer( "sv_gotoWave", params[2] )
+		else
+			sm.gui.displayAlertText("#df7f00Invalid wave number specified! It must be between #ffffff1 #df7f00and #ffffff"..tostring(#g_waves), 5)
+		end
 	elseif params[1] == "/aircontrol" then
 		self.network:sendToServer( "sv_toggleAirControl", player )
 	elseif params[1] == "/movement" then
@@ -74,12 +99,16 @@ function Game:sv_switchGodMode()
 	end
 end
 
-function Game:sv_restartWaves()
-	sm.event.sendToWorld( self.sv.saved.world, "sv_resetWaves" )
-end
-
 function Game:sv_startWaves()
 	sm.event.sendToWorld( self.sv.saved.world, "sv_startWaves" )
+end
+
+function Game:sv_stopWaves()
+	sm.event.sendToWorld( self.sv.saved.world, "sv_stopWaves" )
+end
+
+function Game:sv_restartWaves()
+	sm.event.sendToWorld( self.sv.saved.world, "sv_resetWaves" )
 end
 
 function Game:sv_toggleInv()
@@ -98,6 +127,10 @@ function Game:sv_togglePvp()
 	for v, k in pairs(sm.player.getAllPlayers()) do
 		sm.event.sendToPlayer(k, "sv_chatMsg", "PVP is now #df7f00"..mode)
 	end
+end
+
+function Game:sv_gotoWave( wave )
+	sm.event.sendToWorld( self.sv.saved.world, "sv_gotoWave", wave )
 end
 
 function Game:sv_toggleAirControl( player )

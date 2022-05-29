@@ -74,10 +74,6 @@ function PotatoRifle.client_onCreate( self )
 	self.cl.blasting = false
 	self.cl.spreadShotSpread = maxSpreadShotSpread
 
-	self.cl.useCD = {}
-	self.cl.useCD.active = false
-	self.cl.useCD.cd = chargedBurstUseCD
-
 	self.cl.coin = {}
 	self.cl.coin.ammo = 4
 	self.cl.coin.recharge = coinRecharge
@@ -99,7 +95,7 @@ function PotatoRifle.client_onCreate( self )
 	--self.cl.chargeHud:createHorizontalSlider("chargeSlider", maxBlastCharge, 0, false, "cl_bruh")
 
 	self.cl.baseGun = BaseGun()
-	self.cl.baseGun.cl_create( self, mods )
+	self.cl.baseGun.cl_create( self, mods, chargedBurstUseCD )
 end
 
 function PotatoRifle:cl_bruh()
@@ -160,14 +156,6 @@ function PotatoRifle:client_onFixedUpdate( dt )
 		if self.cl.coin.recharge <= 0 then
 			self.cl.coin.ammo = self.cl.coin.ammo + 1
 			self.cl.coin.recharge = coinRecharge
-		end
-	end
-
-	if self.cl.useCD.active then
-		self.cl.useCD.cd = self.cl.useCD.cd - 1
-		if self.cl.useCD.cd <= 0 then
-			self.cl.useCD.active = false
-			self.cl.useCD.cd = chargedBurstUseCD
 		end
 	end
 
@@ -960,13 +948,11 @@ function PotatoRifle.cl_onSecondaryUse( self, state )
 	end
 end
 
-function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState )
+function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 	self.cl.primState = primaryState
 	self.cl.secState = secondaryState
 
-	if self.cl.useCD.active then
-		sm.gui.setProgressFraction( self.cl.useCD.cd/chargedBurstUseCD )
-	elseif (self.cl.secState == 1 or self.cl.secState == 2) then
+	if (self.cl.secState == 1 or self.cl.secState == 2) and not self.cl.useCD.active then
 		if mods[self.cl.mod].name == "Sniper" then
 			sm.gui.setProgressFraction( self.fireCooldownTimer/sniperShotFireCooldown )
 		elseif mods[self.cl.mod].name == "Charged Burst" and not self.cl.blasting then
@@ -983,6 +969,8 @@ function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
+
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 
 	return true, true
 end

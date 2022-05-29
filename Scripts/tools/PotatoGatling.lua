@@ -10,8 +10,20 @@ local spinUpProjs = {
 	projectile_tape,
 	projectile_explosivetape,
 }
+
+local turretUUID = sm.uuid.new("bb314cd5-38bc-4b46-9fb7-0e7347bed62c")
+
 local mods = {
-	{ name = "Spin Up", prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 20, 20 }, cost = { 1, 1 } }
+	--{ name = "Spin Up", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 20, 20 }, cost = { 1, 1 } },
+	{ name = "Turret", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 22, 22 }, cost = { 1, 1 }, auto = true }
+}
+
+local normalDir = sm.vec3.new(0,1,0)
+local rots = {
+	0,
+	90,
+	180,
+	270,
 }
 
 PotatoGatling = class()
@@ -36,12 +48,47 @@ function PotatoGatling.client_onCreate( self )
 	self.shootEffectFP = sm.effect.createEffect( "SpudgunSpinner - FPSpinnerMuzzel" )
 	self.windupEffect = sm.effect.createEffect( "SpudgunSpinner - Windup" )
 
+	self.tool:setFpColor(mods[1].fpCol)
+	self.tool:setTpColor(mods[1].tpCol)
+
+	if not self.tool:isLocal() then return end
 	self.cl = {}
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
 	self.cl.spinUpTime = 0
 	self.cl.spinUpCanLevelUp = true
+
+	self.cl.visEffect = sm.effect.createEffect( "ShapeRenderable" )
+	self.cl.visEffect:setParameter("uuid", turretUUID)
+	--self.cl.visEffect:setParameter("visualization", true)
+	self.cl.visEffect:setScale(sm.vec3.one() / 4)
+
+	self.cl.rot = 1
+
+	self.cl.baseGun = BaseGun()
+	self.cl.baseGun.cl_create( self, mods, 0 )
+end
+
+function PotatoGatling:cl_setWpnModGui()
+	local player = sm.localPlayer.getPlayer()
+	local data = player:getClientPublicData()
+
+	data.weaponMod = {
+		name = mods[self.cl.mod].name,
+		colour = mods[self.cl.mod].fpCol
+	}
+
+	player:setClientPublicData( data )
+end
+
+function PotatoGatling:sv_changeColour( index )
+	self.network:sendToClients("cl_changeColour", index)
+end
+
+function PotatoGatling:cl_changeColour( index )
+	self.tool:setFpColor(mods[index].fpCol)
+	self.tool:setTpColor(mods[index].tpCol)
 end
 
 function PotatoGatling:client_onReload()
@@ -49,15 +96,26 @@ function PotatoGatling:client_onReload()
 	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
 	sm.audio.play("PaintTool - ColorPick")
 
+	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self:cl_setWpnModGui()
+
 	return true
 end
 
 function PotatoGatling:client_onToggle()
+	if mods[self.cl.mod].name == "Turret" then
+		--sm.gui.displayAlertText("Changed Turret rotation!", 2.5)
+		sm.audio.play("ConnectTool - Rotate")
+		self.cl.rot = self.cl.rot == #rots and 1 or self.cl.rot + 1
+	end
+
 	return true
 end
 
 function PotatoGatling:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() then return end
+
+	self.cl.baseGun.cl_fixedUpdate( self )
 end
 
 function PotatoGatling.client_onRefresh( self )
@@ -396,7 +454,11 @@ function PotatoGatling.client_onUpdate( self, dt )
 end
 
 function PotatoGatling.client_onEquip( self, animate )
-	
+	if self.tool:isLocal() then
+		self.network:sendToServer("sv_changeColour", self.cl.mod)
+		self:cl_setWpnModGui()
+	end
+
 	if animate then
 		sm.audio.play( "PotatoRifle - Equip", self.tool:getPosition() )
 	end
@@ -725,9 +787,47 @@ function PotatoGatling.cl_onSecondaryUse( self, state )
 	end
 end
 
-function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondaryState )
+function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 	self.cl.primState = primaryState
 	self.cl.secState = secondaryState
+
+	if mods[self.cl.mod].name == "Turret" then
+		local hit, result = sm.localPlayer.getRaycast(7.5)
+		local worldPos = result.pointWorld
+
+		if hit then
+			local keyBindingText =  sm.gui.getKeyBinding( "ForceBuild", true )
+			sm.gui.setInteractionText( "", keyBindingText, "Place Turret" )
+
+			if forceBuild then
+				local dir = normalDir:rotate(math.rad(rots[self.cl.rot]), g_up)
+				local rot = sm.vec3.getRotation(g_up, dir)
+
+				--sm.particle.createParticle("paint_smoke", self.tool:getOwner().character:getWorldPosition() + dir)
+				self.cl.visEffect:setPosition( worldPos + sm.vec3.new(0,0,1) / 8 )
+				--self.cl.visEffect:setRotation( sm.vec3.getRotation(g_up, dir) )
+
+				if not self.cl.visEffect:isPlaying() then
+					self.cl.visEffect:start()
+				end
+
+				if primaryState == sm.tool.interactState.start then
+					self.network:sendToServer("sv_placeTurret",
+						{
+							pos = worldPos,
+							rot = rot,
+							player = sm.localPlayer.getPlayer()
+						}
+					)
+					self.cl.visEffect:stop()
+				end
+			else
+				self.cl.visEffect:stop()
+			end
+		else
+			self.cl.visEffect:stop()
+		end
+	end
 
 	if self.cl.secState == 1 or self.cl.secState == 2 then
 		if mods[self.cl.mod].name == "Spin Up" then
@@ -740,11 +840,27 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 	else
 		self.gatlingActive = false
 	end
-	
+
 	if secondaryState ~= self.prevSecondaryState then
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
 
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
+
 	return true, true
+end
+
+function PotatoGatling:sv_placeTurret( args )
+	local turret = sm.shape.createPart(turretUUID, args.pos - sm.vec3.new(0.125,0.125,0), sm.quat.identity(), false, true )
+	turret.interactable:setPublicData(
+		{
+			owner = args.player
+		}
+	)
+
+	sm.container.beginTransaction()
+	local inv = sm.game.getLimitedInventory() and args.player:getInventory() or args.player:getHotbar()
+	sm.container.spend(inv, g_gatling, 1)
+	sm.container.endTransaction()
 end

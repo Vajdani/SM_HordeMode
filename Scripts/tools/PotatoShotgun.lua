@@ -11,6 +11,7 @@ local hookRange = 30 --meters?
 local hookForceMult = 250
 local hookDetachDistance = 1.5
 local meathookDetachImpulse = 1250
+local hookUseCD = 200
 local mods = {
 	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, fireVels = { 130, 130 }, auto = true },
 	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), fireVels = { 130, 30 }, auto = false },
@@ -58,7 +59,7 @@ function PotatoShotgun.client_onCreate( self )
 	self.cl.hookTarget = nil
 
 	self.cl.baseGun = BaseGun()
-	self.cl.baseGun.cl_create( self, mods )
+	self.cl.baseGun.cl_create( self, mods, hookUseCD )
 end
 
 function PotatoShotgun:server_onCreate()
@@ -132,7 +133,7 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 	end
 
 
-	if mods[self.cl.mod].sec_projectile ~= "hook" then
+	if mods[self.cl.mod].sec_projectile ~= "hook" or self.cl.useCD.active then
 		if self.cl.hookGui:isActive() then
 			self.cl.hookGui:close()
 		end
@@ -194,6 +195,7 @@ function PotatoShotgun:cl_createHook( args )
 		local player = sm.localPlayer.getPlayer()
 		if args.player == player then
 			player:getClientPublicData().meathookState = false
+			self.cl.useCD.active = true
 		end
 
 		return
@@ -886,7 +888,7 @@ function PotatoShotgun.cl_onSecondaryUse( self, state )
 	end
 end
 
-function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondaryState )
+function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 	self.cl.primState = primaryState
 	self.cl.secState = secondaryState
 
@@ -899,6 +901,8 @@ function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondarySta
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
+
+	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 
 	return true, true
 end

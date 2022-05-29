@@ -1,6 +1,6 @@
 BaseGun = class()
 
-function BaseGun.cl_create( self, mods )
+function BaseGun.cl_create( self, mods, useCD )
     function self:cl_blockModWheel()
         self.cl.blockModWheel = true
     end
@@ -14,6 +14,8 @@ function BaseGun.cl_create( self, mods )
         self.cl.modWheel:close()
         self.cl.blockModWheel = true
     end
+
+    self.cl.weaponMods = mods
 
     self.cl.modWheel = sm.gui.createGuiFromLayout( "$CONTENT_DATA/Gui/modWheel.layout", false,
         {
@@ -37,9 +39,22 @@ function BaseGun.cl_create( self, mods )
     self.cl.blockModWheel = false
 
     self.cl.modWheel:setOnCloseCallback("cl_blockModWheel")
+
+    self.cl.useCD = {}
+	self.cl.useCD.active = false
+	self.cl.useCD.cd = useCD
+    self.cl.useCD.max = useCD
 end
 
 function BaseGun.cl_fixedUpdate( self )
+    if self.cl.useCD.active then
+		self.cl.useCD.cd = self.cl.useCD.cd - 1
+		if self.cl.useCD.cd <= 0 then
+			self.cl.useCD.active = false
+			self.cl.useCD.cd = self.cl.useCD.max
+		end
+	end
+
     local clientData = sm.localPlayer.getPlayer():getClientPublicData()
 	if clientData == nil then return true end
 
@@ -54,4 +69,10 @@ function BaseGun.cl_fixedUpdate( self )
 
 		self.cl.blockModWheel = false
 	end
+end
+
+function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f )
+    if self.cl.useCD.active then
+		sm.gui.setProgressFraction( self.cl.useCD.cd/self.cl.useCD.max )
+    end
 end

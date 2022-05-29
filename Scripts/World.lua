@@ -53,7 +53,7 @@ function World.server_onCreate( self )
     g_pesticideManager = PesticideManager()
 	g_pesticideManager:sv_onCreate()
 
-    self.sv.arenaData = sm.json.open("$CONTENT_DATA/Scripts/arenas.json").arenaList
+    self.sv.arenaData = sm.json.open("$CONTENT_DATA/Scripts/arenas.json")
     self.sv.currentArena = 1
 
 	self.sv.pickups = {}
@@ -78,6 +78,19 @@ end
 function World:server_onFixedUpdate( dt )
     g_pesticideManager:sv_onWorldFixedUpdate( self )
 
+    if self.sv.pickups ~= nil or #self.sv.pickups > 0 then
+        for v, k in pairs(self.sv.pickups) do
+            if not k.active and k.remainingUses > 0 then
+                k.cd = k.cd - 1
+                if k.cd <= 0 then
+                    k.active = true
+                    k.cd = k.respawnTime
+                    self.network:sendToClients("cl_managePickupEffect", { id = v, active = k.active, pos = k.pos })
+                end
+            end
+        end
+    end
+
 	if not self.sv.progressWaves then return end
 
     self:sv_handleWaves()
@@ -96,30 +109,11 @@ function World:server_onFixedUpdate( dt )
         end
         self.sv.progressWaves = false
     end
-
-    if self.sv.pickups == nil or #self.sv.pickups == 0 then return end
-    for v, k in pairs(self.sv.pickups) do
-        if not k.active and k.remainingUses > 0 then
-            k.cd = k.cd - 1
-            if k.cd <= 0 then
-                k.active = true
-                k.cd = k.respawnTime
-                self.network:sendToClients("cl_managePickupEffect", { id = v, active = k.active, pos = k.pos })
-            end
-        end
-    end
 end
 
 function World:sv_pickup_onPickup( trigger, result )
-    local pickupData = {}
-    local index = 0
-    for v, k in pairs(self.sv.pickups) do
-        if k.trigger == trigger then
-            pickupData = k
-            index = v
-            break
-        end
-    end
+    local index = trigger:getUserData().index
+    local pickupData = self.sv.pickups[index]
 
     if not pickupData.active or pickupData.remainingUses == 0 then return end
 
@@ -152,7 +146,7 @@ function World:sv_createPickups()
     for v, k in pairs(pickups) do
         local pickup = k
         pickup.pos = sm.vec3.new(pickup.pos.x, pickup.pos.y, pickup.pos.z)
-        pickup.trigger = sm.areaTrigger.createBox( pickupSize, pickup.pos, sm.quat.identity(), sm.areaTrigger.filter.character )
+        pickup.trigger = sm.areaTrigger.createBox( pickupSize, pickup.pos, sm.quat.identity(), sm.areaTrigger.filter.character, { index = v } )
         pickup.trigger:bindOnStay( "sv_pickup_onPickup" )
         pickup.active = true
         pickup.cd = k.respawnTime
@@ -184,45 +178,44 @@ end
 
 function World:sv_generateWaves()
     g_waves = {}
-    for i = 1, math.random(minWaves, maxWaves) do
+    local waveData = self.sv.arenaData[self.sv.currentArena].waves
+
+    for i = 1, math.random(waveData.min, waveData.max) do
         local possibleEnemies = {}
 
-        if i >= totebotWavesStart then
-            for j = 1, math.floor(totebotPerWave * (i / 2)) do
-                if math.random() < totebotChance then
-                    possibleEnemies[#possibleEnemies+1] = unit_totebot_green
+        for v, k in pairs(waveData.predefinedEnemies) do
+
+        end
+
+        for v, k in pairs(waveData.enemies) do
+            local enemiesAdded = 0
+            if i >= k.startWave then
+                for j = 1, math.floor(k.perWave * i / 2) do
+                    if enemiesAdded < k.maxAmount and math.random() < k.chance + k.spawnChanceIncrease * i then
+                        possibleEnemies[#possibleEnemies+1] = { uuid = sm.uuid.new(k.uuid) }
+                        enemiesAdded = enemiesAdded + 1
+                    else
+                        break
+                    end
                 end
             end
         end
-
-        if i >= haybotWavesStart then
-            for j = 1, math.floor(haybotPerWave * (i / 2)) do
-                if math.random() < haybotChance then
-                    possibleEnemies[#possibleEnemies+1] = unit_haybot
-                end
-            end
-        end
-
-        if i >= tapebotWavesStart then
-            for j = 1, math.floor(tapebotPerWave * (i / 2)) do
-                if math.random() < tapebotChance + spawnChanceIncrease * i then
-                    possibleEnemies[#possibleEnemies+1] = unit_tapebot
-                end
-            end
-        end
-
-        if i >= farmbotWavesStart then
-            for j = 1, math.floor(farmbotPerWave * (i / 2)) do
-                if math.random() < farmbotChance + spawnChanceIncrease * i then
-                    possibleEnemies[#possibleEnemies+1] = unit_farmbot
-                end
-            end
-        end
-
 
         local wave = {}
         for j = 1, #possibleEnemies do
-            wave[#wave+1] = { unit = possibleEnemies[j], pos = function () return sm.vec3.new(math.random(mapBounds[1][1],mapBounds[1][2]),math.random(mapBounds[2][1],mapBounds[2][2]),0) end }
+            local data = possibleEnemies[j]
+            wave[#wave+1] =
+            {
+                unit = data.uuid,
+                pos = data.pos == nil and function()
+                    return sm.vec3.new(
+                        math.random(mapBounds[1][1],mapBounds[1][2]),
+                        math.random(mapBounds[2][1],mapBounds[2][2]),
+                        0
+                    )
+                end
+                or data.pos
+            }
         end
 
         g_waves[#g_waves+1] = wave
@@ -272,10 +265,12 @@ function World:sv_handleWaves()
                 end
 
                 local bewareMsg = ""
-                if self.sv.currentWave == tapebotWavesStart then
-                    bewareMsg = "#0044ccBeware of tapebots!"
-                elseif self.sv.currentWave == farmbotWavesStart then
-                    bewareMsg = "#dd0000Beware of farmbots!"
+                for v, k in pairs(self.sv.arenaData[self.sv.currentArena].waves.enemies) do
+                    if k.startWave == self.sv.currentWave and k.bewareMsg.enabled then
+                        bewareMsg = string.format("#%sBeware of %s!", k.bewareMsg.colour, k.name)
+                        print(k.bewareMsg.colour)
+                        break
+                    end
                 end
 
                 for v, k in pairs(sm.player.getAllPlayers()) do
@@ -288,7 +283,7 @@ function World:sv_handleWaves()
 end
 
 function World:sv_startWaves()
-    if not self.sv.progressWaves and self.sv.currentWave == 0 then
+    if not self.sv.progressWaves --[[and self.sv.currentWave == 0]] then
         self.sv.progressWaves = true --not self.sv.progressWaves
         for v, k in pairs(sm.player.getAllPlayers()) do
             sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Let the waves begin!")
@@ -303,9 +298,17 @@ function World:sv_startWaves()
     end
 end
 
+function World:sv_stopWaves()
+    self.sv.progressWaves = false
+    for v, k in pairs(sm.player.getAllPlayers()) do
+        sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Waves stopped!")
+    end
+end
+
 function World:sv_resetWaves()
     self.sv.currentWave = 0
     self.sv.waveCountDown = waveCountDown
+    self.sv.unitsInCurrentWave = {}
     self.sv.hasSentCompleteMessage = false
     self.sv.progressWaves = false
     self.sv.sendDeadMessage = true
@@ -317,6 +320,18 @@ function World:sv_resetWaves()
     self:sv_yeetBots()
     self:sv_deletePickups()
     self:sv_startWaves()
+end
+
+function World:sv_gotoWave( wave )
+    self.sv.currentWave = wave - 1
+    self.sv.waveCountDown = waveCountDown
+    self.sv.unitsInCurrentWave = {}
+    self:sv_yeetBots()
+    self:sv_resetPickups()
+
+    for v, k in pairs(sm.player.getAllPlayers()) do
+        sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Current wave has been set to: #ffffff"..tostring(wave))
+    end
 end
 
 function World.server_onProjectile( self, hitPos, hitTime, hitVelocity, _, attacker, damage, userData, hitNormal, target, projectileUuid )
