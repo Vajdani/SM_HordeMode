@@ -1,6 +1,6 @@
 {
    "custom_icons" : false,
-   "description" : "Horde Mode for Scrap Mechanic.\nDefeat waves of enemies with powerful guns!\n\nCommands:\n-[b]/start[/b]: starts the waves\n-[b]/restart[/b]: restart the waves\n-[b]/god[/b]: toggles god mode\n-[b]/inv[/b]: toggles creative inventory\n-[b]/aircontrol[/b]: toggles air control\n-[b]/movement[/b]: toggles advanced movement",
+   "description" : "Horde Mode for Scrap Mechanic.\nDefeat waves of enemies with powerful guns!\n\nCommands:\n--[b]HOST ONLY[/b]--\n-[b]/start[/b]: starts the waves\n-[b]/stop[/b]: stops the waves, use /start to start them again\n-[b]/restart[/b]: restart the game from the beginning\n-[b]/inv[/b]: toggles creative inventory\n-[b]/god[/b]: toggles god mode\n-[b]/pvp[/b]: toggles pvp\n-[b]/goto[/b]: the game skips to the specified wave\n\n--[b]FOR EVERYONE[/b]--\n-[b]/aircontrol[/b]: toggles air control\n-[b]/movement[/b]: toggles advanced movement",
    "fileId" : 2811012789,
    "localId" : "988bc7a1-0885-436b-beb9-2b9fc659d005",
    "name" : "Horde Mode",
