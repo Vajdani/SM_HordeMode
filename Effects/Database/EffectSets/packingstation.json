@@ -1,0 +1,165 @@
+{
+	"Packingstation - Load":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/installations/packingstation/ps_load",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Packingstation - Shoot":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_packingstation_blowout",
+				"offset": { "x": 0.0, "y": -0.5, "z": -0.25 },	
+				"attached": true,
+				"delay": 0.0
+			}	
+		]
+	},
+	"Packingstation - Roller":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/installations/packingstation/ps_roller",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Packingstation - Activate":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_packingstation_inside_piston01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },	
+				"attached": true,
+				"delay": 1.5
+			}	
+		]
+	},
+	"Packingstation - ActivateSound":
+	{
+		"effectList":
+		[
+			// {
+			// 	"type": "renderable",
+			// 	"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_orangecrate.rend",
+			// 	"offset": { "x": 8.0, "y": 0.0, "z": 0.0 },
+			// 	"delay": 2.5
+			// },
+			{
+				"type": "audio",
+				"name": "event:/props/installations/packingstation/ps_pack",
+				"offset": { "x": 0.0, "y": 0.0, "z": -3.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/installations/packingstation/ps_throw",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Packingstation - Orange":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_orangecrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Bananacrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_bananacrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Blueberrycrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_blueberrycrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Pineapplecrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_pineapplecrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Redbeetcrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_redbeetcrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Brocolicrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_broccolicrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Carrotcrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_carrotcrate.rend",
+				"delay": 2.5
+			}
+		]
+	},
+	"Packingstation - Tomatocrate":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$SURVIVAL_DATA/Effects/Renderable/Packingstation/obj_containers_tomatocrate.rend",
+				"delay": 2.5
+			}
+		]
+	}
+			
+}

@@ -1,0 +1,974 @@
+{
+	"MountedPotatoRifle - Shoot":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "PotatoRifle - Shoot",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_basic_muzzel",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Mountedwatercanon - Shoot":
+	{
+		"effectList":
+		[
+			{
+			 	"type": "audio",
+			 	"name": "event:/weapons/watercannon_fire",
+			 	"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_water_hit_ground_small",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"PropaneTank - ExplosionSmall":
+	{
+		"maxInstances": 64,
+		"parameterList":
+		{
+			"size": 0.0,
+			"color": "ffcc34",
+			"radius": 16.0,
+			"intensity": 2.0,
+			"shakeStrength": 0.5,
+			"shakeRadius": 40.0
+		},
+		"parameterCurves":
+		{
+			"radius":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.1, "value":15.0 },
+					{ "time":0.6, "value":0.0 }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Explosion_small_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Explosion",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": 1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "cameraShake",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"shakeStrength",
+					"shakeRadius"
+				],
+				"duration": 0.4,
+				"delay": 0.0
+			}
+		]
+	},
+	"PropaneTank - ExplosionBig":
+	{
+		"maxInstances": 64,
+		"parameterList":
+		{
+			"size": 0.5,
+			"color": "ffcc34",
+			"radius": 20.0,
+			"intensity": 8.0,
+			"shakeStrength": 1,
+			"shakeRadius": 50.0
+		},
+		"parameterCurves":
+		{
+			"radius":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.1, "value":20.0 },
+					{ "time":0.6, "value":0.0 }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Explosion_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Explosion",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": 1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "cameraShake",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"shakeStrength",
+					"shakeRadius"
+				],
+				"duration": 0.4,
+				"delay": 0.0
+			}
+		]
+	},
+	"PropaneTank - ActivateSmall":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Explosion_small_activation_startup",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"PropaneTank - ActivateBig":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Explosion_big_activation_startup",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"PropaneTank - SingleActivate":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Explosion_impact_activation_startup",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Explosion - Debris":
+	{
+		"maxInstances": 384,
+		"parameterList":
+		{
+			"Size": 0.0,
+			"Velocity_max_50": 20.0,
+			"Material": 0.0,
+			"Phys_energy": 10.0,
+			"RemainingInstances": 384
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "explosion_debri_part",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0,
+				"parameters":
+				{
+					"RemainingInstances":
+					[
+						{
+							"condition": "less",
+							"value": 256.0,
+							"name": "explosion_debri_block_smokeless"
+						}
+					]
+				}
+			},
+			{
+				"type": "audio",
+				"name": "Collision - Single",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"PistonExhaust":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "construct_Piston_exhaust_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"BubbleBath":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Bubbles_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - DoorwayDestruction":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_doorway",
+				"offset": { "x": 0.0, "y": -0.25, "z": 0.0 },
+				"attached": true,
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - cocoon01":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_cocoon_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - cocoon02":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_cocoon_02",
+				"offset": { "x": 0.0, "y": -0.25, "z": 0.0 },
+				"attached": true,
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - TapeRoll":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_taperoll_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - TapeRollBig":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_taperoll_big_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - Tape":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_tape_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - TapeCorner":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_corner_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"DestructableTape - TapeCornerBig":
+	{
+		"parameterList":
+		{
+			"progress":0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tape_destroy_corner_02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "Gas Leak",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"progress"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"PowerSocket - Activate":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_powersocket_powersocket01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/installations/powercore_insert",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/installations/downedship_poweron",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.3
+			}
+		]
+	},
+	"Resourcecollector - PutIn":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/resourcecollector_insert",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Resourcecollector - TakeOut":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/resourcecollector_takeout",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Beacon - Idle":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/beacon",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"NoteTerminal - Active":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/ui/logbook_entry",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"NoteTerminal - Interact":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/ui/logbook_entryactivate",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Buildarea - Oncreate":
+	{
+		"parameterList":
+		{
+			"minColor":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor":[0.4, 0.4, 1.0, 0.7],
+			"minColor2":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor2":[0.4, 0.4, 1.0, 0.7]
+		},
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_buildarea.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_buildarearim.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_buildzone.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor2", "maxColor2" ]
+			}
+
+		]
+	},
+	"Goal - Oncreate":
+	{
+		"parameterList":
+		{
+			"minColor":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor":[0.4, 0.4, 1.0, 0.7]
+		},
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_goal.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			},
+			{
+				"type": "particle",
+				"name": "p_challengemode_goal_icon",
+				"offset": { "x": 0.0, "y": 9.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Goal - Activate":
+	{
+		"effectList":
+		[
+
+			{
+				"type": "particle",
+				"name": "p_challengemode_hologram_goal_activate",
+				"offset": { "x": 0.0, "y": 0.11, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Chest - Arrow":
+	{
+		"parameterList":{},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_challengemode_treasurechest_icon",
+				"delay": 0.0
+			}
+		]
+	},
+	"Ball":
+	{
+		"parameterList":
+		{
+			"Velocity_max_50": 0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/challengeball_rolling",
+				"parameters": [ "Velocity_max_50" ]
+			}
+		]
+	},
+	"Supervisor - Cheer":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/supervisor/monitor_bravo",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Supervisor - Fail":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/supervisor/monitor_next",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Supervisor - Generic":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/supervisor/monitor_generic",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"CelebrationBot - Confetti":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_challengemode_confetti",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"CelebrationBot - Audio":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/confettibot",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Soundcube - Activate":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/ui/challenge/chall_activation",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Balltrigger - Activate":
+	{
+		"parameterList":
+		{
+			"color": "007fff",
+			"Color": [1,1,1,1],
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+			 	"type": "audio",
+			 	"name": "event:/props/challengeball_slot",
+			 	"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+			 	"delay": 0.0
+			 },
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_challengemode_ballactivation",
+				"offset": { "x": 0.0, "y": 0.5, "z": 0.0 },
+				"delay": 0.0,
+				"parameters":
+				[
+					"Color"
+				],
+				"attached": true
+			}
+		]
+	},
+	"Celebrationbot - Activate":
+	{
+		"parameterList":
+		{
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "challengemode_animated_challengeball",
+				"offset": { "x": 0.0, "y": 0.5, "z": 0.0 },
+				"delay": 0.0,
+				"attached": true
+			}
+		]
+	},
+	"Ballspawner - Activate":
+	{
+		"parameterList":{},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/challengeball_spawn",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"ObserverBot - Write":
+	{
+		"parameterList":{},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/observerbot_write",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"PlayerStart - Glow":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_obj_interactive_startposition_glow",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction" : { "x": 0.0, "y": 1.0, "z": 0.0 }
+			}
+		]
+	},
+	"MapInspector - On":
+	{
+		"parameterList":{},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/mapinspector/mi_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"BuildMode - Floor":
+	{
+		"parameterList":
+		{
+			"minColor":[0.3, 0.1, 0.0, 0.0], 
+			"maxColor":[1.0, 0.7, 0.05, 0.85],
+			"minColor2":[0.06, 0.019, 0.0, 0.0], 
+			"maxColor2":[0.31, 0.21, 0.01, 0.3],
+			"minColor3":[0.06, 0.019, 0.0, 0.0], 
+			"maxColor3":[0.31, 0.21, 0.01, 0.1]
+
+		},
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor02.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.6 },
+				"parameters" : [ "minColor2", "maxColor2" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor02.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": -1.5 },
+				"parameters" : [ "minColor3", "maxColor3" ]
+			}
+
+		]
+	},
+		"Boop - Floor":
+	{
+		"parameterList":
+		{
+			"minColor":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor":[0.4, 0.4, 1.0, 0.7],
+			"minColor2":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor2":[0.4, 0.4, 1.0, 0.4],
+			"minColor3":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor3":[0.4, 0.4, 1.0, 0.1]
+
+		},
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor02.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor02.rend",
+				"offset": { "x": 0.0, "y": -5.0, "z": -5.0 },
+				"parameters" : [ "minColor2", "maxColor2" ]
+			},
+			{
+				"type": "renderable",
+				"name": "$CHALLENGE_DATA/Effects/Renderables/hologram_builderfloor02.rend",
+				"offset": { "x": 0.0, "y": -10.0, "z": -10.0 },
+				"parameters" : [ "minColor3", "maxColor3" ]
+			}
+		]
+	}
+}

@@ -1,0 +1,134 @@
+{
+	"Glowgorp - Cardboardmunch":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_glowgorp_destruct_cardboard",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.1 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/eat",
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Hit":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/hit",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Walk":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/footstep",
+				"parameters":
+				[
+					"surface"
+				],
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Jump":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/jump",
+				"parameters":
+				[
+					"surface"
+				],
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Idlesound":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/idle",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Pickup":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/animals/glowgorp/pickup",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Glowgorp - Destruct":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Material": 20.0,
+			"Color": [1,0.6,0,1]
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_glowgorp_destruct",
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"parameters":
+				[
+					"Color"
+				],
+				"delay": 0.0
+			}
+
+		]
+	}
+}

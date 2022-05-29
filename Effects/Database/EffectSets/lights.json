@@ -1,0 +1,538 @@
+{
+	"HeadLight":
+	{
+		"parameterList":
+		{
+			"range": 50.0,
+			"coneFade": 0.5,
+			"coneAngle": 45.0,
+			"intensity": 1.5,
+			"maxIntensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"FloodLight":
+	{
+		"parameterList":
+		{
+			"range": 20.0,
+			"coneFade": 0.4,
+			"coneAngle": 68.0,
+			"intensity": 1.8,
+			"maxIntensity": 1.8,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0, "y": -0.70, "z": 0.70 },
+				"delay": 0.0
+			}
+		]
+	},
+	"FactoryLight":
+	{
+		"parameterList":
+		{
+			"radius": 10.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientIntensityScale": 1.0,
+			"ambientMaxIntensity": 0.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"ambientRangeScale": 2.0
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EncryptorLight":
+	{
+		"parameterList":
+		{
+			"radius": 4.0,
+			"intensity": 1.5,
+			"maxIntensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"ambientIntensityScale": 1.0,
+			"ambientMaxIntensity": 0.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"ambientRangeScale": 2.0
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.0
+			}
+		]
+	},
+	"FluorescentLight":
+	{
+		"parameterList":
+		{
+			"range": 25.0,
+			"coneFade": 0.3,
+			"coneAngle": 54,
+			"intensity": 1.8,
+			"maxIntensity": 1.8,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.4,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.3,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"offset": { "x": 0.0, "y": 0.05, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"PackingtableLight":
+	{
+		"parameterList":
+		{
+			"range": 15.0,
+			"coneFade": 0.3,
+			"coneAngle": 70,
+			"intensity": 1.3,
+			"maxIntensity": 1.3,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": -0.5, "z": 0.5 },
+				"offset": { "x": 0.0, "y": -0.05, "z": 0.05 },
+				"delay": 0.0
+			}
+		]
+	},
+	"PosterLight":
+	{
+		"parameterList":
+		{
+			"range": 15.0,
+			"coneFade": 0.3,
+			"coneAngle": 52.0,
+			"intensity": 1.5,
+			"maxIntensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.4, "z": 0.5 },
+				"delay": 0.0
+			}
+		]
+	},
+	"AreaLight":
+	{
+		"parameterList":
+		{
+			"range": 30.0,
+			"coneFade": 0.4,
+			"coneAngle": 42,
+			"intensity": 2.0,
+			"maxIntensity": 2.0,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.35,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.5,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"offset": { "x": 0.0, "y": 0.05, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"ConstructionLight":
+	{
+		"parameterList":
+		{
+			"range": 25.0,
+			"coneFade": 0.5,
+			"coneAngle": 45.0,
+			"intensity": 1.5,
+			"maxIntensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.125 },
+				"delay": 0.0
+			}
+		]
+	},
+	"ShackLight":
+	{
+		"parameterList":
+		{
+			"radius": 6.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"ambientRangeScale": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"delay": 0.0
+			}
+		]
+	},
+	"FreshLight":
+	{
+		"parameterList":
+		{
+			"color": "35ffff",
+			"radius": 3.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"ambientRangeScale": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentSpotLight_Static_Small":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"range": 10.0,
+			"coneFade": 0.5,
+			"coneAngle": 45.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentSpotLight_Static_Medium":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"range": 22.0,
+			"coneFade": 0.5,
+			"coneAngle": 80.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.2,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentSpotLight_Static_Large":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"range": 120.0,
+			"coneFade": 0.3,
+			"coneAngle": 25.0,
+			"intensity": 1.5,
+			"maxIntensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.05,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 0.4,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentSpotLight_Dynamic_Small":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"range": 10.0,
+			"coneFade": 0.5,
+			"coneAngle": 45.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentSpotLight_Dynamic_Medium":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"range": 22.0,
+			"coneFade": 0.1,
+			"coneAngle": 70.0,
+			"intensity": 1.0,
+			"maxIntensity": 1.0,
+			"ambient": true,
+			"additive": false,
+			"ambientPosScale": 0.25,
+			"ambientIntensityScale": 0.3,
+			"ambientMaxIntensity": 0.0,
+			"ambientRangeScale": 1.2,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"shadowMode": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "spotLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentPointLight_Static_Medium":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"radius": 13.0,
+			"intensity": 1.5,
+			"ambient": true,
+			"additive": false,
+			"maxIntensity": 1.5,
+			"ambientIntensityScale": 0.2,
+			"ambientMaxIntensity": 0.0,
+			"falloffMode": 0,
+			"falloffFactor": 1.0,
+			"ambientRangeScale": 3.0
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentAmbientLight_Small":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"radius": 10.0,
+			"intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "ambientLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentAmbientLight_Medium":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"radius": 22.0,
+			"intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "ambientLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"EnvironmentAmbientLight_Large":
+	{
+		"parameterList":
+		{
+			"color": "eeeeee",
+			"radius": 120.0,
+			"intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "ambientLight",
+				"name": "",
+				"direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
+				"delay": 0.0
+			}
+		]
+	}
+}

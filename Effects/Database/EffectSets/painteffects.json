@@ -1,0 +1,64 @@
+{
+	"Paintcharacter - Small":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_painteffect_small",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_paint",
+				"delay": 0.0
+			}
+		]
+	},
+	"Paintcharacter - Medium":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_painteffect_medium",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_paint",
+				"delay": 0.0
+			}
+		]
+	},
+	"Paintcharacter - Large":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_painteffect_large",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_paint",
+				"delay": 0.0
+			}
+		]
+	},
+	"Paintcharacter - Erase":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_erase",
+				"delay": 0.0
+			}
+		]
+	}
+}

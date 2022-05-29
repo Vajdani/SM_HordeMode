@@ -1,0 +1,35 @@
+{
+	"Part - Upgrade":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_partseffect_parts_uppgrade01",
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/upgrade_part",
+				"delay": 0.0
+			}
+		]
+	},
+	"Part - Electricity":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_parteffects_electricity",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/electric_spark",
+				"delay": 0.0
+			}
+		]
+	}
+}

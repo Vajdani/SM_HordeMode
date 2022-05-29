@@ -1,0 +1,170 @@
+{
+	"Unbox - Farmbot01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot/unbox_big",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_farmbot_bot",
+                "offset": { "x": 0.0, "y": -1.25, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_farmbot_top",
+                "offset": { "x": 0.0, "y": -0.75, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    },
+	"Unbox - Totebot01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_totebot_bot",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_totebot_top",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    },
+	"Unbox - Haybot01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_haybot_bot",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 10.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_haybot_top",
+                "offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    },
+	"Unbox - Tapebot01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_tapebot_bot",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_tapebot_top",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    },
+    "Unbox - glowworm01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_glowworm_bot",
+                "offset": { "x": 0.0, "y": -0.5, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_glowworm_top",
+                "offset": { "x": 0.0, "y": -0.5, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    },
+	"Unbox - woc01":
+    {
+        "effectList":
+        [
+            {
+				"type": "audio",
+				"name": "event:/props/bot_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_woc_bot",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            },
+            {
+                "type": "particle",
+                "name": "p_characterobject_package_woc_top",
+                "offset": { "x": 0.0, "y": -1.0, "z": 0.0 },
+                "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+                "attached": true,
+                "delay": 0.0
+            }
+        ]
+    }
+}

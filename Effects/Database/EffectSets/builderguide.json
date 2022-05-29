@@ -1,0 +1,97 @@
+{
+	"Builderguide - Active":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_builderguide_active",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/builderguide/activate",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Builderguide - Background":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_builderguide_background",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/builderguide/loop",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Builderguide - Buildcomplete":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_builderguide_buildcomplete",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.5
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/builderguide/complete",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Builderguide - Stagecomplete":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_builderguide_stagecomplete",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/builderguide/finish_section",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	},
+	"Builderguide - Deactivate":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_builderguide_deactivate",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 1.5
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/builderguide/deactivate",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	}
+}

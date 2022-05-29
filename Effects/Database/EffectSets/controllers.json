@@ -1,0 +1,134 @@
+{
+	"Controller - Default":
+	{
+		"parameterList":
+		{
+			"level": 0,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	},
+	"Controller - Level 1":
+	{
+		"parameterList":
+		{
+			"level": 1,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	},
+	"Controller - Level 2":
+	{
+		"parameterList":
+		{
+			"level": 2,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	},
+	"Controller - Level 3":
+	{
+		"parameterList":
+		{
+			"level": 3,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	},
+	"Controller - Level 4":
+	{
+		"parameterList":
+		{
+			"level": 4,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	},
+	"Controller - Level 5":
+	{
+		"parameterList":
+		{
+			"level": 5,
+			"velocity": 0.0,
+			"load": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/controller",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"load"
+				]
+			}
+		]
+	}
+}

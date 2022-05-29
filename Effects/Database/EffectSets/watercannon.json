@@ -1,0 +1,30 @@
+{
+	"Watercannon - Muzzeflash":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_watercanon_muzzelflash",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Watercannon - Impact":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_watercannon_projectile_impact",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

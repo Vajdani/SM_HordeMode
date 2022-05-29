@@ -1,0 +1,13 @@
+{
+	"Arrow":
+	{
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$GAME_DATA/Effects/Renderables/arrow.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 }
+			}
+		]
+	}
+}

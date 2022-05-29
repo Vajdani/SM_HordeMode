@@ -1,0 +1,303 @@
+{
+	"Thruster - Level 1":
+	{
+		"parameterList":
+		{
+			"velocity": 0.0,
+			"power": 0.0,
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"velocity",
+					"power"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "1_thruster_afterburner_BurstThrust_lvl1",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.6125 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "1_thruster_afterburner_startup_lvl1",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.25
+			},
+			{
+				"type": "particle",
+				"name": "1_thruster_afterburner_lvl1",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.425
+			}
+		]
+	},
+	"Thruster - Level 2":
+	{
+		"parameterList":
+		{
+			"velocity": 0.0,
+			"power": 0.0,
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"velocity",
+					"power"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "2_thruster_afterburner_BurstThrust_lvl2",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.6125 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "2_thruster_afterburner_startup_lvl2",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.25
+			},
+			{
+				"type": "particle",
+				"name": "2_thruster_afterburner_lvl2",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.425
+			}
+		]
+	},
+	"Thruster - Level 3":
+	{
+		"parameterList":
+		{
+			"velocity": 0.0,
+			"power": 0.0,
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster03",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"velocity",
+					"power"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "3_thruster_afterburner_BurstThrust_lvl3",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.6125 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "3_thruster_afterburner_startup_lvl3",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.25
+			},
+			{
+				"type": "particle",
+				"name": "3_thruster_afterburner_lvl3",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.425
+			}
+		]
+	},
+	"Thruster - Level 4":
+	{
+		"parameterList":
+		{
+			"velocity": 0.0,
+			"power": 0.0,
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster04",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"velocity",
+					"power"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "4_thruster_afterburner_BurstThrust_lvl4",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.6125 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "4_thruster_afterburner_startup_lvl4",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.25
+			},
+			{
+				"type": "particle",
+				"name": "4_thruster_afterburner_lvl4",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.425
+			}
+		]
+	},
+	"Thruster - Level 5":
+	{
+		"parameterList":
+		{
+			"velocity": 0.0,
+			"power": 0.0,
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster05",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"velocity",
+					"power"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "5_thruster_afterburner_BurstThrust_lvl5",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.6125 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "5_thruster_afterburner_startup_lvl5",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.25
+			},
+			{
+				"type": "particle",
+				"name": "5_thruster_afterburner_lvl5",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"delay": 0.425
+			}
+		]
+	},
+	"Thruster - Ground effect":
+	{
+		"parameterList":
+		{
+			"ground_distance": 0.0,
+			"power": 0.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "Construct_afterburner_GroundDust_Direction01_Intensity_03",
+				"delay": 0.075
+			},
+			{
+				"type": "audio",
+				"name": "Thruster dust",
+				"parameters":
+				[
+					"ground_distance",
+					"power"
+				],
+				"delay": 0.075
+			}
+		]
+	}
+}

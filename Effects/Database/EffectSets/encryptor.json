@@ -1,0 +1,140 @@
+{
+	"Encryptor - Activation":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_encrypter_activation_startup",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_encrypter_activation_end",
+				"offset": { "x": 0.0, "y": -0.25, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_on",
+				"delay": 0
+			}
+		]
+	},
+	"Encryptor - Deactivation":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_encrypter_deactivation",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_off",
+				"delay": 0
+			}
+		]
+	},
+	"Barrier - Activation":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_barrier_activation_startup",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_barrier_activation_end",
+				"offset": { "x": 0.0, "y": -0.25, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_barrier_activation_lightning_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_on",
+				"delay": 0
+			}
+		]
+	},
+	"Barrier - Deactivation":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_barrier_deactivation",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.25 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_off",
+				"delay": 0
+			}
+		]
+	},
+	"Barrier - SledgeHammerHit":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_barrier_impact",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_off",
+				"delay": 0
+			}
+		]
+	},
+	"Barrier - ShieldImpact":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_barrier_hit_impact",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/encryptor_off",
+				"delay": 0
+			}
+		]
+	}
+}

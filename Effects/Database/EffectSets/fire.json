@@ -1,0 +1,542 @@
+{
+	"Fire - gradual":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 10.0,
+			"intensity": 3.0,
+			"health": 2,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_metalcreak",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"parameters":
+				{
+					"health":
+					[
+						{
+							"condition": "equal",
+							"value": 1,
+							"name": "p_enviroment_fire_small_01"
+						},
+						{
+							"condition": "equal",
+							"value": 2,
+							"name": "p_enviroment_fire_01"
+						},
+						{
+							"condition": "equal",
+							"value": 3,
+							"name": "p_enviroment_fire_massive_01"
+						}
+					]
+				},
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - small01":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 6.0,
+			"intensity": 2.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_small_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire -medium01":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 7.0,
+			"intensity": 2.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - large01":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 10.0,
+			"intensity": 3.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.75 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_massive_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire -medium01_putout":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 7.0,
+			"intensity": 2.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/fire_extinguish",
+				"delay": 0.075
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_putout_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - large01_putout":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 10.0,
+			"intensity": 3.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/fire_extinguish",
+				"delay": 0.075
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_massive_putout_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - lowburn":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 5.0,
+			"intensity": 2.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_low_intensity_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"FireColorTest":
+	{
+		"parameterList":
+		{
+			"Color": [1,1,1,1],
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_massive_ColorTest",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - vertical":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 6.0,
+			"intensity": 2.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_vertical_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire - Shipwreck":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 2.5,
+			"intensity": 3.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.75 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_shipwreck_fire_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Steam - quench":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "WeldTool - Sparks",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "paint_smoke",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fire- Smoke Medium01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_medium01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - pillar01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_big_smokepillar01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - pillar03":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_small_smokepillar03",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - pillar02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_smokepillar02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - blowing01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_blowingsmoke01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - blowing02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_blowingsmoke02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},"Smoke - blowing03":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_blowingsmoke03",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - GroundSmokeMassive":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_massivegroundsmoke",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - ash":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_floatingash_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Smoke - embers":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_smoke_floatingembers_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	}
+}

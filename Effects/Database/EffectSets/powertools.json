@@ -1,0 +1,116 @@
+{
+	"Drill - StoneDrill":
+	{
+		"parameterList":
+		{
+			"impact": 0,
+			"velocity": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/drill",
+				"parameters":
+				[
+					"impact",
+					"velocity"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Drill - Debris":
+	{
+		"parameterList":
+		{
+			"drill_material": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_powertools_drill_default_01",
+				"parameters":
+				{
+					"drill_material":
+					[
+						{
+							"condition": "equal",
+							"value": 9.0,
+							"name": "p_powertools_drill_metal_01"
+						},
+						{
+							"condition": "equal",
+							"value": 6.0,
+							"name": "p_powertools_drill_stone_01"
+						},
+						{
+							"condition": "equal",
+							"value": 7.0,
+							"name": "p_powertools_drill_wood_01"
+						}
+					]
+				},
+				"delay": 0.0
+			}
+		]
+	},
+	"Saw - SawBlade":
+	{
+		"parameterList":
+		{
+			"impact": 0,
+			"velocity": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/saw",
+				"parameters":
+				[
+					"impact",
+					"velocity"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Saw - Debris":
+	{
+		"parameterList":
+		{
+			"saw_material": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_powertools_sawblade_generic_01",
+				"parameters":
+				{
+					"saw_material":
+					[
+						{
+							"condition": "equal",
+							"value": 9.0,
+							"name": "p_powertools_sawblade_metal_01"
+						},
+						{
+							"condition": "equal",
+							"value": 6.0,
+							"name": "p_powertools_sawblade_stone_01"
+						},
+						{
+							"condition": "equal",
+							"value": 7.0,
+							"name": "p_powertools_sawblade_wood_01"
+						}
+					]
+				},
+				"delay": 0.0
+			}
+		]
+	}
+}

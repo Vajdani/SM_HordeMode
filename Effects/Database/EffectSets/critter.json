@@ -1,0 +1,35 @@
+{
+	"butterfly":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_butterfly_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"flies01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_fly_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"flies02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_fly_02",
+				"delay": 0.0
+			}
+		]
+	}
+}

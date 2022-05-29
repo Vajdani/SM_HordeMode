@@ -1,0 +1,192 @@
+{
+	"Water - splash01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_watersplash_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/water_splash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - splash02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_watersplash_02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/water_leak",
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - HitWaterTiny":
+	{
+		"parameterList":
+		{
+			"Size": 0.01,
+			"Velocity_max_50": 0.0,
+			"Material": 17,
+			"Phys_energy": 300.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_hit_ground_tiny",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.165 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - HitWaterSmall":
+	{
+		"parameterList":
+		{
+			"Size": 0.01,
+			"Velocity_max_50": 0.0,
+			"Material": 17,
+			"Phys_energy": 300.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_hit_ground_small",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.165 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - HitWaterBig":
+	{
+		"parameterList":
+		{
+			"Size": 0.01,
+			"Velocity_max_50": 0.0,
+			"Material": 17,
+			"Phys_energy": 300.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_hit_ground_big",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.165 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - HitWaterMassive":
+	{
+		"parameterList":
+		{
+			"Size": 0.01,
+			"Velocity_max_50": 0.0,
+			"Material": 17,
+			"Phys_energy": 300.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_hit_ground_massive",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.165 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - BucketGetWater":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_bucket_getwater",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - WaterProjectileTrail":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_water_projectile_trail",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	}
+}

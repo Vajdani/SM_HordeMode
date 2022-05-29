@@ -1,0 +1,16 @@
+{
+   "Horn - Honk" : {
+      "effectList" : [
+         {
+            "audio" : [ "event:/vehicle/horns/clownhorn" ],
+            "delay" : 0.0,
+            "offset" : [ 0.0, 0.0, 0.0 ],
+            "parameters" : [ "pitch" ],
+            "type" : "audio"
+         }
+      ],
+      "parameterList" : {
+         "pitch" : 0.50
+      }
+   }
+}

@@ -1,0 +1,187 @@
+{
+	"Shipwreck - sparks01":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/electric_spark_randomloop",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_shipwreck_sparks_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Shipwreck - sparks02":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/electric_spark_randomloop",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_shipwreck_sparks_02",
+				"delay": 0.0
+			}
+		]
+	},
+	"Shipwreck - sparks03":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/electric_spark_randomloop",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_shipwreck_sparks_03",
+				"delay": 0.0
+			}
+		]
+	},
+	"Shipwreck - AmbianceSound":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/2D/downedship_int",
+				"delay": 0.0
+			}
+		]
+	},
+	"ShipFire - medium01":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 1.5,
+			"intensity": 3.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.5 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"ShipFire - large01":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 2.5,
+			"intensity": 3.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.75 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_massive_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"ShipFire - lowburn":
+	{
+		"parameterList":
+		{
+			"color": "ff7b33ff",
+			"radius": 1.0,
+			"intensity": 3.0,
+			"fire_intensity": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/amb_3D_crashsitefire_small",
+				"parameters":
+				[
+					"fire_intensity"
+				],
+				"delay": 0.075
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_enviroment_fire_low_intensity_01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.625 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	}
+}

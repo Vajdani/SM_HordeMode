@@ -1,0 +1,152 @@
+{
+	"Piston - Default":
+	{
+		"parameterList":
+		{
+			"level": 0,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Piston - Level 1":
+	{
+		"parameterList":
+		{
+			"level": 1,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Piston - Level 2":
+	{
+		"parameterList":
+		{
+			"level": 2,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Piston - Level 3":
+	{
+		"parameterList":
+		{
+			"level": 3,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Piston - Level 4":
+	{
+		"parameterList":
+		{
+			"level": 4,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Piston - Level 5":
+	{
+		"parameterList":
+		{
+			"level": 5,
+			"velocity": 0,
+			"height": 0,
+			"stretch": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/piston",
+				"parameters":
+				[
+					"level",
+					"velocity",
+					"height",
+					"stretch"
+				],
+				"delay": 0.0
+			}
+		]
+	}
+}

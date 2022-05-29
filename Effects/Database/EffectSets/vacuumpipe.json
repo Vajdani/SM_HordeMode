@@ -1,0 +1,45 @@
+{
+	"Vacuumpipe - Suction":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_vacuumpipe_suction",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/vacuum/vacuum_suction",
+				"delay": 0.0
+			}
+		]
+	},
+	"Vacuumpipe - Blowout":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_vacuumpipe_blowout",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/vacuum/vacuum_blowout",
+				"delay": 0.0
+			}
+		]
+	}
+	// "Vacuumpipe - Build":
+	// {
+	// 	"effectList":
+	// 	[
+	// 		{
+	// 			"type": "audio",
+	// 			"name": "event:/ui/attach_default",
+	// 			"delay": 0.0
+	// 		}
+	// 	]
+	// }
+}

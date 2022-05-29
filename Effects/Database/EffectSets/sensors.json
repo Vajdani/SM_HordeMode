@@ -1,0 +1,242 @@
+{
+	"Sensor on":
+	{
+		"parameterList":
+		{
+			"level": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off":
+	{
+		"parameterList":
+		{
+			"level": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor on - Level 1":
+	{
+		"parameterList":
+		{
+			"level": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off - Level 1":
+	{
+		"parameterList":
+		{
+			"level": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor on - Level 2":
+	{
+		"parameterList":
+		{
+			"level": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off - Level 2":
+	{
+		"parameterList":
+		{
+			"level": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor on - Level 3":
+	{
+		"parameterList":
+		{
+			"level": 3
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off - Level 3":
+	{
+		"parameterList":
+		{
+			"level": 3
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor on - Level 4":
+	{
+		"parameterList":
+		{
+			"level": 4
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off - Level 4":
+	{
+		"parameterList":
+		{
+			"level": 4
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor on - Level 5":
+	{
+		"parameterList":
+		{
+			"level": 5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_on",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Sensor off - Level 5":
+	{
+		"parameterList":
+		{
+			"level": 5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/triggers/trigger_sensor_off",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"level"
+				],
+				"delay": 0.0
+			}
+		]
+	}
+}

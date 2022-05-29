@@ -1,0 +1,475 @@
+{
+	"PaintTool - Open":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_colourmenu",
+				"delay": 0.0
+			}
+		]
+	},
+	"PaintTool - Close":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_colourpick",
+				"delay": 0.0
+			}
+		]
+	},
+	"PaintTool - NoAmmo":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_colourabort",
+				"delay": 0.0
+			}
+	
+		]
+	},
+	"PaintTool - Paint":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/painttool/pt_paint",
+				"delay": 0.0
+			}
+		]
+	},
+	"Itemtool - FertilizerUse":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/fertilizer",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_fertilizer_use",
+				"offset": { "x": 0.11, "y": 0.0, "z": 0.18 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Itemtool - FPFertilizerUse":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/fertilizer",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_fertilizer_use",
+				"delay": 0.0
+			}
+		]
+	},
+	"Multiknife - Use":
+	{
+		"parameterList":
+		{
+			"Material": 7
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/multitool_refine",
+				"parameters":
+				[
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_multiknife_usesparks",
+				"delay": 0.05
+			}
+		]
+	},
+	"Multiknife - Hit":
+	{
+		"parameterList":
+		{
+			"Material": 0,
+			"Size": 0.005,
+			"Velocity_max_50": 10.0,
+			"Phys_energy": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/tools/multitool_refine",
+				"parameters":
+				[
+					"Material"
+				]
+			},
+			{
+				"type": "particle",
+				"name": "",
+				"parameters":
+				{
+					"Material":
+					[
+						{
+							"condition": "equal",
+							"values": [ 1.0, 2.0, 3.0, 4.0, 5.0 ],
+							"name": "hammer_ground"
+						},
+						{
+							"condition": "equal",
+							"value": 6.0,
+							"name": "p_tool_multiknife_refine_hit_stone"
+						},
+						{
+							"condition": "equal",
+							"value": 7.0,
+							"name": "p_tool_multiknife_refine_hit_wood"
+						},
+						{
+							"condition": "equal",
+							"value": 8.0,
+							"name": "hammer_plastic"
+						},
+						{
+							"condition": "equal",
+							"value": 9.0,
+							"name": "p_tool_multiknife_refine_hit_metal"
+						},
+						{
+							"condition": "equal",
+							"value": 10.0,
+							"name": "p_sledgehammer_impact_glass"
+						},
+						{
+							"condition": "equal",
+							"value": 13.0,
+							"name": "p_sledgehammer_impact_cardboard"
+						},
+						{
+							"condition": "equal",
+							"value": 15.0,
+							"name": "hammer_tape"
+						}
+					]
+				},
+				"delay": 0.0
+			}
+		]
+	},
+	"Multiknife - Complete":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/ui/detach_default",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/item_pickup",
+				"delay": 0.0
+			}
+		]
+	},
+	"Eat - Munch":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.3
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.45
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.6
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.7
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.8
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.9
+			},
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 1.0
+			}			
+		]
+	},
+	"Eat - Drink":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.3
+			}
+			
+		]
+	},
+	"Eat - MunchFP":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.3
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.45
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.6
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.7
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.8
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 0.9
+			},
+			{
+				"type": "particle",
+				"offset": { "x": 0.0, "y": 0.025, "z": -0.025 },
+				"name": "p_player_munchfp",
+				"attached": true,
+				"delay": 1.0
+			}			
+		]
+	},
+
+	"Eat - MunchSound":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_generic",
+				"delay": 0.15
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_generic",
+				"delay": 0.46
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_generic",
+				"delay": 0.89
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_generic",
+				"delay": 1.23
+			}
+			
+		]
+	},
+	"Eat - DrinkSound":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/can_drink",
+				"delay": 0.25
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/can_drink",
+				"delay": 0.85
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/can_drink",
+				"delay": 1.0
+			}
+			
+		]
+	},
+	"Eat - EatFinish":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+
+			{
+				"type": "audio",
+				"name": "event:/props/can_drink",
+				"delay": 0.25
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/health_restored",
+				"delay": 0.8
+			}
+			
+		]
+	},
+	"Eat - DrinkFinish":
+	{
+		"parameterList":
+		{
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/can_drink",
+				"delay": 0.25
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/health_restored",
+				"delay": 0.8
+			}
+			
+		]
+	},
+	"Mechanic - ReciveBaguette":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_sandwich",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_player_eating_baguette",
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	"Mechanic - EatBaguette":
+	{
+		"effectList":
+		[	
+			{
+				"type": "particle",
+				"name": "p_player_munch",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/consumtion/eat_sandwich",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_player_eating_baguette",
+				"offset": { "x": 0.0, "y": -0.04, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"BearingDrill - Use":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "construct_addingbearing",
+				"delay": 0.0
+			}
+		]
+	}
+}

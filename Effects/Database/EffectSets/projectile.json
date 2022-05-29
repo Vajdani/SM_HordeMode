@@ -1,0 +1,689 @@
+{
+	"PotatoProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Material": 2,
+			"Velocity_max_50": 10.0,
+			"Size": 0.005
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "Weapon - Hit",
+				"parameters":
+				[
+					"Material",
+					"Velocity_max_50",
+					"Size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_basic_impact_potato",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"BananaProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_banana_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"BroccoliProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_broccoli_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"PineappleProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_pineapple_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"RedbeetProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_redbeet_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"TomatoProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_tomato_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"OrangeProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_orange_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"CarrotProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_carrot_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"BlueberryProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Size": 0.08,
+			"Velocity_max_50": 50.0,
+			"Material": 20.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_debris",
+				"parameters":
+				[
+					"Size",
+					"Velocity_max_50",
+					"Material"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_blueberry_impact",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"TapeProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Velocity": 10.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "PotatoRifle - NoAmmo",
+				//"parameters":
+				//[
+				//	"Velocity"
+				//],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tapebot_projectile_trail",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"TapeProjectile - Attached":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/enemies/tapebot/tapebot_shoot_projectile",
+				"attached": true
+			}
+		]
+	},
+	"WaterProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Velocity_max_50": 10.0,
+			"Material": 16,
+			"Size": 0.1,
+			"Phys_energy": 250
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Velocity_max_50",
+					"Material",
+					"Size",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_water_watersplash_02",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"PesticideProjectile - Attached":
+	{
+		"parameterList":
+		{
+			"velocity": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_farmbot_pesticide_projectile",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"attached": true,
+				"delay": 0.0
+			},			{
+				"type": "audio",
+				"name": "event:/weapons/chemcannon/chem_flying",
+				"attached": true,
+				"parameters":
+				[
+					"velocity"
+				]
+			}
+		]
+	},
+	"PesticideProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Velocity": 10.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_farmbot_pesticide_impact01",
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/weapons/chemcannon/chem_explode",
+				"attached": false
+			}
+		]
+	},
+	"Pesticide - Cloud":
+	{
+		"parameterList":
+		{
+			"Velocity": 10.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_farmbot_pesticide_cloud",
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"offset": { "x": 0.0, "y": 0.0, "z": -1.5 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/weapons/chemcannon/chem_cloud",
+				"attached": true
+			}
+		]
+	},
+	"GlowstickProjectile - Attached":
+	{
+		"parameterList":
+		{
+			"Color": [1,0.6,0,1],
+			"radius": 12.5,
+			"intensity": 1.25,
+			"color":"ffcc34",
+			"velocity": 0.5
+		},
+		"parameterCurves":
+		{
+			"radius":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.125, "value":12.5 }
+				]
+			},
+			"intensity":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.125, "value":1.25 }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_glowstick_trail01",
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/glowstick/gs_flying",
+				"attached": true,
+				"parameters":
+				[
+					"velocity"
+				]
+			}
+		]
+	},
+	"GlowstickProjectile - Bounce":
+	{
+		"parameterList":
+		{
+			"Velocity": 10.0,
+			"Color": [1,0.6,0,1],
+			"radius": 0.75,
+			"intensity": 4.0,
+			"color":"ffd200ff"
+		},
+		"parameterCurves":
+		{
+		"radius":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.5, "value":5.0 },
+					{ "time":1.25, "value":0.0 }
+				]
+			},
+			"intensity":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.25, "value":1.0 },
+					{ "time":1.25, "value":0.0 }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": 1.25,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_glowstick_bounce01",
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_glowstick_goopile01",
+				"attached": false,
+				"delay": 0.1
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/glowstick/gs_bounce",
+				"attached": false
+			}
+		]
+	},
+	"GlowstickProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Color": [1,0.6,0,1],
+			"radius": 12.5,
+			"intensity": 2.2,
+			"color":"ffd200ff"
+		},
+		"parameterCurves":
+		{
+			"radius":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.5, "value":12.5 }
+				]
+			},
+			"intensity":
+			{
+				"timeline":
+				[
+					{ "time":0.0, "value":0.0 },
+					{ "time":0.25, "value":1.7 }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_tools_glowstick_impact01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.125 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_tools_glowstick_big_goopile02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.125 },
+				"attached": false,
+				"delay": 0.1
+			},
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.375 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"duration": -1.0,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/glowstick/gs_open",
+				"attached": false
+			},
+			{
+				"type": "audio",
+				"name": "event:/tools/glowstick/gs_pool",
+				"attached": false,
+				"delay": 0.1
+			}
+		]
+	},
+	"FertilizerProjectile - Attached":
+	{
+		"parameterList":
+		{
+			"velocity": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_projectile_fertilizer_trail",
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"FertilizerProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Velocity_max_50": 10.0,
+			"Material": 16,
+			"Size": 0.1,
+			"Phys_energy": 250
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Velocity_max_50",
+					"Material",
+					"Size",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_fertilizersplash_01",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"ChemicalProjectile - Attached":
+	{
+		"parameterList":
+		{
+			"velocity": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_projectile_checmical_trail",
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"ChemicalProjectile - Hit":
+	{
+		"parameterList":
+		{
+			"Velocity_max_50": 10.0,
+			"Material": 16,
+			"Size": 0.1,
+			"Phys_energy": 250
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/impact_single",
+				"parameters":
+				[
+					"Velocity_max_50",
+					"Material",
+					"Size",
+					"Phys_energy"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_projectile_chemicalsplash_01",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

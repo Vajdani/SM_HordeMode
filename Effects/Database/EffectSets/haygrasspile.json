@@ -1,0 +1,56 @@
+{
+	"Haypile - Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_haypile",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Leafpile - Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_leafpile",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.25 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

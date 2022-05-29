@@ -1,0 +1,162 @@
+{
+	//// Default Spudgun ////
+	"SpudgunBasic - BasicMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "PotatoRifle - Shoot",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_basic_muzzel",
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	"SpudgunBasic - FPBasicMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "PotatoRifle - Shoot",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_fp_basic_muzzel",
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	"SpudgunBasic - DefaultImpact01":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/plants/plant_seed",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_impact_defualt01",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	//// Default Frier ////
+	"SpudgunFrier - FrierMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/weapons/spudgun/frier_fire",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_frier_muzzel",
+				"offset": { "x": 0.035, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.00
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_frier_muzzel",
+				"offset": { "x":-0.035, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.00
+			}
+		]
+	},
+	"SpudgunFrier - FPFrierMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/weapons/spudgun/frier_fire",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_fp_frier_muzzel",
+				"offset": { "x":-0.02, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.05
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_fp_frier_muzzel",
+				"offset": { "x": 0.02, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	//// Default Spinner ////
+	"SpudgunSpinner - SpinnerMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/weapons/spudgun/spinner_fire",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_muzzel_spinner",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.00
+			}
+		]
+	},
+	"SpudgunSpinner - FPSpinnerMuzzel":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/weapons/spudgun/spinner_fire",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_spudgun_fp_muzzel_spinner",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.00
+			}
+		]
+	},
+	"SpudgunSpinner - Windup":
+	{
+		// velocity 0-1
+		"parameterList":
+		{
+			"velocity": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/weapons/spudgun/spinner_spin",
+				"parameters":
+				[
+					"velocity"
+				],
+				"delay": 0.0
+			}
+		]
+	}
+}

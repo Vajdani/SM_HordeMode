@@ -1,0 +1,184 @@
+{
+	"Robotparts - FarmbotCannonarm":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_farmbot_cannonarm",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - FarmbotDrill":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_farmbot_drill",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - FarmbotHead":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_farmbot_head",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - FarmbotScyth":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_farmbot_scytharm",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - HaybotBody":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_haybot_body",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - HaybotFork":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_haybot_fork",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - HaybotHead":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_haybot_head",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - HaybotPelvis":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_haybot_pelvis",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - RedtapebotHead":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_redtapebot_head",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - TapebotHead":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_tapebot_head",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - TapebotLeftarm":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_tapebot_leftarm",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - TapebotTorso":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_tapebot_torso",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - TotebotBody":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_totebot_body",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Robotparts - TotebotLeg":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_robotparts_totebot_leg",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	}
+}

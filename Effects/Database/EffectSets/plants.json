@@ -1,0 +1,107 @@
+{
+	"Plants - Planted":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/plants/plant_seed",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plantables_planted",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Plants - Fertilizer":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_plants_fertilizer",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plants_fertilizer_impact",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.125 },
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Plants - Done":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/plants/plant_finished",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plantables_done",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Plants - Picked":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/plant",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plantables_picked",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Plants - Destroyed":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/plant",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plantables_destoryed",
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Plants - SoilbagUse":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/plant",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_plantables_soilbag_use",
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

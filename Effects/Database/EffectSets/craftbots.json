@@ -1,0 +1,850 @@
+{
+	/////////////////// REFINARY //////////////////////
+	"Refinary - Area":
+	{
+		"parameterList":
+		{
+			"minColor":[0.0, 0.0, 1.0, 0.0], 
+			"maxColor":[0.4, 0.4, 1.0, 0.7]
+		},
+		"effectList":
+		[
+			{
+				"type": "renderable",
+				"name": "$GAME_DATA/Effects/Renderables/Craftbots/hologram_refinaryarea.rend",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters" : [ "minColor", "maxColor" ]
+			}
+		]
+	},
+	"Refinery - Unpack":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_unpack",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - SuckStart":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_suck_start",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_use_start",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - Start":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_work_initialhit",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "PotatoRifle - Shoot",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - WorkWood":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_work_wood",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_use",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - WorkStone":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_work_stone",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_use",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - WorkMetal":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_work_metal",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_use",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - Finish":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_suck_finish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.65
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/refinery/refinery_use_end",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/item_spawn",
+				"delay": 1.75
+			}
+		]
+	},
+	"Refinery - ScrapMetalBlock":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapmetal_block",
+				"offset": { "x": 0.0, "y": 0.25, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - ScrapStoneBlock":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapstone_block",
+				"offset": { "x": 0.0, "y": 0.25, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - ScrapWoodBlock":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapwood_block",
+				"offset": { "x": 0.0, "y": 0.25, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - WoodBlock":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_wood_block",
+				"offset": { "x": 0.0, "y": 0.25, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - MetalBlock":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_metal_block",
+				"offset": { "x": 0.0, "y": 0.25, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - ScrapMetalBlockLog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapmetal_workfinnish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - ScrapStoneBlockLog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapstone_workfinnish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - ScrapWoodBlockLog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapwood_workfinnish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - WoodBlockLog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_scrapwood_workfinnish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Refinery - MetalBlockLog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "refinery_metal_workfinnish",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	/////////////////// CRAFTBOT //////////////////////
+	"Craftbot - Unpack":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_unpack",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Idle":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_idle",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - IdleSpecial01":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_idle_special01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - IdleSpecial02":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_idle_special02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Start":
+	{
+			"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_craft_start",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Work01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_craftbot_work01_left",
+				"offset": { "x": -0.333, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 3.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_work01_right",
+				"offset": { "x": -0.333, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 3.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_shoulder01",
+				"offset": { "x": 0.15, "y": 1.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 3.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_shoulder01",
+				"offset": { "x": -0.825, "y": 1.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 3.9,
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Work02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_craftbot_work02_left",
+				"offset": { "x": -0.333, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 7.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_work02_right",
+				"offset": { "x": -0.333, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 7.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_shoulder02",
+				"offset": { "x": 0.15, "y": 1.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 7.9,
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_craftbot_shoulder02",
+				"offset": { "x": -0.825, "y": 1.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 7.9,
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Work02Torch":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_craftbot_torch",
+				"offset": { "x": -0.333, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"duration": 7.9,
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Work":
+	{
+		"parameterList":
+		{
+			"craftbot": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_craft",
+				"parameters": [ "craftbot" ],
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Craftbot - Finish":
+	{
+			"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_craftbot_done01",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_craft_finished",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	/////////////////// DRESSBOT //////////////////////
+	"Dressbot - Start":
+	{
+			"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_craft_start",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - Idle":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_idle",
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - Work01":
+	{
+		"parameterList":
+		{
+			"craftbot": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_dressbot_work01",
+				"offset": { "x": -0.542, "y": -0.141, "z": 0.375 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_craft",
+				"parameters": [ "craftbot" ],
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - HeadWork01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_dressbot_head_work01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - Work02":
+	{
+		"parameterList":
+		{
+			"craftbot": 2
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_dressbot_work02",
+				"offset": { "x": -0.542, "y": -0.141, "z": 0.375 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_craft",
+				"parameters": [ "craftbot" ],
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - Finish":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_dressbot_done01",
+				"offset": { "x": 0.531, "y": -0.544, "z": 0.372 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_craft_finished",
+				"delay": 0.0
+			}
+		]
+	},
+	"Dressbot - Opendoors":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/dressbot/db_door_open",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	/////////////////// COOKBOT //////////////////////
+	"Cookbot - Unpack":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_unpack",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - Idle":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_idle",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - IdleSpecial01":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_idle_special01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - IdleSpecial02":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_idle_special02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - Start":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_cookbot_start",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_craft_start",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - Work":
+	{
+		"parameterList":
+		{
+			"craftbot": 1
+		},
+		"effectList":
+		[
+			
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_craft",
+				"parameters": [ "craftbot" ],
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+			
+		]
+	},
+	"Cookbot - Work01":
+	{
+		"effectList":
+		[
+			
+			{
+				"type": "particle",
+				"name": "p_cookbot_work01",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+			
+		]
+	},
+	"Cookbot - Work02":
+	{
+
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_cookbot_work02",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+
+		]
+	},
+	"Cookbot - Work03":
+	{
+
+		
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_cookbot_work03",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - Work03Salt":
+	{
+		"parameterList":
+		{
+			"craftbot": 1
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_cookbot_work03_salt",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_craft",
+				"parameters": [ "craftbot" ],
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Cookbot - Finish":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_cookbot_finnish",
+				"offset": { "x": 0.0, "y": 0.001, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/cookbot/cob_craft_finished",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Workbench - Work01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_workbench_glow",
+				"offset": { "x": 0.0, "y": -0.45, "z": 0.1 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_small_craft",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Workbench - Finish":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_workbench_done",
+				"offset": { "x": 0.0, "y": -0.35, "z": 0.4 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/item_spawn",
+				"delay": 0.0
+			}
+		]
+	},
+	"Workbench - Idle":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/npc/bots/utility/craftinbot/cb_small_idle",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"DispenserbotSpawner - Spawn":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/installations/mechanicstation/ms_open",
+				"delay": 0.0
+			}
+		]
+	},
+	"Dispenserbot - Work01":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/props/installations/mechanicstation/ms_craft",
+				"offset": { "x": 0.0, "y": 4.2, "z": -11.5 },
+				"delay": 0.0
+			}
+		]
+	}
+}

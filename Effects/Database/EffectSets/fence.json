@@ -1,0 +1,411 @@
+{
+	"Fence - PlankLongDestruction":
+	{
+		"parameterList":
+		{
+			"size": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_plank_long_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - PlankShortDestruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_plank_short_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - PlankCornerDestruction":
+	{
+		"parameterList":
+		{
+			"size": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_plank_corner_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	/////////////// FARMFENCE ///////////////
+	"Fence - FarmPlank01Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_farmfence_01_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - FarmPlank02Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_farmfence_02_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - FarmPlank03Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_farmfence_03_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - FarmPlank04Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_farmfence_04_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	///////////////// HIDEOUT////////////////////////
+				//////SIGNS//////////////
+	"Sign - HideoutSign03 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_sign_03_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Sign - HideoutSign04 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_sign_04_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Sign - HideoutSign07 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_sign_07_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	//////FENCE//////////////
+	"Fence - HideoutFence01 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_fence_01_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - HideoutFence02 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_fence_02_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - HideoutFence04 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_fence_04_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - HideoutFence05 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_fence_05_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Fence - HideoutFence06 Destruction":
+	{
+		"parameterList":
+		{
+			"size": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/coll/collapse/fence",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"size"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_hvs_hideout_fence_06_destruct",
+				"offset": { "x": 0.0, "y": 0.0, "z": -0.75 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

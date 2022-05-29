@@ -1,0 +1,398 @@
+{
+	"Gui - Test":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "hammer_metal",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - CraftingDone":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_craftingdone",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/attach_default"
+			}
+		]
+	},
+	"Gui - CraftingDoneCollectButton":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_craftingdone_collectbutton",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/item_collect",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - Upgrade":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_partsuppgrade_button",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - UpgradeIcon":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_partsuppgrade_parts",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - PlayButtonShine":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_playbutton_shine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - CuztomizeMainMenuShine":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_cuztomize_mainmenu_shine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotDone":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_craftingdone",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/attach_default"
+			}
+		]
+	},
+	"Gui - UnboxItem":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_partsuppgrade_parts",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotBackground":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_dressbot_background",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotUnboxGarmentButton":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxgarment_button",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotUnboxGarmentButtonActivate":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxgarment_button_activate",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotCollect":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxgarment_collect",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/item_collect",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotUnboxCommon":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxcommon",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/garment_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotUnboxRare":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxrare",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/garment_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotUnboxEpic":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_craft_dressbot_unboxepic",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/ui/garment_unbox",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - DressbotBox":
+	{
+		"parameterList":
+		{
+			"2dOffset": [0.0, 0.0],
+			"offsetRotation": [0.0, 0.0, 0.0]
+		},
+		"parameterCurves":
+		{
+			"2dOffset":
+			{
+				"loop": 4.0,
+				"speed": 1.2,
+				"timeline":
+				[
+					{ "time":0.0, "value":[ 0.0, 0.0 ], "easing":"easeOutElastic" },
+					{ "time":1.0, "value":[ 0.0, 8.0 ], "easing":"easeInElastic" },
+					{ "time":2.0, "value":[ 0.0, 0.0 ], "easing":"easeOutElastic" },
+					{ "time":3.0, "value":[ 0.0, -8.0 ], "easing":"easeInElastic" },
+					{ "time":4.0, "value":[ 0.0, 0.0 ] }
+				]
+			},
+			"offsetRotation":
+			{
+				"loop": 4.0,
+				"speed": 1.2,
+				"timeline":
+				[
+					{ "time":0.0, "value":[ 0.0, 0.0, 0.0 ], "easing":"easeOutBack" },
+					{ "time":1.0, "value":[ 8.0, 8.0, 0.0 ], "easing":"easeInBack" },
+					{ "time":2.0, "value":[ 0.0, 0.0, 0.0 ], "easing":"easeOutBack" },
+					{ "time":3.0, "value":[ 8.0, -8.0, 0.0 ], "easing":"easeInBack" },
+					{ "time":4.0, "value":[ 0.0, 0.0, 0.0 ] }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "shapeRenderable",
+				"name": "",
+				"parameters":
+				[
+					"2dOffset",
+					"offsetRotation"
+				]
+			}			
+		]
+	},
+	"Gui - CustomizationRewardItem":
+	{
+		"parameterList":
+		{
+			"2dOffset": [0.0, 0.0],
+			"offsetRotation": [0.0, 0.0, 0.0]
+		},
+		"parameterCurves":
+		{
+			"2dOffset":
+			{
+				"loop": 2.0,
+				"speed": 0.8,
+				"timeline":
+				[
+					{ "time":0.0, "value":[ 0.0, 0.0 ], "easing":"easeOutQuad" },
+					{ "time":0.5, "value":[ 0.0, 18.0 ], "easing":"easeInQuad" },
+					{ "time":1.0, "value":[ 0.0, 0.0 ], "easing":"easeOutQuad" },
+					{ "time":1.5, "value":[ 0.0, -18.0 ], "easing":"easeInQuad" },
+					{ "time":2.0, "value":[ 0.0, 0.0 ] }
+				]
+			}
+		},
+		"effectList":
+		[
+			{
+				"type": "customizationRenderable",
+				"name": "",
+				"parameters":
+				[
+					"2dOffset",
+					"offsetRotation"
+				]
+			}			
+		]
+	},
+	"Gui - LogbookNotification":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/ui/notification",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - LogbookIcon Flash":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_logbook_logbookicon_flash",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - LogbookPhotograph Flash":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_logbook_logbookphotograph_shine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - Setwaypoint Flash":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_logbook_setwaypoint_button_click",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	},
+	"Gui - Setwaypoint Loop":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_2d_logbook_setwaypoint_button_loop",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": false,
+				"delay": 0.0
+			}
+		]
+	}
+}

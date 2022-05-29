@@ -1,0 +1,241 @@
+{
+	"AtmosphericDust":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "atmospheric_dust",
+				"delay": 0.0
+			}
+		]
+	},
+	"OutdoorAmbience":
+	{
+		"parameterList":
+		{
+			"amb_day_night": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/2D/amb_2D_field_day_night",
+				"parameters":
+				[
+					"amb_day_night"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"ChallengeAmbience":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/amb/challenge",
+				"delay": 0.0
+			}
+		]
+	},
+	"Forest - Grassblowing":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_forest_grass_blowing_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Forest - LeafsBlowing":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_forest_leafs_blowing_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Forest - MassiveFog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "P_enviroment_forest_massivefog_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Forest - SmallFog":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_forest_smallfog_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Forest - Fireflies":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_environment_forest_fireflies",
+				"delay": 0.0
+			}
+		]
+	},
+	"Lakes - bubbles":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_lakes_bubbles",
+				"delay": 0.0
+			}
+		]
+	},
+	"Lakes - Floatingdebri":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_lakes_floatingdebri",
+				"delay": 0.0
+			}
+		]
+	},
+	"ChemicalLakes - SurfaceBubblesBig":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_chemicallake_surfacebubbles_big",
+				"delay": 0.0
+			}
+		]
+	},
+	"ChemicalLakes - SurfaceBubblesSmall":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_chemicallake_surfacebubbles_small",
+				"delay": 0.0
+			}
+		]
+	},
+	"Water - Waterleak01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_water_waterleak01",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/water_leak",
+				"delay": 0.0
+			}
+			
+		]
+	},
+	"Water - Waterleak02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_water_waterleak02",
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/amb/3D/water_splash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Hideout - Smoke":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_hideout_smokepuff",
+				"delay": 0.0
+			}
+		]
+	},
+	"Critter - Butterfly01":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_butterfly_01",
+				"delay": 0.0
+			}
+		]
+	},
+	"Critter - Butterfly02":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_butterfly_02(singlebillboard)",
+				"delay": 0.0
+			}
+		]
+	},
+	"Critter - NightMoth":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_nightmoth",
+				"delay": 0.0
+			}
+		]
+	},
+	"Critter - Fly":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_fly_01",
+				"delay": 0.0
+			}
+		]
+	}
+,
+"Critter - Rottingsmoke":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_enviroment_rottingsmoke",
+				"delay": 0.0
+			}
+		]
+	}}

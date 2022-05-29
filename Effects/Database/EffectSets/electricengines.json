@@ -1,0 +1,112 @@
+{
+	"ElectricEngine - Level 1":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/elengines/elengine01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"ElectricEngine - Level 2":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/elengines/elengine02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"ElectricEngine - Level 3":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/elengines/elengine03",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"ElectricEngine - Level 4":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/elengines/elengine04",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"ElectricEngine - Level 5":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/elengines/elengine05",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	}
+}

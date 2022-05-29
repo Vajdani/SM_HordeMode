@@ -1,0 +1,136 @@
+{
+	"GasEngine - Scrap":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5,
+			"gas": 1.0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/scrapengine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load",
+					"gas"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"GasEngine - Level 1":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/gasengine01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"GasEngine - Level 2":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/gasengine02",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"GasEngine - Level 3":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/gasengine03",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"GasEngine - Level 4":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/gasengine04",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"GasEngine - Level 5":
+	{
+		"parameterList":
+		{
+			"rpm": 0.0,
+			"load": 0.5
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/gasengines/gasengine05",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"rpm",
+					"load"
+				],
+				"delay": 0.0
+			}
+		]
+	}
+}

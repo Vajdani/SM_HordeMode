@@ -1,0 +1,433 @@
+{
+	"Mechanic walk":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "Character movement",
+				"parameters":
+				[
+					"surface"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic crouch walk":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/footstep_crouching",
+				"parameters":
+				[
+					"surface"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic jump":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "Character jump",
+				"parameters":
+				[
+					"surface"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic land":
+	{
+		"parameterList":
+		{
+			"surface": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "Character land",
+				"parameters":
+				[
+					"surface"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic crouch":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "Character crouch",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic getUp":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/getup",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic underwater":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_player_dive_bubbles",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - MeleeHit":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/impact",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - JetpackThruster":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster01",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_player_jetpack_thrust",
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	"Mechanic - JetpackBurstThruster":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/vehicle/thrusters/thruster01",
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_player_jetpack_burstthrust",
+				"attached": false,
+				"delay": 0.05
+			}
+		]
+	},
+	"Mechanic - Swimforeward":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/movement/water/swim_forwards",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Swimbackward":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/movement/water/swim_backwards",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Ko":
+	{
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/death",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - KoLoop":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_player_knockedout",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 1.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.05
+			},
+			{
+				"type": "audio",
+				"name": "event:/char/health/ko",
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Hurt":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/impact",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Hurtshock":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/shock",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Hurthunger":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/hurt_hunger",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - Hurtpoision":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/poison",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - HurtDrown":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/hurt_drown",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - HurtFire":
+	{
+		"parameterList":
+		{
+			"char": 0,
+			"damage": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/burn",
+				"parameters":
+				[
+					"char",
+					"damage"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - StatusHungry":
+	{
+		"parameterList":
+		{
+			"char": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/lowfood",
+				"parameters":
+				[
+					"char"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - StatusThirsty":
+	{
+		"parameterList":
+		{
+			"char": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/lowfood",
+				"parameters":
+				[
+					"char"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Mechanic - StatusUnderwater":
+	{
+		"parameterList":
+		{
+			"char": 0
+		},
+		"effectList":
+		[
+			{
+				"type": "audio",
+				"name": "event:/char/health/lowair",
+				"parameters":
+				[
+					"char"
+				],
+				"delay": 0.0
+			}
+		]
+	},
+	"Builderbot - Thruster":
+	{
+		"parameterList":
+		{
+			"color": "007fff",
+			"radius": 1.5,
+			"intensity": 0.01
+		},
+		"effectList":
+		[
+			{
+				"type": "pointLight",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.875 },
+				"parameters":
+				[
+					"color",
+					"radius",
+					"intensity"
+				],
+				"delay": 0.0
+			},
+			{
+				"type": "particle",
+				"name": "p_challengemode_builderbot_afterburner",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"delay": 0.0
+			}
+		]
+	}
+}

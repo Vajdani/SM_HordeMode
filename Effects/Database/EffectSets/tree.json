@@ -1,0 +1,221 @@
+{
+	"Tree - CrownCollapse":
+	{
+		"parameterList":
+		{
+			"shakeStrength": 0.1,
+			"shakeRadius": 25.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_leafexplode_birch",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "cameraShake",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"shakeStrength",
+					"shakeRadius"
+				],
+				"duration": 0.4,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/tree_impact_ground",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - CrownCollapse Spurce":
+	{
+		"parameterList":
+		{
+			"shakeStrength": 0.1,
+			"shakeRadius": 25.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_leafexplode_spruce01",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "cameraShake",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"shakeStrength",
+					"shakeRadius"
+				],
+				"duration": 0.4,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/tree_impact_ground",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - CrownCollapse Pine":
+	{
+		"parameterList":
+		{
+			"shakeStrength": 0.1,
+			"shakeRadius": 25.0
+		},
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_leafexplode_pine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "cameraShake",
+				"name": "",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"parameters":
+				[
+					"shakeStrength",
+					"shakeRadius"
+				],
+				"duration": 0.4,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/tree_impact_ground",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk Birch":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_birch",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk Pine":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_pine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk PineHalf":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_half_pine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk PineQuarter":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_quater_pine",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk Spruce":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_spruce",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	},
+	"Tree - BreakTrunk SpruceHalf":
+	{
+		"effectList":
+		[
+			{
+				"type": "particle",
+				"name": "p_hvs_trees_barkexplode_half_spruce",
+				"offset": { "x": 0.0, "y": 0.0, "z": 0.0 },
+				"direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
+				"attached": true,
+				"delay": 0.0
+			},
+			{
+				"type": "audio",
+				"name": "event:/props/logs_smash",
+				"delay": 0.0
+			}
+		]
+	}
+}
