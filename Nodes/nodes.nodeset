@@ -46,6 +46,7 @@
 			"renderable": "$GAME_DATA/Nodes/Renderable/node_reflection.rend",
 			"visualization": false,
 			"useUnitBounds": true,
+			"color": [1.0, 1.0, 1.0, 1.0],
 			"billboardColor": [0.5, 0.0, 1.0, 1.0],
 			"scale": 0.25,
 			"initYUp": false,

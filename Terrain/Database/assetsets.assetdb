@@ -1,97 +1,95 @@
 {
    "assetSetList" : [
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/example.assetset",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Dustpot.assetset",
          "categories" : [ "Dustpot" ]
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/menu.json",
-         "categories" : "Menu",
-         "hidden" : false
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/menu.json",
+         "categories" : "Menu"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/manmade.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/manmade.json",
          "categories" : "Manmade"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/forest.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/forest.json",
          "categories" : "Forest"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/foliage.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/foliage.json",
          "categories" : "Foliage"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/smallstone.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/smallstone.json",
          "categories" : "Small Stones"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/rocks.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/rocks.json",
          "categories" : "Rocks"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Nature/Rocks.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Nature/Rocks.json",
          "categories" : "Survival Rocks"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/racetrack.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Creative/racetrack.json",
          "categories" : "Racetrack"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Water.json",
-         "categories" : "Water",
-         "hidden" : false
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Water.json",
+         "categories" : "Water"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Forest.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Forest.json",
          "categories" : "Survival Forest"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Building.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Building.json",
          "categories" : [ "Survival Building" ]
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Manmade.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Manmade.json",
          "categories" : "Survival Manmade"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Hideout.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Hideout.json",
          "categories" : "Survival Hideout"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Nature/Foliage.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Nature/Foliage.json",
          "categories" : "Survival Foliage"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Burntforest.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Burntforest.json",
          "categories" : "Survival Burntforest"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Road.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Road.json",
          "categories" : "Road"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Ruin.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Ruin.json",
          "categories" : "Ruin"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/SurvivalObjects.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/SurvivalObjects.json",
          "categories" : "Survival Objects"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Camping.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Camping.json",
          "categories" : "Camping"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Mecanicstation.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Mecanicstation.json",
          "categories" : "Mecanicstation"
       },
       {
-         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Spaceship.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Survival/Spaceship.json",
          "categories" : "Spaceship"
       },
       {
-         "assetSet" : "$CHALLENGE_DATA/Terrain/Database/AssetSets/challengemode.json",
+         "assetSet" : "$CONTENT_DATA/Terrain/Database/AssetSets/Challenge/challengemode.json",
          "categories" : "Challengemode"
       }
    ]
