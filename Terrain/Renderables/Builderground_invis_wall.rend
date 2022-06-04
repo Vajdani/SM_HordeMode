@@ -1,0 +1,17 @@
+{
+   "lodList" : [
+      {
+         "mesh" : "$CHALLENGE_DATA/Terrain/Collision/Challengemode/env_challengemode_builderground_col.obj",
+         "subMeshList" : [
+            {
+               "material" : "DifAsgNor",
+               "textureList" : [
+                  "$CONTENT_DATA/Terrain/Textures/transparent.tga",
+                  "$CONTENT_DATA/Terrain/Textures/transparent.tga",
+                  "$CONTENT_DATA/Terrain/Textures/transparent.tga"
+               ]
+            }
+         ]
+      }
+   ]
+}
