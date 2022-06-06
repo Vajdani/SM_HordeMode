@@ -7,6 +7,7 @@ World.cellMaxY =  1
 World.worldBorder = true
 
 dofile( "$SURVIVAL_DATA/Scripts/game/managers/PesticideManager.lua" )
+dofile "$SURVIVAL_DATA/Scripts/blueprint_util.lua"
 
 g_potatoProjectiles = {
     projectile_potato,
@@ -26,25 +27,6 @@ local mapBounds = {
     { -20, 20 },
     { -20, 20 }
 }
-local minWaves = 12
-local maxWaves = 20
-local spawnChanceIncrease = 0.01
-
-local totebotWavesStart = 1
-local totebotPerWave = 2
-local totebotChance = 0.8
-
-local haybotWavesStart = 3
-local haybotPerWave = 2
-local haybotChance = 0.6
-
-local tapebotWavesStart = 6
-local tapebotPerWave = 1
-local tapebotChance = 0.3
-
-local farmbotWavesStart = 9
-local farmbotPerWave = 0.5
-local farmbotChance = 0.1
 
 function World.server_onCreate( self )
     print("World.server_onCreate")
@@ -52,9 +34,6 @@ function World.server_onCreate( self )
     self.sv = {}
     g_pesticideManager = PesticideManager()
 	g_pesticideManager:sv_onCreate()
-
-    self.sv.arenaData = sm.json.open("$CONTENT_DATA/Scripts/arenas.json")
-    self.sv.currentArena = 1
 
 	self.sv.pickups = {}
 
@@ -64,7 +43,6 @@ function World.server_onCreate( self )
     self.sv.hasSentCompleteMessage = false
     self.sv.progressWaves = false
     self.sv.sendDeadMessage = true
-
 
     local manager = sm.storage.load( "INPUTMANAGER" )
     if manager == nil then
@@ -140,7 +118,7 @@ function World:sv_pickup_onPickup( trigger, result )
 end
 
 function World:sv_createPickups()
-    local pickups = self.sv.arenaData[self.sv.currentArena].pickups
+    local pickups = g_arenaData[g_currentArena].pickups
 
     local dataToSend = {}
     for v, k in pairs(pickups) do
@@ -179,15 +157,17 @@ end
 function World:sv_generateWaves()
     print("\n\n")
     g_waves = {}
-    local waveData = self.sv.arenaData[self.sv.currentArena].waves
+    local waveData = g_arenaData[g_currentArena].waves
 
     for i = 1, math.random(waveData.min, waveData.max) do
         print("GENERATING WAVE", i)
         local possibleEnemies = {}
 
-        print("GENERATING PREDETERMINED ENEMIES")
+        print("IMPORTING PREDETERMINED ENEMIES")
         for v, k in pairs(waveData.predefinedEnemies) do
-
+            if k.waves[1] == "all" or k.waves[1] == "%2" and v%2 == 0 or isAnyOf(v, k.waves) then
+                possibleEnemies[#possibleEnemies+1] = { uuid = sm.uuid.new(k.allowedEnemies[math.random(#k.allowedEnemies)]), pos = tableToVec3( k.pos ) }
+            end
         end
 
         print("\n")
@@ -280,7 +260,7 @@ function World:sv_handleWaves()
                 end
 
                 local bewareMsg = ""
-                for v, k in pairs(self.sv.arenaData[self.sv.currentArena].waves.enemies) do
+                for v, k in pairs(g_arenaData[g_currentArena].waves.enemies) do
                     if k.startWave == self.sv.currentWave and k.bewareMsg.enabled then
                         bewareMsg = string.format("#%sBeware of %s!", k.bewareMsg.colour, k.name)
                         print(k.bewareMsg.colour)

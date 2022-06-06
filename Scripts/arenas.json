@@ -3,7 +3,164 @@
         "name": "empty",
         "icon" : "",
         "gameMode": "pve",
-        "world": "$CONTENT_DATA/Terrain/Worlds/example.world",
+        "path": "$CONTENT_DATA/Terrain/Worlds/example.world",
+        "predefinedSpawnPoints": [
+
+        ],
+        "randomEnemies": true,
+        "waves": {
+            "spawnChanceIncrease": 0.01,
+            "min": 12,
+            "max": 20,
+            "predefinedEnemies": [
+                {
+                    "waves": [ "all" ],
+                    "pos": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "allowedEnemies": [
+                        "04761b4a-a83e-4736-b565-120bc776edb2"
+                    ]
+                },
+                {
+                    "waves": [ "%2" ],
+                    "pos": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 0
+                    },
+                    "allowedEnemies": [
+                        "04761b4a-a83e-4736-b565-120bc776edb2"
+                    ]
+                },
+                {
+                    "waves": [ 1, 3, 5 ],
+                    "pos": {
+                        "x": -1,
+                        "y": -1,
+                        "z": 0
+                    },
+                    "allowedEnemies": [
+                        "04761b4a-a83e-4736-b565-120bc776edb2"
+                    ]
+                }
+            ],
+            "enemies": [
+                {
+                    "uuid": "8984bdbf-521e-4eed-b3c4-2b5e287eb879",
+                    "name": "Totebot",
+                    "startWave": 1,
+                    "perWave": 2,
+                    "chance": 0.8,
+                    "maxAmount": 20,
+                    "bewareMsg": {
+                        "enabled": false,
+                        "colour": "#107029"
+                    }
+                },
+                {
+                    "uuid": "c8bfb8f3-7efc-49ac-875a-eb85ac0614db",
+                    "name": "Haybot",
+                    "startWave": 3,
+                    "perWave": 2,
+                    "chance": 0.6,
+                    "maxAmount": 20,
+                    "bewareMsg": {
+                        "enabled": false,
+                        "colour": "#df7f00"
+                    }
+                },
+                {
+                    "uuid": "04761b4a-a83e-4736-b565-120bc776edb2",
+                    "name": "Tapebot",
+                    "startWave": 6,
+                    "perWave": 1,
+                    "chance": 0.3,
+                    "maxAmount": 6,
+                    "bewareMsg": {
+                        "enabled": true,
+                        "colour": "0044cc"
+                    }
+                },
+                {
+                    "uuid": "9f4fde94-312f-4417-b13b-84029c5d6b52",
+                    "name": "Farmbot",
+                    "startWave": 9,
+                    "perWave": 0.5,
+                    "chance": 0.1,
+                    "maxAmount": 3,
+                    "bewareMsg": {
+                        "enabled": false,
+                        "colour": "#107029"
+                    }
+                }
+            ]
+        }, 
+        "pickups": [
+            {
+                "pos": {
+                    "x": 10,
+                    "y": 10,
+                    "z": 0.25
+                },
+                "type": "health",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 400
+            },
+            {
+                "pos": {
+                    "x": -10,
+                    "y": -10,
+                    "z": 0.25
+                },
+                "type": "health",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 400
+            },
+            {
+                "pos": {
+                    "x": -10,
+                    "y": 10,
+                    "z": 0.25
+                },
+                "type": "armour",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 200
+            },
+            {
+                "pos": {
+                    "x": 10,
+                    "y": -10,
+                    "z": 0.25
+                },
+                "type": "armour",
+                "amount": 20,
+                "maxUses": 3,
+                "respawnTime": 200
+            },
+            {
+                "pos": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.25
+                },
+                "type": "ammo",
+                "amount": 75,
+                "maxUses": 2,
+                "respawnTime": 600
+            }
+        ]
+    },
+    {
+        "name": "pipe",
+        "icon" : "",
+        "gameMode": "pve",
+        "path": "$CONTENT_DATA/Terrain/Worlds/arena.world",
         "predefinedSpawnPoints": [
             {
                 "pos": {

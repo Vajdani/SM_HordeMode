@@ -19,11 +19,16 @@ g_gatling = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff")
 
 function Game.server_onCreate( self )
 	print("Game.server_onCreate")
+
+	g_arenaData = sm.json.open("$CONTENT_DATA/Scripts/arenas.json")
+    g_currentArena = sm.storage.load( "CURRENTARENA" ) or 1
+
 	self.sv = {}
 	self.sv.saved = self.storage:load()
 	if self.sv.saved == nil then
 		self.sv.saved = {}
 		self.sv.saved.world = sm.world.createWorld( "$CONTENT_DATA/Scripts/World.lua", "World" )
+		self.sv.saved.world:setTerrainScriptData( { path = g_arenaData[g_currentArena].path } )
 		self.storage:save( self.sv.saved )
 	end
 
@@ -52,6 +57,17 @@ function Game:cl_bindCommands()
 			"cl_onChatCommand",
 			"go to specified wave"
 		)
+		sm.game.bindChatCommand( "/arena",
+			{
+				{
+					"int",
+					"wave",
+					true
+				}
+			},
+			"cl_onChatCommand",
+			"load into another arena"
+		)
 	end
 
 	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control(more effective movement in the air)" )
@@ -78,10 +94,21 @@ function Game:cl_onChatCommand( params )
 			return
 		end
 
-		if params[2] < #g_waves and params[2] > 0 then
+		if params[2] <= #g_waves and params[2] > 0 then
 			self.network:sendToServer( "sv_gotoWave", params[2] )
 		else
 			sm.gui.displayAlertText("#df7f00Invalid wave number specified! It must be between #ffffff1 #df7f00and #ffffff"..tostring(#g_waves), 5)
+		end
+	elseif params[1] == "/arena" then
+		print(#g_arenaData)
+		if g_arenaData == nil or #g_arenaData == 0 then
+			return
+		end
+
+		if params[2] <= #g_arenaData and params[2] > 0 then
+			self.network:sendToServer( "sv_changeArenaTo", params[2] )
+		else
+			sm.gui.displayAlertText("#df7f00Invalid arena index specified! It must be between #ffffff1 #df7f00and #ffffff"..tostring(#g_arenaData), 5)
 		end
 	elseif params[1] == "/aircontrol" then
 		self.network:sendToServer( "sv_toggleAirControl", player )
@@ -179,6 +206,35 @@ function Game.sv_createPlayerCharacter( self, world, x, y, player, params )
 	player:setCharacter( character )
 
 	--sm.event.sendToWorld(self.sv.saved.world, "sv_resetPlayerInv", player)
+end
+
+function Game:sv_changeArenaTo( index )
+	g_currentArena = index
+	sm.storage.save( "CURRENTARENA", g_currentArena )
+
+	--thanks MrCrackx for the kewl coed
+	local newWorld = sm.world.createWorld( "$CONTENT_DATA/Scripts/World.lua", "World" )
+	local arena = g_arenaData[g_currentArena]
+	newWorld:setTerrainScriptData( { path = arena.path } )
+
+	if not sm.exists( newWorld ) then
+		sm.world.loadWorld( newWorld )
+	end
+
+	local players = sm.player.getAllPlayers()
+	for k, player in pairs( players ) do
+		local playerChar = player:getCharacter()
+		if sm.exists( playerChar ) then
+			local newChar = sm.character.createCharacter( player, newWorld, sm.vec3.new( 32, 32, 5 ), _, _, playerChar )
+			player:setCharacter( nil )
+			player:setCharacter( newChar )
+		end
+	end
+
+	self.saved.world:destroy()
+	self.saved.world = newWorld
+
+	self.storage:save( self.saved )
 end
 
 function Game:server_onFixedUpdate( dt )
