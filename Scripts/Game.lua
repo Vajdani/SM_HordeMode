@@ -231,10 +231,12 @@ function Game:sv_changeArenaTo( index )
 		end
 	end
 
-	self.saved.world:destroy()
-	self.saved.world = newWorld
+	self.sv.saved.world:destroy()
+	self.sv.saved.world = newWorld
 
-	self.storage:save( self.saved )
+	self.storage:save( self.sv.saved )
+
+	sm.event.sendToWorld( self.sv.saved.worldm, "sv_resetWaves" )
 end
 
 function Game:server_onFixedUpdate( dt )

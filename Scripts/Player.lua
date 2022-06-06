@@ -66,8 +66,9 @@ end
 
 function Player.server_onExplosion( self, center, destructionLevel )
 	self:sv_takeDamage(destructionLevel * 2, nil)
-	if self.player.character:isTumbling() then
-		local knockbackDirection = ( self.player.character.worldPosition - center ):normalize()
+	local dir = ( self.player.character.worldPosition - center )
+	if self.player.character:isTumbling() and dir:length() > 0.01 then
+		local knockbackDirection = dir:normalize()
 		ApplyKnockback( self.player.character, knockbackDirection, 5000 )
 	end
 end
@@ -307,9 +308,14 @@ function Player:cl_init()
 			backgroundAlpha = 0.0,
 		}
 	)
-	for i = 1, 3 do
-		self.cl.weaponWheel:setButtonCallback("btn"..i, "cl_weaponWheelClick")
-		self.cl.weaponWheel:setIconImage("img"..i, weaponWheelGuns[i])
+	for i = 1, 6 do
+		local gun = weaponWheelGuns[i]
+		if gun then
+			self.cl.weaponWheel:setButtonCallback("btn"..i, "cl_weaponWheelClick")
+			self.cl.weaponWheel:setIconImage("img"..i, gun)
+		end
+
+		self.cl.weaponWheel:setVisible("btn"..i, gun ~= nil)
 	end
 	self.cl.blockWeaponWheel = false
 	self.cl.weaponWheel:setOnCloseCallback("cl_blockModWheel")

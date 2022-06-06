@@ -1,9 +1,9 @@
 World = class( nil )
 World.terrainScript = "$CONTENT_DATA/Scripts/terrain.lua"
-World.cellMinX = -1
-World.cellMaxX =  1
-World.cellMinY = -1
-World.cellMaxY =  1
+World.cellMinX = -5
+World.cellMaxX =  5
+World.cellMinY = -5
+World.cellMaxY =  5
 World.worldBorder = true
 
 dofile( "$SURVIVAL_DATA/Scripts/game/managers/PesticideManager.lua" )

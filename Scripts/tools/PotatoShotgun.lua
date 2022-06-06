@@ -13,9 +13,54 @@ local hookDetachDistance = 1.5
 local meathookDetachImpulse = 1250
 local hookUseCD = 200
 local mods = {
-	{ name = "Full Auto", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_fries, sec_projectile = projectile_fries, fireVels = { 130, 130 }, auto = true },
-	{ name = "Explosive Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_fries, sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"), fireVels = { 130, 30 }, auto = false },
-	{ name = "Meathook", fpCol = sm.color.new("#e1b40f"), tpCol = sm.color.new("#e1b40f"), prim_projectile = projectile_fries, sec_projectile = "hook", fireVels = { 130, 130 }, auto = false }
+	{
+		name = "Full Auto",
+		fpCol = sm.color.new(0,0.4,0.9),
+		tpCol = sm.color.new(0,0.4,0.9),
+		prim_projectile = projectile_fries,
+		sec_projectile = projectile_fries,
+		fireVels = { 130, 130 },
+		auto = true
+	},
+	{
+		name = "Explosive Shot",
+		fpCol = sm.color.new(0.78,0.03,0.03),
+		tpCol = sm.color.new(0.78,0.03,0.03),
+		prim_projectile = projectile_fries,
+		sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"),
+		fireVels = { 130, 30 },
+		auto = false
+	},
+	{
+		name = "Pump",
+		fpCol = sm.color.new("#11ab0c"),
+		tpCol = sm.color.new("#11ab0c"),
+		prim_projectile = projectile_fries,
+		sec_projectile = projectile_fries,
+		fireVels = { 130, 130 },
+		auto = false
+	},
+	{
+		name = "Meathook",
+		fpCol = sm.color.new("#e1b40f"),
+		tpCol = sm.color.new("#e1b40f"),
+		prim_projectile = projectile_fries,
+		sec_projectile = "hook",
+		fireVels = { 130, 130 },
+		auto = false
+	}
+}
+
+local pumpColours = {
+	sm.color.new("#11ab0c"),
+	sm.color.new("#decc0d"),
+	sm.color.new("#de800d"),
+	sm.color.new("#de0d0d")
+}
+local flashFrequency = 40 / 8
+local flashColours = {
+	pumpColours[#pumpColours],
+	sm.color.new(0,0,0)
 }
 
 PotatoShotgun = class()
@@ -45,7 +90,12 @@ function PotatoShotgun.client_onCreate( self )
 	self.tool:setTpColor(mods[1].tpCol)
 
 	self.cl = {}
+	self.cl.uuid = g_shotgun
 	self.cl.hooks = {}
+	self.cl.flashing = false
+	self.cl.flashTimer = Timer()
+	self.cl.flashTimer:start( flashFrequency )
+	self.cl.flashCount = 1
 
 	if not self.tool:isLocal() then return end
 	self.cl.mod = 1
@@ -53,6 +103,7 @@ function PotatoShotgun.client_onCreate( self )
 	self.cl.secState = nil
 	self.cl.autoFire = Timer()
 	self.cl.autoFire:start( autoFireRate )
+	self.cl.pumpCount = 1
 
 	self.cl.hookGui = sm.gui.createWorldIconGui( 50, 50 )
 	self.cl.hookGui:setImage("Icon", "$CONTENT_DATA/susshake.png")
@@ -67,6 +118,16 @@ function PotatoShotgun:server_onCreate()
 	self.sv.hookTarget = nil
 end
 
+function PotatoShotgun:sv_toggleFlash( toggle )
+	self.network:sendToClients("cl_toggleFlash", toggle )
+end
+
+function PotatoShotgun:cl_toggleFlash( toggle )
+	self.cl.flashing = toggle
+	self.cl.flashCount = 1
+	self.cl.flashTimer:reset()
+end
+
 function PotatoShotgun:cl_setWpnModGui()
 	local player = sm.localPlayer.getPlayer()
 	local data = player:getClientPublicData()
@@ -78,27 +139,48 @@ function PotatoShotgun:cl_setWpnModGui()
 	player:setClientPublicData( data )
 end
 
-function PotatoShotgun:sv_changeColour( index )
-	self.network:sendToClients("cl_changeColour", index)
+function PotatoShotgun:sv_changeColour( data )
+	self.network:sendToClients("cl_changeColour", data)
 end
 
-function PotatoShotgun:cl_changeColour( index )
-	self.tool:setFpColor(mods[index].fpCol)
-	self.tool:setTpColor(mods[index].tpCol)
+function PotatoShotgun:cl_changeColour( data )
+	if data == "secUse_start" then
+		local fpCol, tpCol = self:cl_convertToUseCol()
+		self.tool:setFpColor(fpCol)
+		self.tool:setTpColor(tpCol)
+		return
+	end
+
+	if data[1] == "flash" then
+		self.tool:setFpColor(flashColours[data[2]])
+		self.tool:setTpColor(flashColours[data[2]])
+		return
+	else
+		self.cl.flashing = false
+	end
+
+	local index = data[1]
+	if mods[index].name ~= "Pump" then
+		self.tool:setFpColor(mods[index].fpCol)
+		self.tool:setTpColor(mods[index].tpCol)
+	else
+		local pumps = data[2]
+		self.tool:setFpColor(pumpColours[pumps])
+		self.tool:setTpColor(pumpColours[pumps])
+		if pumps == #pumpColours then
+			self.cl.flashing = true
+		end
+	end
 end
 
 function PotatoShotgun:client_onReload()
 	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
-	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
+	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
 	sm.audio.play("PaintTool - ColorPick")
 
-	self.network:sendToServer("sv_changeColour", self.cl.mod)
+	self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount })
 	self:cl_setWpnModGui()
 
-	return true
-end
-
-function PotatoShotgun:client_onToggle()
 	return true
 end
 
@@ -115,9 +197,28 @@ function PotatoShotgun:sv_onToggle( pos )
 	sm.unit.createUnit(unit_totebot_green, pos)
 end
 
-function PotatoShotgun:client_onFixedUpdate( dt )
-	if not sm.exists(self.tool) or not self.tool:isEquipped() or not self.tool:isLocal() then return end
+function PotatoShotgun:sv_explode()
+	sm.physics.explode( self.tool:getOwner().character.worldPosition, 7, 2.0, 6.0, 25.0, "PropaneTank - ExplosionSmall" )
+end
 
+function PotatoShotgun:client_onFixedUpdate( dt )
+	if not sm.exists(self.tool) or not self.tool:isEquipped() then return end
+	local localTool = self.tool:isLocal()
+
+	if self.cl.flashing then
+		self.cl.flashTimer:tick()
+		if self.cl.flashTimer:done() then
+			self.cl.flashTimer:start(flashFrequency)
+			self:cl_changeColour( { "flash", self.cl.flashCount } )
+			self.cl.flashCount = self.cl.flashCount == 2 and 1 or 2
+
+			if localTool then
+				sm.audio.play("Button off")
+			end
+		end
+	end
+
+	if not localTool then return end
 	self.cl.baseGun.cl_fixedUpdate( self )
 
 	local player = sm.localPlayer.getPlayer()
@@ -166,7 +267,7 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 			self.cl.hookGui:open()
 			self.cl.hookGui:setWorldPosition( char:getWorldPosition() )
 
-			if self.cl.secState == 1 then
+			if self.cl.secState == sm.tool.interactState.start then
 				self.cl.hookTarget = char
 				player:getClientPublicData().meathookState = true
 				self.network:sendToServer("sv_setHookTarget", { target = char, player = player })
@@ -290,7 +391,21 @@ function PotatoShotgun:cl_shoot()
 		local owner = self.tool:getOwner()
 		if owner then
 			local projectile = aiming and mod.sec_projectile or mod.prim_projectile
-			sm.projectile.projectileAttack( projectile, Damage, firePos, dir * mod.fireVels[aiming and 2 or 1], owner, fakePosition, fakePositionSelf )
+			local isPump = mod.name == "Pump"
+			if self.cl.pumpCount == #pumpColours then
+				self.network:sendToServer("sv_explode")
+			else
+				for i = 1, isPump and self.cl.pumpCount or 1 do
+					dir = sm.noise.gunSpread( dir, spreadDeg * ( isPump and math.random( 10 ) or 1 ) )
+					sm.projectile.projectileAttack( projectile, Damage, firePos, dir * mod.fireVels[aiming and 2 or 1], owner, fakePosition, fakePositionSelf )
+				end
+			end
+
+			if isPump then
+				self.cl.pumpCount = 1
+				self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
+				self.network:sendToServer("sv_toggleFlash", false)
+			end
 		end
 
 		-- Timers
@@ -663,7 +778,7 @@ end
 
 function PotatoShotgun.client_onEquip( self, animate )
 	if self.tool:isLocal() then
-		self.network:sendToServer("sv_changeColour", self.cl.mod)
+		self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
 		self:cl_setWpnModGui()
 	end
 
@@ -701,6 +816,9 @@ end
 function PotatoShotgun.client_onUnequip( self, animate )
 	if self.tool:isLocal() then
 		self.cl.hookGui:close()
+		self.network:sendToServer("sv_toggleFlash", false)
+		self.cl.pumpCount = 1
+		self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
 	end
 
 	self.wantEquipped = false
@@ -763,6 +881,25 @@ function PotatoShotgun.onShoot( self, dir )
 		self.shootEffect:start()
 	end
 
+end
+
+function PotatoShotgun.sv_n_onPump( self )
+	self.network:sendToClients( "cl_n_onPump" )
+end
+
+function PotatoShotgun.cl_n_onPump( self )
+	if not self.tool:isLocal() and self.tool:isEquipped() then
+		self:onPump()
+	end
+end
+
+function PotatoShotgun.onPump( self )
+	self.tpAnimations.animations.idle.time = 0
+	self.tpAnimations.animations.shoot.time = 0
+	self.tpAnimations.animations.aimShoot.time = 0
+
+	sm.audio.play("Button on", self.tool:getOwner():getCharacter():getWorldPosition())
+	setTpAnimation( self.tpAnimations, self.aiming and "aimShoot" or "shoot", 10.0 )
 end
 
 function PotatoShotgun.calculateFirePosition( self )
@@ -866,10 +1003,23 @@ function PotatoShotgun.cl_onPrimaryUse( self, state )
 end
 
 function PotatoShotgun.cl_onSecondaryUse( self, state )
-	--if mods[self.cl.mod].sec_projectile == "hook" then return end
-	if true then return end
+	if mods[self.cl.mod].name ~= "Pump" then return end
 
-	if state == sm.tool.interactState.start and not self.aiming then
+	if state == sm.tool.interactState.start then
+		local maxPumps = #pumpColours
+		self.cl.pumpCount = self.cl.pumpCount < maxPumps and self.cl.pumpCount + 1 or maxPumps
+
+		if self.cl.pumpCount == maxPumps and not self.cl.flashing then
+			self.network:sendToServer("sv_toggleFlash", true)
+		end
+
+		self:onPump()
+		self.network:sendToServer( "sv_n_onPump" )
+		setFpAnimation( self.fpAnimations, self.aiming and "aimShoot" or "shoot", 0.05 )
+		self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
+	end
+
+	--[[if state == sm.tool.interactState.start and not self.aiming then
 		self.aiming = true
 		self.tpAnimations.animations.idle.time = 0
 
@@ -885,7 +1035,7 @@ function PotatoShotgun.cl_onSecondaryUse( self, state )
 		self:onAim( self.aiming )
 		self.tool:setMovementSlowDown( self.aiming )
 		self.network:sendToServer( "sv_n_onAim", self.aiming )
-	end
+	end]]
 end
 
 function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )

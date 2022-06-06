@@ -197,6 +197,159 @@
 			},
 			"flammable": false,
 			"showInInventory": true
+		},
+		{
+			"uuid": "450639d7-5a77-4900-8c49-a61314bc589b",
+			"name": "trn_boostpad",
+			"renderable": {
+				"lodList": [
+					{
+						"mesh": "$CONTENT_DATA/Objects/Mesh/trn_boostpad.fbx",
+						"subMeshMap": {
+							"Material": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$GAME_DATA/Textures/transparent.tga",
+									"$GAME_DATA/Textures/transparent.tga",
+									"$GAME_DATA/Textures/nonor_nor.tga"
+									
+								]
+							},
+							"submesh1": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_dif.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_asg.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_nor.tga"
+									
+								]
+							},
+							"submesh2": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_dif.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_asg.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_nor.tga"
+									
+								]
+							},
+							"submesh3": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_dif.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_asg.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_nor.tga"
+									
+								]
+							},
+							"submesh4": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_dif.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_asg.tga",
+									"$SURVIVAL_DATA/Objects/Textures/interactive/obj_interactive_thruster_05_nor.tga"
+									
+								]
+							}
+						}
+					}
+				]
+			},
+			"color": "525252",
+			"box": {
+				"x": 4,
+				"y": 4,
+				"z": 1
+				//"col": "$CONTENT_DATA/Objects/Mesh/trn_boostpad.fbx"
+			},
+			"scripted": {
+				"filename": "$CONTENT_DATA/Scripts/interactables/trn_boostpad.lua",
+				"classname": "BoostPad",
+				"data": {}
+			},
+			"rotationSet": "PropZ",
+			"sticky": "-Z",
+			"physicsMaterial": "Mechanical",
+			"ratings": {
+				"density": 6,
+				"durability": 10,
+				"friction": 8,
+				"buoyancy": 1
+			},
+			"flammable": false,
+			"restrictions": {
+				"erasable": true,
+				"liftable": true,
+				"paintable": true,
+				"usable": false
+			},
+			"showInInventory": true
+		},
+		{
+			"uuid": "539e2ec8-cc49-484c-9d88-6e1cc6bbddc4",
+			"name": "trn_monkeybar",
+			"renderable": {
+				"lodList": [
+					{
+						"subMeshMap": {
+							"rod_base": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$GAME_DATA/Textures/transparent.tga",
+									"$GAME_DATA/Textures/transparent.tga",
+									"$GAME_DATA/Textures/nonor_nor.tga"
+								]
+							},
+							"rod_glow": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$CONTENT_DATA/Objects/Textures/green2.png",
+									"$CONTENT_DATA/Objects/Textures/fullblue.png",
+									"$GAME_DATA/Textures/nonor_nor.tga"
+								]
+							},
+							"rod_grips": {
+								"material": "DifAsgNor",
+								"textureList": [
+									"$CONTENT_DATA/Objects/Textures/lightergray.png",
+									"$GAME_DATA/Textures/transparent.tga",
+									"$GAME_DATA/Textures/nonor_nor.tga"
+								]
+							}
+						},
+						"mesh": "$CONTENT_DATA/Objects/Mesh/trn_monkeybar.fbx"
+					}
+				]
+			},
+			"color": "ffcc4d",
+			"hull": {
+				"x": 1,
+				"y": 1,
+				"z": 1,
+				"col": "$CONTENT_DATA/Objects/Mesh/trn_monkeybar.fbx"
+			},
+			"scripted": {
+				"filename": "$CONTENT_DATA/Scripts/interactables/trn_monkeybar.lua",
+				"classname": "MonkeyBar",
+				"data": {}
+			},
+			"rotationSet": "PropZ",
+			"sticky": "-Z",
+			"physicsMaterial": "Metal",
+			"ratings": {
+				"density": 6,
+				"durability": 10,
+				"friction": 8,
+				"buoyancy": 1
+			},
+			"flammable": false,
+			"restrictions": {
+				"erasable": true,
+				"liftable": true,
+				"paintable": true,
+				"usable": false
+			},
+			"showInInventory": true
 		}
 	]
 }

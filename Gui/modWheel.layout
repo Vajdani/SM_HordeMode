@@ -25,6 +25,24 @@
                     <Property key="NeedMouse" value="false"/>
                 </Widget>
             </Widget>
+            <Widget type="Button" skin="SMButton" position_real="0.10000000000000001 0.5 0.20000000000000001 0.20000000000000001" name="btn4">
+                <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.25 0.25 0.5 0.5" name="img4">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
+            <Widget type="Button" skin="SMButton" position_real="0.40000000000000002 0.5 0.20000000000000001 0.20000000000000001" name="btn5">
+                <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.25 0.25 0.5 0.5" name="img5">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
+            <Widget type="Button" skin="SMButton" position_real="0.69999999999999996 0.5 0.20000000000000001 0.20000000000000001" name="btn6">
+                <Widget type="ImageBox" skin="BeaconIconColor" position_real="0.25 0.25 0.5 0.5" name="img6">
+                    <Property key="NeedKey" value="false"/>
+                    <Property key="NeedMouse" value="false"/>
+                </Widget>
+            </Widget>
             <Widget type="TextBox" skin="TextBox" position_real="0 0.90000000000000002 1 0.10000000000000001">
                 <Property key="Caption" value="Click on one of the mods to switch to it!"/>
                 <Property key="FontName" value="SM_Header"/>

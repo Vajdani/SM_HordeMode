@@ -175,7 +175,7 @@ end
 
 function Sledgehammer.client_onUpdate( self, dt )
 	
-	if not self.animationsLoaded then
+	if not self.animationsLoaded or not sm.exists(self.tool) then
 		return
 	end
 	

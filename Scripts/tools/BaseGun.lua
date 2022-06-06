@@ -8,11 +8,22 @@ function BaseGun.cl_create( self, mods, useCD )
     function self:cl_modWheelClick( button )
         self.cl.mod = tonumber(button:sub(4,4))
 	    sm.audio.play("PaintTool - ColorPick")
-        self.network:sendToServer("sv_changeColour", self.cl.mod)
+
+        local sent = self.cl.uuid == g_shotgun and { self.cl.mod, self.cl.pumpCount } or self.cl.mod
+        self.network:sendToServer("sv_changeColour", sent )
         self:cl_setWpnModGui()
 
         self.cl.modWheel:close()
         self.cl.blockModWheel = true
+    end
+
+    function self:cl_convertToUseCol()
+        local mod = self.cl.weaponMods[self.cl.mod]
+        local function brighten( colour )
+            return sm.color.new( colour.r * 2, colour.g * 2, colour.b * 2 )
+        end
+
+        return brighten(mod.fpCol), brighten(mod.tpCol)
     end
 
     self.cl.weaponMods = mods
@@ -27,7 +38,8 @@ function BaseGun.cl_create( self, mods, useCD )
             backgroundAlpha = 0.0,
         }
     )
-    for i = 1, 4 do
+
+    for i = 1, 6 do
         local btn = "btn"..i
         if i <= #mods then
             self.cl.modWheel:setButtonCallback(btn, "cl_modWheelClick")
@@ -74,5 +86,13 @@ end
 function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f, cdVisCheck, mod )
     if self.cl.useCD.active and ( not cdVisCheck or self.cl.weaponMods[self.cl.mod].name == mod) then
 		sm.gui.setProgressFraction( self.cl.useCD.cd/self.cl.useCD.max )
+    end
+
+    if self.cl.weaponMods[self.cl.mod].name ~= "Pump" then
+        if self.cl.secState == sm.tool.interactState.start then
+            self.network:sendToServer("sv_changeColour", "secUse_start")
+        elseif self.cl.secState == sm.tool.interactState.stop then
+            self.network:sendToServer("sv_changeColour", self.cl.uuid == g_shotgun and { self.cl.mod, self.cl.pumpCount } or self.cl.mod)
+        end
     end
 end

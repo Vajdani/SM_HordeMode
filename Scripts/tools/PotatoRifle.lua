@@ -63,8 +63,10 @@ function PotatoRifle.client_onCreate( self )
 	self.tool:setFpColor(mods[1].fpCol)
 	self.tool:setTpColor(mods[1].tpCol)
 
-	if not self.tool:isLocal() then return end
 	self.cl = {}
+	self.cl.uuid = g_spudgun
+
+	if not self.tool:isLocal() then return end
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
@@ -124,18 +126,25 @@ function PotatoRifle:cl_setWpnModGui()
 	player:setClientPublicData( data )
 end
 
-function PotatoRifle:sv_changeColour( index )
-	self.network:sendToClients("cl_changeColour", index)
+function PotatoRifle:sv_changeColour( data )
+	self.network:sendToClients("cl_changeColour", data)
 end
 
-function PotatoRifle:cl_changeColour( index )
-	self.tool:setFpColor(mods[index].fpCol)
-	self.tool:setTpColor(mods[index].tpCol)
+function PotatoRifle:cl_changeColour( data )
+	if data == "secUse_start" then
+		local fpCol, tpCol = self:cl_convertToUseCol()
+		self.tool:setFpColor(fpCol)
+		self.tool:setTpColor(tpCol)
+		return
+	end
+
+	self.tool:setFpColor(mods[data].fpCol)
+	self.tool:setTpColor(mods[data].tpCol)
 end
 
 function PotatoRifle:client_onReload()
 	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
-	sm.gui.displayAlertText("Current weapon mod: #df7f00"..mods[self.cl.mod].name, 2.5)
+	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
 	sm.audio.play("PaintTool - ColorPick")
 
 	self.network:sendToServer("sv_changeColour", self.cl.mod)
