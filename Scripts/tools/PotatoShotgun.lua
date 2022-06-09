@@ -57,7 +57,7 @@ local pumpColours = {
 	sm.color.new("#de800d"),
 	sm.color.new("#de0d0d")
 }
-local flashFrequency = 40 / 6
+local flashFrequency = 40 / 4
 local flashColours = {
 	pumpColours[#pumpColours],
 	sm.color.new(0,0,0)
@@ -211,7 +211,7 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 			self.cl.flashTimer:start(flashFrequency)
 			self:cl_changeColour( { "flash", self.cl.flashCount } )
 			if localTool and self.cl.flashCount == 1 then
-				sm.audio.play("Button off")
+				sm.audio.play( "Retrobass" )
 			end
 
 			self.cl.flashCount = self.cl.flashCount == 2 and 1 or 2
