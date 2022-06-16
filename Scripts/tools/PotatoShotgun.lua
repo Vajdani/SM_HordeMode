@@ -557,7 +557,6 @@ function PotatoShotgun.client_onUpdate( self, dt )
 		end
 	end
 
-
 	-- First person animation
 	local isSprinting =  self.tool:isSprinting()
 	local isCrouching =  self.tool:isCrouching()
@@ -841,23 +840,6 @@ function PotatoShotgun.client_onUnequip( self, animate )
 	end
 end
 
-function PotatoShotgun.sv_n_onAim( self, aiming )
-	self.network:sendToClients( "cl_n_onAim", aiming )
-end
-
-function PotatoShotgun.cl_n_onAim( self, aiming )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
-		self:onAim( aiming )
-	end
-end
-
-function PotatoShotgun.onAim( self, aiming )
-	self.aiming = aiming
-	if self.tpAnimations.currentAnimation == "idle" or self.tpAnimations.currentAnimation == "aim" or self.tpAnimations.currentAnimation == "relax" and self.aiming then
-		setTpAnimation( self.tpAnimations, self.aiming and "aim" or "idle", 5.0 )
-	end
-end
-
 function PotatoShotgun.sv_n_onShoot( self, dir )
 	self.network:sendToClients( "cl_n_onShoot", dir )
 end
@@ -1018,24 +1000,6 @@ function PotatoShotgun.cl_onSecondaryUse( self, state )
 		setFpAnimation( self.fpAnimations, self.aiming and "aimShoot" or "shoot", 0.05 )
 		self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
 	end
-
-	--[[if state == sm.tool.interactState.start and not self.aiming then
-		self.aiming = true
-		self.tpAnimations.animations.idle.time = 0
-
-		self:onAim( self.aiming )
-		self.tool:setMovementSlowDown( self.aiming )
-		self.network:sendToServer( "sv_n_onAim", self.aiming )
-	end
-
-	if self.aiming and (state == sm.tool.interactState.stop or state == sm.tool.interactState.null) then
-		self.aiming = false
-		self.tpAnimations.animations.idle.time = 0
-
-		self:onAim( self.aiming )
-		self.tool:setMovementSlowDown( self.aiming )
-		self.network:sendToServer( "sv_n_onAim", self.aiming )
-	end]]
 end
 
 function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
