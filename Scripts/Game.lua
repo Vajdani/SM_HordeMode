@@ -221,8 +221,7 @@ function Game:sv_changeArenaTo( index )
 		sm.world.loadWorld( newWorld )
 	end
 
-	local players = sm.player.getAllPlayers()
-	for k, player in pairs( players ) do
+	for k, player in pairs( sm.player.getAllPlayers() ) do
 		local playerChar = player:getCharacter()
 		if sm.exists( playerChar ) then
 			local newChar = sm.character.createCharacter( player, newWorld, sm.vec3.new( 32, 32, 5 ), _, _, playerChar )
@@ -236,7 +235,7 @@ function Game:sv_changeArenaTo( index )
 
 	self.storage:save( self.sv.saved )
 
-	sm.event.sendToWorld( self.sv.saved.worldm, "sv_resetWaves" )
+	sm.event.sendToWorld( self.sv.saved.world, "sv_resetWaves" )
 end
 
 function Game:server_onFixedUpdate( dt )
