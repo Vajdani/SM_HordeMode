@@ -15,7 +15,7 @@ local consumeActions = {
 
 function Detector:server_onCreate()
     self.sv = {}
-    self.sv.ignoredPlayers = {}
+    self.sv.ignoredPlayers = sm.player.getAllPlayers() --{}
 end
 
 function Detector:server_onFixedUpdate()

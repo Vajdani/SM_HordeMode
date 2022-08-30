@@ -70,7 +70,7 @@ function BaseGun.cl_fixedUpdate( self )
     local clientData = sm.localPlayer.getPlayer():getClientPublicData()
 	if clientData == nil then return true end
 
-    local wheelBindActive = clientData.input[sm.interactable.actions.zoomOut]
+    --[[local wheelBindActive = clientData.input[sm.interactable.actions.zoomOut]
 	local wheelActive = self.cl.modWheel:isActive()
 	if wheelBindActive and not wheelActive and not self.cl.blockModWheel then
 		self.cl.modWheel:open()
@@ -80,7 +80,7 @@ function BaseGun.cl_fixedUpdate( self )
 		end
 
 		self.cl.blockModWheel = false
-	end
+	end]]
 end
 
 function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f, cdVisCheck, mod )

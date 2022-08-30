@@ -388,7 +388,7 @@ function PotatoRifle.loadAnimations( self )
 			pickup = { "spudgun_pickup", { nextAnimation = "idle" } },
 			putdown = { "spudgun_putdown" }
 
-			,coinThrow = { "spudgun_coin_throw", { nextAnimation = "idle" } },
+			--,coinThrow = { "spudgun_coin_throw", { nextAnimation = "idle" } },
 		}
 	)
 	local movementAnimations = {
@@ -435,9 +435,9 @@ function PotatoRifle.loadAnimations( self )
 
 				sprintInto = { "spudgun_sprint_into", { nextAnimation = "sprintIdle",  blendNext = 0.2 } },
 				sprintExit = { "spudgun_sprint_exit", { nextAnimation = "idle",  blendNext = 0 } },
-				sprintIdle = { "spudgun_sprint_idle", { looping = true } },
+				sprintIdle = { "spudgun_sprint_idle", { looping = true } }
 
-				coinThrow = { "spudgun_coin_throw", { nextAnimation = "idle" } },
+				--,coinThrow = { "spudgun_coin_throw", { nextAnimation = "idle" } },
 			}
 		)
 	end
@@ -611,13 +611,6 @@ function PotatoRifle.client_onUpdate( self, dt )
 
 	local playerDir = self.tool:getDirection()
 	local angle = math.asin( playerDir:dot( sm.vec3.new( 0, 0, 1 ) ) ) / ( math.pi / 2 )
-	local linareAngle = playerDir:dot( sm.vec3.new( 0, 0, 1 ) )
-
-	local linareAngleDown = clamp( -linareAngle, 0.0, 1.0 )
-
-	down = clamp( -angle, 0.0, 1.0 )
-	fwd = ( 1.0 - math.abs( angle ) )
-	up = clamp( angle, 0.0, 1.0 )
 
 	local crouchWeight = self.tool:isCrouching() and 1.0 or 0.0
 	local normalWeight = 1.0 - crouchWeight

@@ -18,13 +18,9 @@ local mods = {
 	{ name = "Turret", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 22, 22 }, cost = { 1, 1 }, auto = true }
 }
 
-local normalDir = sm.vec3.new(0,1,0)
-local rots = {
-	0,
-	90,
-	180,
-	270,
-}
+local dirY = sm.vec3.new( 0, 1, 0 )
+local dirX = sm.vec3.new( 1, 0, 0 )
+local deg90 = math.pi*0.5
 
 PotatoGatling = class()
 
@@ -73,6 +69,12 @@ function PotatoGatling.client_onCreate( self )
 	self.cl.baseGun.cl_create( self, mods, 0 )
 end
 
+function PotatoGatling:client_onDestroy()
+	if self.cl.visEffect then
+		self.cl.visEffect:stop()
+	end
+end
+
 function PotatoGatling:cl_setWpnModGui()
 	local player = sm.localPlayer.getPlayer()
 	local data = player:getClientPublicData()
@@ -115,7 +117,7 @@ end
 function PotatoGatling:client_onToggle()
 	if mods[self.cl.mod].name == "Turret" then
 		sm.audio.play("ConnectTool - Rotate")
-		self.cl.rot = self.cl.rot == #rots and 1 or self.cl.rot + 1
+		self.cl.rot = self.cl.rot == 4 and 1 or self.cl.rot + 1
 	end
 
 	return true
@@ -240,7 +242,7 @@ function PotatoGatling.loadAnimations( self )
 	self.aimWeight = math.max( cameraWeight, cameraFPWeight )
 	
 	self.gatlingActive = false
-	self.gatlingBlendSpeedIn = 1.5
+	self.gatlingBlendSpeedIn = 100 --1.5
 	self.gatlingBlendSpeedOut = 0.375
 	self.gatlingWeight = 0.0
 	self.gatlingTurnSpeed = ( 1 / self.normalFireMode.fireCooldown ) / 3
@@ -279,19 +281,12 @@ function PotatoGatling.client_onUpdate( self, dt )
 		end
 		return
 	end
-	
-	local effectPos, rot
-	
-	if self.tool:isLocal() then
-	
-		local zOffset = 0.6
-		if self.tool:isCrouching() then
-			zOffset = 0.29
-		end
 
+	local effectPos, rot
+	if self.tool:isLocal() then
 		local dir = sm.localPlayer.getDirection()
 		local firePos = self.tool:getFpBonePos( "pejnt_barrel" )
-		
+
 		if not self.aiming then
 			effectPos = firePos + dir * 0.2
 		else
@@ -299,20 +294,16 @@ function PotatoGatling.client_onUpdate( self, dt )
 		end
 
 		rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-		
-		
+
 		self.shootEffectFP:setPosition( effectPos )
 		self.shootEffectFP:setVelocity( self.tool:getMovementVelocity() )
 		self.shootEffectFP:setRotation( rot )
 	end
 	local pos = self.tool:getTpBonePos( "pejnt_barrel" )
 	local dir = self.tool:getTpBoneDir( "pejnt_barrel" )
-	
 	effectPos = pos + dir * 0.2
-
 	rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-	
-	
+
 	self.shootEffect:setPosition( effectPos )
 	self.shootEffect:setVelocity( self.tool:getMovementVelocity() )
 	self.shootEffect:setRotation( rot )
@@ -322,7 +313,7 @@ function PotatoGatling.client_onUpdate( self, dt )
 	self.fireCooldownTimer = math.max( self.fireCooldownTimer - dt, 0.0 )
 	self.spreadCooldownTimer = math.max( self.spreadCooldownTimer - dt, 0.0 )
 	self.sprintCooldownTimer = math.max( self.sprintCooldownTimer - dt, 0.0 )
-	
+
 
 	if self.tool:isLocal() then
 		local dispersion = 0.0
@@ -512,6 +503,8 @@ function PotatoGatling.client_onUnequip( self, animate )
 		end
 		setTpAnimation( self.tpAnimations, "putdown" )
 		if self.tool:isLocal() then
+			self.cl.visEffect:stop()
+
 			self.tool:setMovementSlowDown( false )
 			self.tool:setBlockSprint( false )
 			self.tool:setCrossHairAlpha( 1.0 )
@@ -796,46 +789,69 @@ function PotatoGatling.cl_onSecondaryUse( self, state )
 	end
 end
 
+
+function PotatoGatling.constructionRayCast( self )
+
+	local valid, result = sm.localPlayer.getRaycast( 7.5 )
+	if valid then
+		if result.type == "terrainSurface" then
+
+			local groundPointOffset = -( sm.construction.constants.subdivideRatio_2 - 0.04 + sm.construction.constants.shapeSpacing + 0.005 )
+			local pointLocal = result.pointLocal + result.normalLocal * groundPointOffset
+
+			-- Compute grid pos
+			local size = sm.vec3.new( 3, 3, 1 )
+			local size_2 = sm.vec3.new( 1, 1, 0 )
+			local a = pointLocal * sm.construction.constants.subdivisions
+			local gridPos = sm.vec3.new( math.floor( a.x ), math.floor( a.y ), a.z ) - size_2
+
+			-- Compute world pos
+			local worldPos = gridPos * sm.construction.constants.subdivideRatio + ( size * sm.construction.constants.subdivideRatio ) * 0.5
+
+			return valid, worldPos, result.normalWorld
+		end
+	end
+	return false
+end
+
+
 function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
+	if not sm.exists(self.tool) then return end
+
 	self.cl.primState = primaryState
 	self.cl.secState = secondaryState
 
 	if mods[self.cl.mod].name == "Turret" then
-		local hit, result = sm.localPlayer.getRaycast(7.5)
-		local worldPos = result.pointWorld
+		local hit, worldPos, worldNormal = ConstructionRayCast( { "terrainSurface" } )
 
 		if hit then
 			local keyBindingText =  sm.gui.getKeyBinding( "ForceBuild", true )
 			sm.gui.setInteractionText( "", keyBindingText, "Place Turret" )
 
+			local rot = sm.quat.angleAxis( deg90, dirX ) * sm.quat.angleAxis( deg90 * self.cl.rot, dirY )
+
+			self.cl.visEffect:setPosition( worldPos + sm.vec3.new(0,0,1) / 8 )
+			self.cl.visEffect:setRotation( rot )
+
+			if not self.cl.visEffect:isPlaying() then
+				self.cl.visEffect:start()
+			end
+
 			if forceBuild then
-				local dir = normalDir:rotate(math.rad(rots[self.cl.rot]), g_up)
-				local rot = sm.vec3.getRotation(g_up, dir)
-
-				--sm.particle.createParticle("paint_smoke", self.tool:getOwner().character:getWorldPosition() + dir)
-				self.cl.visEffect:setPosition( worldPos + sm.vec3.new(0,0,1) / 8 )
-				--self.cl.visEffect:setRotation( rot )
-
-				if not self.cl.visEffect:isPlaying() then
-					self.cl.visEffect:start()
-				end
-
-				if primaryState == sm.tool.interactState.start then
-					self.network:sendToServer("sv_placeTurret",
-						{
-							pos = worldPos,
-							rot = rot,
-							player = sm.localPlayer.getPlayer()
-						}
-					)
-					self.cl.visEffect:stop()
-				end
-			else
+				self.network:sendToServer("sv_placeTurret",
+					{
+						pos = worldPos,
+						rot = rot,
+						player = sm.localPlayer.getPlayer()
+					}
+				)
 				self.cl.visEffect:stop()
 			end
 		else
 			self.cl.visEffect:stop()
 		end
+	else
+		self.cl.visEffect:stop()
 	end
 
 	if self.cl.secState == 1 or self.cl.secState == 2 then
@@ -844,11 +860,7 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 		end
 	end
 
-	if primaryState == sm.tool.interactState.start or primaryState == sm.tool.interactState.hold then
-		self.gatlingActive = true
-	else
-		self.gatlingActive = false
-	end
+	self.gatlingActive = (primaryState == sm.tool.interactState.start or primaryState == sm.tool.interactState.hold) and not forceBuild
 
 	if secondaryState ~= self.prevSecondaryState then
 		self:cl_onSecondaryUse( secondaryState )
@@ -861,7 +873,7 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 end
 
 function PotatoGatling:sv_placeTurret( args )
-	local turret = sm.shape.createPart(turretUUID, args.pos - sm.vec3.new(0.125,0.125,0), sm.quat.identity(), false, true )
+	local turret = sm.shape.createPart(turretUUID, args.pos - sm.vec3.new(0.125,0.125,0), sm.quat.identity() --[[args.rot]], false, true )
 	turret.interactable:setPublicData(
 		{
 			owner = args.player

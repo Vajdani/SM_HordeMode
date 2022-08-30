@@ -401,7 +401,7 @@ function Player:client_onFixedUpdate( dt )
 		self.cl.extraHud:setText("weaponMod", weaponModName)
 	end
 
-	local wheelBindActive = clientData.input[sm.interactable.actions.zoomIn]
+	--[[local wheelBindActive = clientData.input[sm.interactable.actions.zoomIn]
 	local wheelActive = self.cl.weaponWheel:isActive()
 	if wheelBindActive and not wheelActive and not self.cl.blockWeaponWheel then
 		self.cl.weaponWheel:open()
@@ -411,7 +411,7 @@ function Player:client_onFixedUpdate( dt )
 		end
 
 		self.cl.blockWeaponWheel = false
-	end
+	end]]
 
 
 	--movement

@@ -30,7 +30,7 @@ local mods = {
 		sec_projectile = sm.uuid.new("2abc4c0c-dd91-48be-96a6-4d69bc5d8276"),
 		fireVels = { 130, 30 },
 		auto = false
-	},
+	}--[[,
 	{
 		name = "Pump",
 		fpCol = sm.color.new("#11ab0c"),
@@ -48,7 +48,7 @@ local mods = {
 		sec_projectile = "hook",
 		fireVels = { 130, 130 },
 		auto = false
-	}
+	}]]
 }
 
 local pumpColours = {

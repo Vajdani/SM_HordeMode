@@ -15,10 +15,12 @@ function Turret:server_onCreate()
         ammo = 500, maxAmmo = 500
     }
 
-    --self.shape:getBody():setDestructable( false )
+    self.shape:getBody():setDestructable( false )
 
     self.sv.fireTimer = Timer()
     self.sv.fireTimer:start( fireRate )
+
+    self.sv.claimed = false
 
     --self.storage:save( self.sv )
     self.network:setClientData( self.sv )
@@ -26,15 +28,6 @@ end
 
 function Turret:server_onRefresh()
     self.network:setClientData( self.sv )
-end
-
-function Turret:server_onDestroy()
-    sm.container.beginTransaction()
-    local player = self.sv.data.owner
-	local inv = sm.game.getLimitedInventory() and player:getInventory() or player:getHotbar()
-    sm.container.spend(inv, turretUUID, 1)
-	sm.container.collect(inv, g_gatling, 1)
-	sm.container.endTransaction()
 end
 
 function Turret.server_onProjectile( self, position, airTime, velocity, projectileName, attacker, damage, customData, normal, uuid )
@@ -46,8 +39,31 @@ function Turret.server_onMelee( self, position, attacker, damage, power, directi
 end
 
 function Turret.server_onExplosion( self, center, destructionLevel )
-    print("a")
 	self:sv_takeDamage(destructionLevel * 2, nil)
+end
+
+function Turret:server_onDestroy()
+    if self.sv.claimed then return end
+
+    sm.container.beginTransaction()
+    local player = self.sv.data.owner
+	local inv = sm.game.getLimitedInventory() and player:getInventory() or player:getHotbar()
+    sm.container.spend(inv, turretUUID, 1)
+	sm.container.collect(inv, g_gatling, 1)
+	sm.container.endTransaction()
+end
+
+function Turret:sv_reclaimTurret()
+    self.sv.claimed = true
+
+    sm.container.beginTransaction()
+    local player = self.sv.data.owner
+	local inv = sm.game.getLimitedInventory() and player:getInventory() or player:getHotbar()
+	sm.container.collect(inv, g_gatling, 1)
+	sm.container.endTransaction()
+
+    sm.effect.playEffect("Part - Upgrade", self.shape.worldPosition, sm.vec3.zero(), sm.vec3.getRotation( sm.vec3.new(0,1,0), g_up ))
+    self.shape:destroyShape()
 end
 
 function Turret.sv_takeDamage( self, damage, source )
@@ -117,6 +133,7 @@ function Turret:sv_transferAmmo( args )
 end
 
 
+
 function Turret:client_onCreate()
     self.cl = {}
     self.cl.data = {}
@@ -137,12 +154,15 @@ function Turret:client_canInteract()
     local o1 = "<p textShadow='false' bg='gui_keybinds_bg_orange' color='#4f4f4f' spacing='9'>"
     local o2 = "</p>"
 
-    sm.gui.setInteractionText("", o1.."Delete Turret"..o2, "reclaim Gatling Gun")
-
     local inv = sm.game.getLimitedInventory() and sm.localPlayer.getInventory() or sm.localPlayer.getHotbar()
     local ammo = self:cl_getTransferrableAmmo( inv )
-    local transferText = (self.cl.stats.ammo == self.cl.stats.maxAmmo or ammo == 0) and "#ff0000Can't transfer any potatoes!" or string.format("Transfer #df7f00%d #ffffffpotatoes", ammo)
-    sm.gui.setInteractionText("", sm.gui.getKeyBinding( "Use", true), transferText)
+
+    local transferText = (self.cl.stats.ammo == self.cl.stats.maxAmmo or ammo == 0) and
+    string.format("%s#ff0000Can't transfer any potatoes!%s", o1, o2) or
+    sm.gui.getKeyBinding( "Use", true)..string.format("Transfer #df7f00%d #ffffffpotatoes", ammo)
+
+    sm.gui.setInteractionText(transferText, "")
+    sm.gui.setInteractionText("", sm.gui.getKeyBinding("Tinker", true), "Reclaim Gatling Gun")
 
     return self.cl.stats.ammo ~= self.cl.stats.maxAmmo
 end
@@ -160,6 +180,12 @@ function Turret:client_onInteract( char, state )
             }
         )
     end
+end
+
+function Turret:client_onTinker( char, state )
+    if self.cl.data.owner ~= sm.localPlayer.getPlayer() or not state then return end
+
+    self.network:sendToServer("sv_reclaimTurret")
 end
 
 function Turret:client_onClientDataUpdate( data, channel )

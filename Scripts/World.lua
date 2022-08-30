@@ -31,10 +31,10 @@ local mapBounds = {
 function World.server_onCreate( self )
     print("World.server_onCreate")
 
-    self.sv = {}
     g_pesticideManager = PesticideManager()
 	g_pesticideManager:sv_onCreate()
 
+    self.sv = {}
 	self.sv.pickups = {}
 
     self.sv.currentWave = 0
@@ -163,12 +163,12 @@ function World:sv_generateWaves()
         print("GENERATING WAVE", i)
         local possibleEnemies = {}
 
-        print("IMPORTING PREDETERMINED ENEMIES")
+        --[[print("IMPORTING PREDETERMINED ENEMIES")
         for v, k in pairs(waveData.predefinedEnemies) do
             if k.waves[1] == "all" or k.waves[1] == "%2" and v%2 == 0 or isAnyOf(v, k.waves) then
                 possibleEnemies[#possibleEnemies+1] = { uuid = sm.uuid.new(k.allowedEnemies[math.random(#k.allowedEnemies)]), pos = tableToVec3( k.pos ) }
             end
-        end
+        end]]
 
         print("\n")
 
