@@ -68,6 +68,7 @@ function Game:cl_bindCommands()
 			"cl_onChatCommand",
 			"load into another arena"
 		)
+		sm.game.bindChatCommand( "/aggro", {}, "cl_onChatCommand", "Toggle bot aggro" )
 	end
 
 	sm.game.bindChatCommand( "/aircontrol", {}, "cl_onChatCommand", "Toggle air control(more effective movement in the air)" )
@@ -76,19 +77,20 @@ end
 
 function Game:cl_onChatCommand( params )
 	local player = sm.localPlayer.getPlayer()
-	if params[1] == "/god" then
+	local commandName = params[1]
+	if commandName == "/god" then
 		self.network:sendToServer( "sv_switchGodMode" )
-	elseif params[1] == "/start" then
+	elseif commandName == "/start" then
 		self.network:sendToServer( "sv_startWaves" )
-	elseif params[1] == "/stop" then
+	elseif commandName == "/stop" then
 		self.network:sendToServer( "sv_stopWaves" )
-	elseif params[1] == "/restart" then
+	elseif commandName == "/restart" then
 		self.network:sendToServer( "sv_restartWaves" )
-	elseif params[1] == "/inv" then
+	elseif commandName == "/inv" then
 		self.network:sendToServer( "sv_toggleInv" )
-	elseif params[1] == "/pvp" then
+	elseif commandName == "/pvp" then
 		self.network:sendToServer( "sv_togglePvp" )
-	elseif params[1] == "/goto" then
+	elseif commandName == "/goto" then
 		if g_waves == nil or #g_waves == 0 then
 			sm.gui.displayAlertText("#df7f00Start the waves first!", 5)
 			return
@@ -99,7 +101,7 @@ function Game:cl_onChatCommand( params )
 		else
 			sm.gui.displayAlertText("#df7f00Invalid wave number specified! It must be between #ffffff1 #df7f00and #ffffff"..tostring(#g_waves), 5)
 		end
-	elseif params[1] == "/arena" then
+	elseif commandName == "/arena" then
 		print(#g_arenaData)
 		if g_arenaData == nil or #g_arenaData == 0 then
 			return
@@ -110,9 +112,11 @@ function Game:cl_onChatCommand( params )
 		else
 			sm.gui.displayAlertText("#df7f00Invalid arena index specified! It must be between #ffffff1 #df7f00and #ffffff"..tostring(#g_arenaData), 5)
 		end
-	elseif params[1] == "/aircontrol" then
+	elseif commandName == "/aggro" then
+		self.network:sendToServer( "sv_toggleAggro" )
+	elseif commandName == "/aircontrol" then
 		self.network:sendToServer( "sv_toggleAirControl", player )
-	elseif params[1] == "/movement" then
+	elseif commandName == "/movement" then
 		self.network:sendToServer( "sv_toggleMovement", player )
 	end
 end
@@ -158,6 +162,16 @@ end
 
 function Game:sv_gotoWave( wave )
 	sm.event.sendToWorld( self.sv.saved.world, "sv_gotoWave", wave )
+end
+
+function Game:sv_toggleAggro()
+	local aggro = not sm.game.getEnableAggro()
+	sm.game.setEnableAggro( aggro )
+
+	local mode = aggro and "ON" or "OFF"
+	for v, k in pairs(sm.player.getAllPlayers()) do
+		sm.event.sendToPlayer(k, "sv_chatMsg", "Aggro is now #df7f00"..mode)
+	end
 end
 
 function Game:sv_toggleAirControl( player )

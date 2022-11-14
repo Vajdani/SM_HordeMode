@@ -174,6 +174,13 @@ function PotatoShotgun:cl_changeColour( data )
 end
 
 function PotatoShotgun:client_onReload()
+	local hit, result = sm.localPlayer.getRaycast( 25 )
+	if hit then
+		self.network:sendToServer("sv_onToggle2", result.pointWorld)
+	end
+
+	if true then return true end
+
 	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
 	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
 	sm.audio.play("PaintTool - ColorPick")
@@ -194,6 +201,10 @@ function PotatoShotgun:client_onToggle()
 end
 
 function PotatoShotgun:sv_onToggle( pos )
+	sm.unit.createUnit(sm.uuid.new("54b66a37-f987-4a4b-bbd5-23dfa5c151fa"), pos)
+end
+
+function PotatoShotgun:sv_onToggle2( pos )
 	sm.unit.createUnit(unit_totebot_green, pos)
 end
 

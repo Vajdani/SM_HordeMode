@@ -1,3 +1,316 @@
+-- #region Character
+---@class Healer_char : CharacterClass
+---@field cl table
+---@field graphicsLoaded boolean
+---@field animationsLoaded boolean
+---@field unitDebugText table
+Healer_char = class( nil )
+
+local alertRenderableTp = "$SURVIVAL_DATA/Character/Char_Totebot/char_totebot_alert.rend"
+local roamingRenderableTp = "$SURVIVAL_DATA/Character/Char_Totebot/char_totebot_roaming.rend"
+sm.character.preloadRenderables( { alertRenderableTp, roamingRenderableTp } )
+
+function Healer_char.client_onCreate( self )
+	self.cl = {}
+	self.cl.animations = {}
+	self.cl.animationSwitches = {}
+	self.cl.effects = {}
+	self.cl.currentAnimationSet = roamingRenderableTp
+	self.cl.target = nil
+
+	self.cl.healedTargets = {}
+
+	--print( "-- Healer_char created --" )
+	self:client_onRefresh()
+end
+
+function Healer_char.client_onDestroy( self )
+	--print( "-- Healer_char destroyed --" )
+end
+
+function Healer_char.client_onRefresh( self )
+	--print( "-- Healer_char refreshed --" )
+end
+
+function Healer_char.client_onGraphicsLoaded( self )
+
+	self.character:addRenderable( self.cl.currentAnimationSet )
+	self:cl_initGraphics()
+	self:cl_initAnimationSwitch()
+	self.character:setGlowMultiplier( 1 )
+	self.graphicsLoaded = true
+
+	self.cl.effects = {}
+	self.cl.effects.alerted = sm.effect.createEffect( "ToteBot - Alerted", self.character, "jnt_head" )
+	self.cl.effects.hit = sm.effect.createEffect( "ToteBot - Hit", self.character, "jnt_head" )
+	self.cl.effects.attack = sm.effect.createEffect( "ToteBot - Attack", self.character )
+	self.cl.effects.sparks = sm.effect.createEffect( "ToteBot - Sparks", self.character, "cable6_jnt" )
+	self.cl.effects.sparks:start()
+end
+
+function Healer_char.client_onGraphicsUnloaded( self )
+	self.graphicsLoaded = false
+
+	if self.cl.effects.alerted then
+		self.cl.effects.alerted:destroy()
+		self.cl.effects.alerted = nil
+	end
+	if self.cl.effects.hit  then
+		self.cl.effects.hit:destroy()
+		self.cl.effects.hit = nil
+	end
+	if self.cl.effects.attack then
+		self.cl.effects.attack:destroy()
+		self.cl.effects.attack = nil
+	end
+	if self.cl.effects.sparks then
+		self.cl.effects.sparks:destroy()
+		self.cl.effects.sparks = nil
+	end
+end
+
+function Healer_char.cl_initGraphics( self )
+	self.cl.animations.attack = {
+		info = self.character:getAnimationInfo( "attack_melee" ),
+		time = 0,
+		weight = 0
+	}
+	self.animationsLoaded = true
+
+	self.cl.blendSpeed = 5.0
+	self.cl.blendTime = 0.2
+
+	self.cl.currentAnimation = ""
+
+	self.character:setMovementEffects( "$SURVIVAL_DATA/Character/Char_Totebot/movement_effects.json" )
+
+	self.character:setGlowMultiplier( 1 )
+end
+
+function Healer_char.cl_initAnimationSwitch( self )
+	self.cl.animationSwitches.alerted = {
+		info = self.character:getAnimationInfo( "alerted" ),
+		time = 0,
+		weight = 0,
+		triggeredEvent = false
+	}
+	self.cl.animationSwitches.roaming = {
+		info = self.character:getAnimationInfo( "roaming" ),
+		time = 0,
+		weight = 0,
+		triggeredEvent = false
+	}
+	self.cl.currentSwitch = ""
+end
+
+function Healer_char.client_onUpdate( self, deltaTime )
+	if not self.graphicsLoaded then
+		return
+	end
+
+	if sm.exists( self.character ) then
+		if sm.game.getCurrentTick()%4 == 0 then
+			local healerPos = self.character.worldPosition
+			for k, char in pairs(self.cl.healedTargets) do
+				if sm.exists(char) then
+					---@type Vec3
+					local healedPos = char.worldPosition
+					for i = 1, 10 do
+						sm.particle.createParticle(
+							"construct_welding",
+							sm.vec3.bezier2(
+								healerPos,
+								healerPos + (healedPos - healerPos) * 0.5 + sm.vec3.new(0,0,2),
+								healedPos,
+								i / 10
+							)
+						)
+					end
+				end
+			end
+		end
+
+		--Animation debug text
+		local activeAnimations = self.character:getActiveAnimations()
+		sm.gui.setCharacterDebugText( self.character, "" ) -- Clear debug text
+		if activeAnimations then
+			for i, animation in ipairs( activeAnimations ) do
+				if animation.name ~= "" and animation.name ~= "spine_turn" then
+					local truncatedWeight = math.floor( animation.weight * 10 + 0.5 ) / 10
+					sm.gui.setCharacterDebugText( self.character, tostring( animation.name .. " : " .. truncatedWeight ), false ) -- Add debug text without clearing
+				end
+			end
+		end
+
+		if self.unitDebugText then
+			sm.gui.setCharacterDebugText( self.character, "#ff7f00UNIT LOG:", false ) -- Clear debug text
+			for i,text in ipairs( self.unitDebugText ) do
+				sm.gui.setCharacterDebugText( self.character, ( i == #self.unitDebugText and ">" or "" )..text, false ) -- Add debug text without clearing
+			end
+		end
+
+		-- Update animations
+		for name, animation in pairs( self.cl.animations ) do
+			if animation.info then
+				animation.time = animation.time + deltaTime
+
+				if name == self.cl.currentAnimation then
+					animation.weight = math.min(animation.weight+(self.cl.blendSpeed * deltaTime), 1.0)
+					if animation.time >= animation.info.duration then
+						self.cl.currentAnimation = ""
+					end
+				elseif animation.active then
+					animation.weight = math.min(animation.weight+(self.cl.blendSpeed * deltaTime), 1.0)
+					if animation.time >= animation.info.duration then
+						self.cl.animations[name].active = false
+					end
+				else
+					animation.weight = math.max(animation.weight-( self.cl.blendSpeed * deltaTime ), 0.0)
+				end
+
+				self.character:updateAnimation( animation.info.name, animation.time, animation.weight, animation.additive )
+			end
+		end
+
+		-- Update state change
+		for name, animationSwitch in pairs( self.cl.animationSwitches ) do
+			if animationSwitch.info then
+				animationSwitch.time = animationSwitch.time + deltaTime
+
+				if name == self.cl.currentSwitch then
+					animationSwitch.weight = math.max( 1 - 2 * math.abs( ( animationSwitch.time / animationSwitch.info.duration ) - 0.5 ), 0 )
+					if animationSwitch.time >= animationSwitch.info.duration * 0.5 and not animationSwitch.triggeredEvent then
+						animationSwitch.triggeredEvent = true
+
+						if name == "alerted" then
+							if self.cl.currentAnimationSet ~= alertRenderableTp then
+								self.character:removeRenderable( self.cl.currentAnimationSet )
+								self.cl.currentAnimationSet = alertRenderableTp
+								self.character:addRenderable( self.cl.currentAnimationSet )
+								self:cl_initGraphics()
+							end
+						elseif name == "roaming" then
+							if self.cl.currentAnimationSet ~= roamingRenderableTp then
+								self.character:removeRenderable( self.cl.currentAnimationSet )
+								self.cl.currentAnimationSet = roamingRenderableTp
+								self.character:addRenderable( self.cl.currentAnimationSet )
+								self:cl_initGraphics()
+							end
+						end
+					end
+
+					if animationSwitch.time >= animationSwitch.info.duration then
+						self.cl.currentSwitch = ""
+						animationSwitch.time = 0
+						animationSwitch.weight = 0
+						animationSwitch.triggeredEvent = false
+					end
+				else
+					animationSwitch.time = 0
+					animationSwitch.weight = 0
+					animationSwitch.triggeredEvent = false
+				end
+
+				self.character:updateAnimation( animationSwitch.info.name, animationSwitch.time, animationSwitch.weight )
+			end
+		end
+	end
+
+end
+
+function Healer_char.client_onEvent( self, event )
+	self:cl_handleEvent( event )
+end
+
+function Healer_char.cl_handleEvent( self, event )
+	if not self.animationsLoaded then
+		return
+	end
+
+	if sm.exists( self.character ) then
+		if event == "melee" then
+			self.cl.currentAnimation = "attack"
+			self.cl.animations.attack.time = 0
+			if self.graphicsLoaded then
+				self.cl.effects.attack:start()
+			end
+		elseif event == "alerted" then
+			if self.cl.animationSwitches.alerted then
+				self.cl.currentSwitch = "alerted"
+				self.cl.animationSwitches.alerted.time = 0
+				self.cl.animationSwitches.alerted.triggeredEvent = false
+				if self.graphicsLoaded then
+					self.cl.effects.alerted:start()
+				end
+			end
+		elseif event == "roaming" then
+			if self.cl.animationSwitches.roaming then
+				self.cl.currentSwitch = "roaming"
+				self.cl.animationSwitches.roaming.time = 0
+				self.cl.animationSwitches.roaming.triggeredEvent = false
+			end
+		elseif event == "death" then
+			SpawnDebris( self.character, "jnt_spine1", "Robotparts - TotebotBody" )
+			SpawnDebris( self.character, "jnt_01_upperleg", "Robotparts - TotebotLeg" )
+			SpawnDebris( self.character, "jnt_02_upperleg", "Robotparts - TotebotLeg" )
+			SpawnDebris( self.character, "jnt_03_upperleg", "Robotparts - TotebotLeg" )
+			SpawnDebris( self.character, "jnt_04_upperleg", "Robotparts - TotebotLeg" )
+			SpawnDebris( self.character, "jnt_05_upperleg", "Robotparts - TotebotLeg" )
+			SpawnDebris( self.character, "jnt_06_upperleg", "Robotparts - TotebotLeg" )
+
+			sm.effect.playEffect( "ToteBot - DestroyedParts", self.character.worldPosition, nil, nil, nil, { Color = self.character:getColor() } )
+		else
+			self.cl.currentAnimation = ""
+		end
+	end
+end
+
+function Healer_char.sv_n_updateTarget( self, params )
+	self.network:sendToClients( "cl_n_updateTarget", params )
+end
+
+function Healer_char.cl_n_updateTarget( self, params )
+	self.cl.target = params.target
+end
+
+function Healer_char.sv_e_unitDebugText( self, text )
+	-- No sync cheat
+	if self.unitDebugText == nil then
+		self.unitDebugText = {}
+	end
+	local MaxRows = 10
+	if #self.unitDebugText == MaxRows then
+		for i = 1, MaxRows - 1 do
+			self.unitDebugText[i] = self.unitDebugText[i + 1]
+		end
+		self.unitDebugText[MaxRows] = text
+	else
+		self.unitDebugText[#self.unitDebugText + 1] = text
+	end
+end
+
+
+function Healer_char:sv_n_addHealTarget( target )
+	self.network:sendToClients( "cl_n_addHealTarget", target )
+end
+
+function Healer_char:cl_n_addHealTarget( target )
+	self.cl.healedTargets[#self.cl.healedTargets+1] = target
+end
+
+
+function Healer_char:sv_n_removeHealTarget( index )
+	self.network:sendToClients( "cl_n_removeHealTarget", index )
+end
+
+function Healer_char:cl_n_removeHealTarget( index )
+	table.remove(self.cl.healedTargets, index)
+end
+-- #endregion
+
+
+
+-- #region AI
 dofile "$SURVIVAL_DATA/Scripts/game/units/unit_util.lua"
 dofile "$SURVIVAL_DATA/Scripts/util.lua"
 dofile "$SURVIVAL_DATA/Scripts/game/util/Ticker.lua"
@@ -9,7 +322,8 @@ dofile "$SURVIVAL_DATA/Scripts/game/units/states/BreachState.lua"
 dofile "$SURVIVAL_DATA/Scripts/game/units/states/CombatAttackState.lua"
 dofile "$SURVIVAL_DATA/Scripts/game/survival_constants.lua"
 
-TotebotGreenUnit = class( nil )
+Healer_ai = class( nil )
+Healer_ai.maxHealTargets = 3
 
 local RoamStartTimeMin = 40 * 4 -- 4 seconds
 local RoamStartTimeMax = 40 * 8 -- 8 seconds
@@ -29,8 +343,7 @@ local MeleeBreachLevel = 9
 
 local HearRange = 40.0
 
-function TotebotGreenUnit.server_onCreate( self )
-	
+function Healer_ai.server_onCreate( self )
 	self.target = nil
 	self.previousTarget = nil
 	self.lastTargetPosition = nil
@@ -41,7 +354,7 @@ function TotebotGreenUnit.server_onCreate( self )
 		self.saved = {}
 	end
 	if self.saved.stats == nil then
-		self.saved.stats = { hp = 60, maxhp = 60 }
+		self.saved.stats = { hp = 180, maxhp = 180 }
 	end
 
 	if g_eventManager then
@@ -83,7 +396,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	end
 	self.storage:save( self.saved )
 	self.unit.publicData = { groupTag = self.saved.groupTag }
-	
+
 	self.unit.eyeHeight = self.unit.character:getHeight() * 0.75
 	self.unit.visionFrustum = {
 		{ 3.0, math.rad( 80.0 ), math.rad( 80.0 ) },
@@ -93,18 +406,18 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.unit:setWhiskerData( 3, math.rad( 60.0 ), 1.5, 5.0 )
 	self.noiseScale = 1.0
 	self.impactCooldownTicks = 0
-	
+
 	self.isInCombat = false
 	self.combatTimer = Timer()
 	self.combatTimer:start( 40 * 12 )
 
 	self.stateTicker = Ticker()
 	self.stateTicker:init()
-	
+
 	-- Idle	
 	self.idleState = self.unit:createState( "idle" )
 	self.idleState.debugName = "idleState"
-	
+
 	-- Stagger
 	self.staggeredEventState = self.unit:createState( "wait" )
 	self.staggeredEventState.time = 0.25
@@ -112,7 +425,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.staggeredEventState.debugName = "staggeredEventState"
 	self.stagger = 0.0
 	self.staggerCooldownTicks = 0
-	
+
 	-- Roam
 	self.roamTimer = Timer()
 	self.roamTimer:start( math.random( RoamStartTimeMin, RoamStartTimeMax ) )
@@ -129,7 +442,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.pathingState:sv_setMovementType( "sprint" )
 	self.pathingState:sv_setWaterAvoidance( false )
 	self.pathingState.debugName = "pathingState"
-	
+
 	-- Attacks
 	self.attackState01 = self.unit:createState( "meleeAttack" )
 	self.attackState01.meleeType = melee_totebotattack
@@ -141,7 +454,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.attackState01.globalCooldown = 0.0 * 40
 	self.attackState01.attackDelay = 0.25 * 40
 	self.attackState01.power = 3750.0
-	
+
 	-- Combat
 	self.combatAttackState = CombatAttackState()
 	self.combatAttackState:sv_onCreate( self.unit )
@@ -157,7 +470,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.breachState:sv_setBreachLevel( MeleeBreachLevel )
 	self.breachState:sv_addAttack( self.attackState01 )
 	self.breachState.debugName = "breachState"
-	
+
 	-- Combat approach
 	self.combatApproachState = self.unit:createState( "positioning" )
 	self.combatApproachState.debugName = "combatApproachState"
@@ -166,7 +479,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.combatApproachState.avoidance = false
 	self.combatApproachState.movementType = "sprint"
 	self.combatApproachState.debugName = "combatApproachState"
-	
+
 	-- Avoid
 	self.avoidState = self.unit:createState( "positioning" )
 	self.avoidState.debugName = "avoid"
@@ -176,7 +489,7 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.avoidState.movementType = "sprint"
 	self.avoidState.debugName = "avoidState"
 	self.avoidCount = 0
-	
+
 	-- LookAt
 	self.lookAtState = self.unit:createState( "positioning" )
 	self.lookAtState.debugName = "lookAt"
@@ -191,37 +504,106 @@ function TotebotGreenUnit.server_onCreate( self )
 	self.dayFlee.maxFleeTime = 0.0
 	self.dayFlee.maxDeviation = 45 * math.pi / 180
 	self.dayFlee.debugName = "dayFlee"
-	
+
 	-- Tumble
 	initTumble( self )
-	
+
 	-- Crushing
 	initCrushing( self, DEFAULT_CRUSH_TICK_TIME )
-	
+
 	self.griefTimer = Timer()
 	self.griefTimer:start( 40 * 9.0 )
 
 	self.avoidResetTimer = Timer()
 	self.avoidResetTimer:start( 40 * 16.0 )
-	
+
 	self.currentState = self.idleState
 	self.currentState:start()
+
+
+
+	self.healTimer = Timer()
+	self.healTimer:start( 40 )
+	self.healedChars = {}
 end
 
-function TotebotGreenUnit.server_onRefresh( self )
-	print( "-- TotebotGreenUnit refreshed --" )
+function Healer_ai.server_onRefresh( self )
+	print( "-- Healer_ai refreshed --" )
 end
 
-function TotebotGreenUnit.server_onDestroy( self )
-	print( "-- TotebotGreenUnit terminated --" )
+function Healer_ai.server_onDestroy( self )
+	print( "-- Healer_ai terminated --" )
 end
 
-function TotebotGreenUnit:sv_horde_takeDamage( args )
-	self:sv_takeDamage( args.damage, args.impact, args.hitpos, args.source )
+
+
+function Healer_ai:canSee( target )
+	local hit, result = sm.physics.raycast(self.unit.character.worldPosition, target.worldPosition)
+	return hit and result:getCharacter() == target
 end
 
-function TotebotGreenUnit.server_onFixedUpdate( self, dt )
-	
+function Healer_ai:addHealTarget( char )
+	self.healedChars[#self.healedChars+1] = char
+	sm.event.sendToCharacter( self.unit.character, "sv_n_addHealTarget", char )
+	print("Added target:", char)
+end
+
+function Healer_ai:removeHealTarget( char )
+	for i, healed in pairs(self.healedChars) do
+		if healed == char then
+			table.remove(self.healedChars, i)
+			sm.event.sendToCharacter( self.unit.character, "sv_n_removeHealTarget", i )
+			print("Removed target:", char)
+		end
+	end
+end
+
+
+function Healer_ai:healTargets()
+	for k, char in pairs(self.healedChars) do
+		if sm.exists(char) then
+			local unit = char:getUnit()
+			if sm.exists(unit) then
+				sm.event.sendToUnit(
+					unit,
+					"sv_horde_takeDamage",
+					{
+						damage = -20,
+						impact = sm.vec3.zero(),
+						hitpos = char.worldPosition,
+						source = "healer"
+					}
+				)
+			end
+		end
+	end
+end
+
+
+
+function Healer_ai.server_onFixedUpdate( self, dt )
+	local healerC = self.unit.character
+	for k, char in pairs(sm.physics.getSphereContacts( healerC.worldPosition, 5 ).characters) do
+		if not isAnyOf(char, self.healedChars) and self:canSee( char ) and
+			#self.healedChars < self.maxHealTargets and
+			not char:isPlayer() and char ~= healerC then
+
+			self:addHealTarget( char )
+		end
+	end
+
+	for k, char in pairs(self.healedChars) do
+		if not sm.exists(char) or not self:canSee(char) then
+			self:removeHealTarget( char )
+		end
+	end
+
+	self.healTimer:tick()
+	if self.healTimer:done() then
+		self.healTimer:reset()
+		self:healTargets()
+	end
+
 	-- Temporary units are destroyed at dawn
 	if sm.exists( self.unit ) and not self.destroyed then
 		if self.saved.deathTickTimestamp and sm.game.getCurrentTick() >= self.saved.deathTickTimestamp then
@@ -238,19 +620,19 @@ function TotebotGreenUnit.server_onFixedUpdate( self, dt )
 		self.roamState.cliffAvoidance = true
 		self.pathingState:sv_setCliffAvoidance( true )
 	end
-	
+
 	self.stateTicker:tick()
-	
+
 	if updateCrushing( self ) then
-		print("'TotebotGreenUnit' was crushed!")
+		print("'Healer_ai' was crushed!")
 		self:sv_onDeath( sm.vec3.new( 0, 0, 0 ) )
 	end
-	
+
 	updateTumble( self )
 	updateAirTumble( self, self.idleState )
-	
+
 	self.griefTimer:tick()
-	
+
 	if self.avoidCount > 0 then
 		self.avoidResetTimer:tick()
 		if self.avoidResetTimer:done() then
@@ -258,7 +640,7 @@ function TotebotGreenUnit.server_onFixedUpdate( self, dt )
 			self.avoidResetTimer:reset()
 		end
 	end
-	
+
 	if self.currentState then
 		if self.target and not sm.exists( self.target ) then
 			self.target = nil
@@ -279,7 +661,7 @@ function TotebotGreenUnit.server_onFixedUpdate( self, dt )
 		self.unit:setMovementDirection( self.currentState:getMovementDirection() )
 		self.unit:setMovementType( self.currentState:getMovementType() )
 		self.unit:setFacingDirection( self.currentState:getFacingDirection() )]]
-		
+
 		-- Random roaming during idle
 		if self.currentState == self.idleState then
 			self.roamTimer:tick()
@@ -291,9 +673,8 @@ function TotebotGreenUnit.server_onFixedUpdate( self, dt )
 
 		self.staggerCooldownTicks = math.max( self.staggerCooldownTicks - 1, 0 )
 		self.impactCooldownTicks = math.max( self.impactCooldownTicks - 1, 0 )
-		
 	end
-	
+
 	-- Update target for totebot character
 	if self.target ~= self.previousTarget then
 		self:sv_updateCharacterTarget()
@@ -301,23 +682,22 @@ function TotebotGreenUnit.server_onFixedUpdate( self, dt )
 	end
 end
 
-function TotebotGreenUnit.server_onCharacterChangedColor( self, color )
+function Healer_ai.server_onCharacterChangedColor( self, color )
 	if self.saved.color ~= color then
 		self.saved.color = color
 		self.storage:save( self.saved )
 	end
 end
 
-function TotebotGreenUnit.server_onUnitUpdate( self, dt )
-	
+function Healer_ai.server_onUnitUpdate( self, dt )
 	if not sm.exists( self.unit ) then
 		return
 	end
-	
+
 	if self.currentState then
 		self.currentState:onUnitUpdate( dt )
 	end
-	
+
 	-- Temporary units are routed by the daylight
 	if self.saved.temporary then
 		if self.currentState ~= self.dayFlee and sm.game.getCurrentTick() >= self.saved.deathTickTimestamp - DaysInTicks( 1 / 24 ) then
@@ -330,11 +710,11 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 			return
 		end
 	end
-	
+
 	if self.unit.character:isTumbling() then
 		return
 	end
-	
+
 	local targetCharacter
 	local closestVisiblePlayerCharacter
 	local closestHeardPlayerCharacter
@@ -375,7 +755,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 	elseif closestVisibleWormCharacter then
 		targetCharacter = closestVisibleWormCharacter
 	end
-	
+
 	-- Share found target
 	local foundTarget = false
 	if targetCharacter and self.target == nil then
@@ -395,7 +775,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 		end
 		foundTarget = true
 	end
-	
+
 	-- Check for targets acquired from callbacks
 	if self.eventTarget and sm.exists( self.eventTarget ) and targetCharacter == nil then
 		if type( self.eventTarget ) == "Character" then
@@ -418,7 +798,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 	if self.target and not sm.exists( self.target ) then
 		self.target = nil
 	end
-	
+
 	-- Cooldown after attacking a crop
 	if type( self.target ) == "Harvestable" then
 		local _, attackResult = self.combatAttackState:isDone()
@@ -426,7 +806,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 			self.griefTimer:reset()
 		end
 	end
-	
+
 	local inCombatApproachRange = false
 	local inCombatAttackRange = false
 	if self.target then
@@ -478,7 +858,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 			self.ambushPosition = self.saved.raidPosition
 		end
 	end
-	
+
 	-- Ambushers will always have somewhere they want to go
 	if self.ambushPosition then
 		if not self.lastTargetPosition and not self.target then
@@ -548,7 +928,7 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 		if nextTargetPosition == nil then
 			nextTargetPosition = self.unit.character.worldPosition + self.unit.character.direction
 		end
-		
+
 		local breachDepth = 0.25
 		local leveledNextTargetPosition = sm.vec3.new( nextTargetPosition.x, nextTargetPosition.y, self.unit.character.worldPosition.z )
 		local valid, breachPosition, breachObject = sm.ai.getBreachablePosition( self.unit, leveledNextTargetPosition, breachDepth, MeleeBreachLevel )
@@ -646,17 +1026,16 @@ function TotebotGreenUnit.server_onUnitUpdate( self, dt )
 		elseif self.currentState == self.idleState and prevState ~= self.roamState then
 			self.unit:sendCharacterEvent( "roaming" )
 		end
-		
+
 		prevState:stop()
 		self.currentState:start()
 		if DEBUG_AI_STATES then
 			print( self.currentState.debugName )
 		end
 	end
-
 end
 
-function TotebotGreenUnit.sv_e_worldEvent( self, params )
+function Healer_ai.sv_e_worldEvent( self, params )
 	if sm.exists( self.unit ) and self.isInCombat == false then
 		if params.eventName == "projectileHit" then
 			if self.unit.character then
@@ -690,7 +1069,7 @@ function TotebotGreenUnit.sv_e_worldEvent( self, params )
 	end
 end
 
-function TotebotGreenUnit.server_onProjectile( self, hitPos, hitTime, hitVelocity, _, attacker, damage, userData, hitNormal, projectileUuid )
+function Healer_ai.server_onProjectile( self, hitPos, hitTime, hitVelocity, _, attacker, damage, userData, hitNormal, projectileUuid )
 	if not sm.exists( self.unit ) or not sm.exists( attacker ) then
 		return
 	end
@@ -717,7 +1096,7 @@ function TotebotGreenUnit.server_onProjectile( self, hitPos, hitTime, hitVelocit
 	end
 end
 
-function TotebotGreenUnit.server_onMelee( self, hitPos, attacker, damage, power, hitDirection )
+function Healer_ai.server_onMelee( self, hitPos, attacker, damage, power, hitDirection )
 	if not sm.exists( self.unit ) or not sm.exists( attacker ) then
 		return
 	end
@@ -740,7 +1119,7 @@ function TotebotGreenUnit.server_onMelee( self, hitPos, attacker, damage, power,
 	end
 end
 
-function TotebotGreenUnit.server_onExplosion( self, center, destructionLevel )
+function Healer_ai.server_onExplosion( self, center, destructionLevel )
 	if not sm.exists( self.unit ) then
 		return
 	end
@@ -748,7 +1127,7 @@ function TotebotGreenUnit.server_onExplosion( self, center, destructionLevel )
 	self:sv_takeDamage( self.saved.stats.maxhp * ( destructionLevel / 10 ), impact, self.unit:getCharacter().worldPosition )
 end
 
-function TotebotGreenUnit.server_onCollision( self, other, collisionPosition, selfPointVelocity, otherPointVelocity, collisionNormal )
+function Healer_ai.server_onCollision( self, other, collisionPosition, selfPointVelocity, otherPointVelocity, collisionNormal )
 	if not sm.exists( self.unit ) then
 		return
 	end
@@ -781,7 +1160,7 @@ function TotebotGreenUnit.server_onCollision( self, other, collisionPosition, se
 			end
 		end
 	end
-	
+
 	if self.impactCooldownTicks > 0 then
 		return
 	end
@@ -793,7 +1172,7 @@ function TotebotGreenUnit.server_onCollision( self, other, collisionPosition, se
 		self.impactCooldownTicks = 6
 	end
 	if damage > 0 then
-		print("'TotebotGreenUnit' took", damage, "collision damage")
+		print("'Healer_ai' took", damage, "collision damage")
 		self:sv_takeDamage( damage, collisionNormal, collisionPosition )
 	end
 	if tumbleTicks > 0 then
@@ -803,24 +1182,22 @@ function TotebotGreenUnit.server_onCollision( self, other, collisionPosition, se
 			end
 		end
 	end
-	
 end
 
-function TotebotGreenUnit.server_onCollisionCrush( self )
+function Healer_ai.server_onCollisionCrush( self )
 	if not sm.exists( self.unit ) then
 		return
 	end
 	onCrush( self )
 end
 
-function TotebotGreenUnit.sv_updateCharacterTarget( self )
+function Healer_ai.sv_updateCharacterTarget( self )
 	if self.unit.character then
 		sm.event.sendToCharacter( self.unit.character, "sv_n_updateTarget", { target = self.target } )
 	end
 end
 
-function TotebotGreenUnit.sv_addStagger( self, stagger )
-	
+function Healer_ai.sv_addStagger( self, stagger )
 	-- Update stagger
 	if self.staggerCooldownTicks <= 0 then
 		self.staggerCooldownTicks = StaggerCooldownTickTime
@@ -835,34 +1212,19 @@ function TotebotGreenUnit.sv_addStagger( self, stagger )
 			self.currentState:start()
 		end
 	end
-	
 end
 
-function TotebotGreenUnit.sv_takeDamage( self, damage, impact, hitPos, source )
+function Healer_ai.sv_takeDamage( self, damage, impact, hitPos )
 	if self.saved.stats.hp > 0 then
-		local prevHp = self.saved.stats.hp
-		local healCap = self.saved.stats.maxhp * 1.5
-
 		self.saved.stats.hp = self.saved.stats.hp - damage
-		self.saved.stats.hp =  sm.util.clamp(math.max( self.saved.stats.hp, 0 ), 0, healCap)
-		print( "'TotebotGreenUnit' received:", damage, "damage.", self.saved.stats.hp, "/", self.saved.stats.maxhp, "HP" )
+		self.saved.stats.hp = math.max( self.saved.stats.hp, 0 )
+		print( "'Healer_ai' received:", damage, "damage.", self.saved.stats.hp, "/", self.saved.stats.maxhp, "HP" )
 
-		if source == "healer" then
-			if prevHp < healCap then
-				sm.effect.playEffect(
-					"Part - Upgrade",
-					hitPos,
-					nil,
-					sm.vec3.getRotation( sm.vec3.new(0,1,0), sm.vec3.new(0,0,1) )
-				)
-			end
-		else
-			local effectRotation = sm.quat.identity()
-			if hitPos and impact and impact:length() >= FLT_EPSILON then
-				effectRotation = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), -impact:normalize() )
-			end
-			sm.effect.playEffect( "ToteBot - Hit", hitPos, nil, effectRotation )
+		local effectRotation = sm.quat.identity()
+		if hitPos and impact and impact:length() >= FLT_EPSILON then
+			effectRotation = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), -impact:normalize() )
 		end
+		sm.effect.playEffect( "ToteBot - Hit", hitPos, nil, effectRotation )
 
 		if self.saved.stats.hp <= 0 then
 			self:sv_onDeath( impact )
@@ -872,14 +1234,14 @@ function TotebotGreenUnit.sv_takeDamage( self, damage, impact, hitPos, source )
 	end
 end
 
-function TotebotGreenUnit.sv_onDeath( self, impact )
+function Healer_ai.sv_onDeath( self, impact )
 	local character = self.unit:getCharacter()
 	if not self.destroyed then
 		self.unit:sendCharacterEvent( "death" )
 		g_unitManager:sv_addDeathMarker( character.worldPosition )
 		self.saved.stats.hp = 0
 		self.unit:destroy()
-		print("'TotebotGreenUnit' killed!")
+		print("'Healer_ai' killed!")
 		self:sv_spawnParts( impact )
 		if SurvivalGame then
 			local loot = SelectLoot( "loot_totebot_green" )
@@ -889,7 +1251,7 @@ function TotebotGreenUnit.sv_onDeath( self, impact )
 	end
 end
 
-function TotebotGreenUnit.sv_spawnParts( self, impact )
+function Healer_ai.sv_spawnParts( self, impact )
 	local character = self.unit:getCharacter()
 
 	local lookDirection = character:getDirection()
@@ -914,7 +1276,7 @@ function TotebotGreenUnit.sv_spawnParts( self, impact )
 	end
 end
 
-function TotebotGreenUnit.sv_e_receiveTarget( self, params )
+function Healer_ai.sv_e_receiveTarget( self, params )
 	if self.unit ~= params.unit then
 		if self.eventTarget == nil then
 			local sameTeam = false
@@ -927,3 +1289,4 @@ function TotebotGreenUnit.sv_e_receiveTarget( self, params )
 		end
 	end
 end
+-- #endregion

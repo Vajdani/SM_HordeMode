@@ -1,10 +1,19 @@
 World = class( nil )
 World.terrainScript = "$CONTENT_DATA/Scripts/terrain.lua"
-World.cellMinX = -5
-World.cellMaxX =  5
-World.cellMinY = -5
-World.cellMaxY =  5
+local size = 10
+local _size = size - 1
+World.cellMinX = -size
+World.cellMaxX =  _size
+World.cellMinY = -size
+World.cellMaxY =  _size
 World.worldBorder = true
+World.enableSurface = true
+World.enableAssets = true
+World.enableClutter = true
+World.enableNodes = true
+World.enableCreations = true
+World.enableHarvestables = true
+World.enableKinematics = true
 
 dofile( "$SURVIVAL_DATA/Scripts/game/managers/PesticideManager.lua" )
 dofile "$SURVIVAL_DATA/Scripts/blueprint_util.lua"

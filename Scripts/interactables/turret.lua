@@ -1,3 +1,4 @@
+---@class Turret : ShapeClass
 Turret = class()
 
 local fireRate = 10
