@@ -17,6 +17,7 @@ World.enableKinematics = true
 
 dofile( "$SURVIVAL_DATA/Scripts/game/managers/PesticideManager.lua" )
 dofile "$SURVIVAL_DATA/Scripts/blueprint_util.lua"
+dofile "$SURVIVAL_DATA/Scripts/game/survival_harvestables.lua"
 
 g_potatoProjectiles = {
     projectile_potato,
@@ -338,6 +339,7 @@ function World:sv_gotoWave( wave )
     end
 end
 
+---@param hitPos Vec3
 function World.server_onProjectile( self, hitPos, hitTime, hitVelocity, _, attacker, damage, userData, hitNormal, target, projectileUuid )
 	-- Notify units about projectile hit
 	if isAnyOf( projectileUuid, g_potatoProjectiles ) then

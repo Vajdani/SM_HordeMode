@@ -3,6 +3,9 @@ dofile( "$SURVIVAL_DATA/Scripts/util.lua" )
 dofile( "$SURVIVAL_DATA/Scripts/game/survival_shapes.lua" )
 dofile( "$SURVIVAL_DATA/Scripts/game/survival_projectiles.lua" )
 
+dofile( "$SURVIVAL_DATA/Scripts/game/util/Timer.lua" )
+dofile "$CONTENT_DATA/Scripts/tools/BaseGun.lua"
+
 local spinUpMult = 2.5
 local spinUpProjs = {
 	projectile_smallpotato,
@@ -14,15 +17,40 @@ local spinUpProjs = {
 local turretUUID = sm.uuid.new("bb314cd5-38bc-4b46-9fb7-0e7347bed62c")
 
 local mods = {
-	--{ name = "Spin Up", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 20, 20 }, cost = { 1, 1 } },
-	{ name = "Turret", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_smallpotato, sec_projectile = projectile_smallpotato, damage = { 22, 22 }, cost = { 1, 1 }, auto = true }
+	--[[
+	{
+		name = "Spin Up",
+		fpCol = sm.color.new(0.78,0.03,0.03),
+		tpCol = sm.color.new(0.78,0.03,0.03),
+		prim_projectile = projectile_smallpotato,
+		sec_projectile = projectile_smallpotato,
+		damage = { 20, 20 },
+		cost = { 1, 1 }
+	},
+	]]
+	{
+		name = "Turret",
+		fpCol = sm.color.new(0,0.4,0.9),
+		tpCol = sm.color.new(0,0.4,0.9),
+		prim_projectile = projectile_smallpotato,
+		sec_projectile = projectile_smallpotato,
+		damage = { 22, 22 },
+		cost = { 1, 1 },
+		auto = true
+	}
 }
 
 local dirY = sm.vec3.new( 0, 1, 0 )
 local dirX = sm.vec3.new( 1, 0, 0 )
 local deg90 = math.pi*0.5
 
-PotatoGatling = class()
+---@class PotatoGatling : BaseGun
+---@field windupEffect Effect
+---@field gatlingActive boolean
+---@field gatlingBlendSpeedIn number
+---@field gatlingTurnSpeed number
+---@field gatlingBlendSpeedOut number
+PotatoGatling = class(BaseGun)
 
 local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Base/char_spudgun_base_basic.rend",
@@ -32,8 +60,13 @@ local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Tank/Tank_basic/char_spudgun_tank_basic.rend"
 }
 
-local renderablesTp = {"$GAME_DATA/Character/Char_Male/Animations/char_male_tp_spudgun.rend", "$GAME_DATA/Character/Char_Tools/Char_spudgun/char_spudgun_tp_animlist.rend"}
-local renderablesFp = {"$GAME_DATA/Character/Char_Tools/Char_spudgun/char_spudgun_fp_animlist.rend"}
+local renderablesTp = {
+	"$GAME_DATA/Character/Char_Male/Animations/char_male_tp_spudgun.rend",
+	"$GAME_DATA/Character/Char_Tools/Char_spudgun/char_spudgun_tp_animlist.rend"
+}
+local renderablesFp = {
+	"$GAME_DATA/Character/Char_Tools/Char_spudgun/char_spudgun_fp_animlist.rend"
+}
 
 sm.tool.preloadRenderables( renderables )
 sm.tool.preloadRenderables( renderablesTp )
@@ -49,9 +82,9 @@ function PotatoGatling.client_onCreate( self )
 
 	self.cl = {}
 	self.cl.uuid = g_gatling
+	self.isLocal = self.tool:isLocal()
 
-
-	if not self.tool:isLocal() then return end
+	if not self.isLocal then return end
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
@@ -65,8 +98,7 @@ function PotatoGatling.client_onCreate( self )
 
 	self.cl.rot = 1
 
-	self.cl.baseGun = BaseGun()
-	self.cl.baseGun.cl_create( self, mods, 0 )
+	self:cl_create( mods, 0 )
 end
 
 function PotatoGatling:client_onDestroy()
@@ -104,13 +136,7 @@ function PotatoGatling:cl_changeColour( data )
 end
 
 function PotatoGatling:client_onReload()
-	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
-	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
-	sm.audio.play("PaintTool - ColorPick")
-
-	self.network:sendToServer("sv_changeColour", self.cl.mod)
-	self:cl_setWpnModGui()
-
+	self:cl_reload()
 	return true
 end
 
@@ -126,11 +152,7 @@ end
 function PotatoGatling:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() then return end
 
-	self.cl.baseGun.cl_fixedUpdate( self )
-end
-
-function PotatoGatling.client_onRefresh( self )
-	self:loadAnimations()
+	self:cl_fixedUpdate()
 end
 
 function PotatoGatling.loadAnimations( self )
@@ -173,7 +195,7 @@ function PotatoGatling.loadAnimations( self )
 
 	setTpAnimation( self.tpAnimations, "idle", 5.0 )
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.fpAnimations = createFpAnimations(
 			self.tool,
 			{
@@ -256,7 +278,7 @@ function PotatoGatling.client_onUpdate( self, dt )
 	local isSprinting =  self.tool:isSprinting() 
 	local isCrouching =  self.tool:isCrouching() 
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		if self.equipped then
 			if isSprinting and self.fpAnimations.currentAnimation ~= "sprintInto" and self.fpAnimations.currentAnimation ~= "sprintIdle" then
 				swapFpAnimation( self.fpAnimations, "sprintExit", "sprintInto", 0.0 )
@@ -283,7 +305,7 @@ function PotatoGatling.client_onUpdate( self, dt )
 	end
 
 	local effectPos, rot
-	if self.tool:isLocal() then
+	if self.isLocal then
 		local dir = sm.localPlayer.getDirection()
 		local firePos = self.tool:getFpBonePos( "pejnt_barrel" )
 
@@ -309,38 +331,34 @@ function PotatoGatling.client_onUpdate( self, dt )
 	self.shootEffect:setRotation( rot )
 	self.windupEffect:setPosition( effectPos )
 
-	-- Timers
 	self.fireCooldownTimer = math.max( self.fireCooldownTimer - dt, 0.0 )
 	self.spreadCooldownTimer = math.max( self.spreadCooldownTimer - dt, 0.0 )
 	self.sprintCooldownTimer = math.max( self.sprintCooldownTimer - dt, 0.0 )
 
-
-	if self.tool:isLocal() then
+	if self.isLocal then
 		local dispersion = 0.0
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
 		local recoilDispersion = 1.0 - ( math.max( fireMode.minDispersionCrouching, fireMode.minDispersionStanding ) + fireMode.maxMovementDispersion )
-		
+
 		if isCrouching then
 			dispersion = fireMode.minDispersionCrouching
 		else
 			dispersion = fireMode.minDispersionStanding
 		end
-		
+
 		if self.tool:getRelativeMoveDirection():length() > 0 then
 			dispersion = dispersion + fireMode.maxMovementDispersion * self.tool:getMovementSpeedFraction()
 		end
-		
+
 		if not self.tool:isOnGround() then
 			dispersion = dispersion * fireMode.jumpDispersionMultiplier
 		end
-		
+
 		self.movementDispersion = dispersion
-		
 		self.spreadCooldownTimer = clamp( self.spreadCooldownTimer, 0.0, fireMode.spreadCooldown )
 		local spreadFactor = fireMode.spreadCooldown > 0.0 and clamp( self.spreadCooldownTimer / fireMode.spreadCooldown, 0.0, 1.0 ) or 0.0
-		
+
 		self.tool:setDispersionFraction( clamp( self.movementDispersion + spreadFactor * recoilDispersion, 0.0, 1.0 ) )
-		
 		if self.aiming then
 			if self.tool:isInFirstPersonView() then
 				self.tool:setCrossHairAlpha( 0.0 )
@@ -362,7 +380,7 @@ function PotatoGatling.client_onUpdate( self, dt )
 	local angle = math.asin( playerDir:dot( sm.vec3.new( 0, 0, 1 ) ) ) / ( math.pi / 2 )
 
 	local crouchWeight = self.tool:isCrouching() and 1.0 or 0.0
-	local normalWeight = 1.0 - crouchWeight 
+	local normalWeight = 1.0 - crouchWeight
 
 	local totalWeight = 0.0
 	for name, animation in pairs( self.tpAnimations.animations ) do
@@ -370,7 +388,6 @@ function PotatoGatling.client_onUpdate( self, dt )
 
 		if name == self.tpAnimations.currentAnimation then
 			animation.weight = math.min( animation.weight + ( self.tpAnimations.blendSpeed * dt ), 1.0 )
-			
 			if animation.time >= animation.info.duration - self.blendTime then
 				if ( name == "shoot" or name == "aimShoot" ) then
 					setTpAnimation( self.tpAnimations, self.aiming and "aim" or "idle", 10.0 )
@@ -378,7 +395,7 @@ function PotatoGatling.client_onUpdate( self, dt )
 					setTpAnimation( self.tpAnimations, self.aiming and "aim" or "idle", 0.001 )
 				elseif animation.nextAnimation ~= "" then
 					setTpAnimation( self.tpAnimations, animation.nextAnimation, 0.001 )
-				end 
+				end
 			end
 		else
 			animation.weight = math.max( animation.weight - ( self.tpAnimations.blendSpeed * dt ), 0.0 )
@@ -422,14 +439,11 @@ function PotatoGatling.client_onUpdate( self, dt )
 	local crouchTotalOffsetX = clamp( ( angle * 60.0 ) -15.0, -60.0, 40.0 )
 	local normalTotalOffsetX = clamp( ( angle * 50.0 ), -45.0, 50.0 )
 	local totalOffsetX = lerp( normalTotalOffsetX, crouchTotalOffsetX , crouchWeight )
-
 	local finalJointWeight = ( self.jointWeight )
-	  
 
 	self.tool:updateJoint( "jnt_hips", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), 0.35 * finalJointWeight * ( normalWeight ) )
 
 	local crouchSpineWeight = ( 0.35 / 3 ) * crouchWeight
-
 	self.tool:updateJoint( "jnt_spine1", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight )  * finalJointWeight )
 	self.tool:updateJoint( "jnt_spine2", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight ) * finalJointWeight )
 	self.tool:updateJoint( "jnt_spine3", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.45 + crouchSpineWeight ) * finalJointWeight )
@@ -438,23 +452,23 @@ function PotatoGatling.client_onUpdate( self, dt )
 	-- Camera update
 	local bobbing = 1
 	if self.aiming then
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 1.0, blend )
 		bobbing = 0.12
 	else
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 0.0, blend )
 		bobbing = 1
 	end
 
 	self.tool:updateCamera( 2.8, 30.0, sm.vec3.new( 0.65, 0.0, 0.05 ), self.aimWeight )
 	self.tool:updateFpCamera( 30.0, sm.vec3.new( 0.0, 0.0, 0.0 ), self.aimWeight, bobbing )
-	
+
 	self:cl_updateGatling( dt )
 end
 
 function PotatoGatling.client_onEquip( self, animate )
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.network:sendToServer("sv_changeColour", self.cl.mod)
 		self:cl_setWpnModGui()
 	end
@@ -469,30 +483,11 @@ function PotatoGatling.client_onEquip( self, animate )
 	local cameraWeight, cameraFPWeight = self.tool:getCameraWeights()
 	self.aimWeight = math.max( cameraWeight, cameraFPWeight )
 	self.jointWeight = 0.0
-	
-	currentRenderablesTp = {}
-	currentRenderablesFp = {}
-	
-	for k,v in pairs( renderablesTp ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderablesFp ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
 
-	self.tool:setTpRenderables( currentRenderablesTp )
-
-	self:loadAnimations()
-
-	setTpAnimation( self.tpAnimations, "pickup", 0.0001 )
-
-	if self.tool:isLocal() then
-		-- Sets PotatoGatling renderable, change this to change the mesh
-		self.tool:setFpRenderables( currentRenderablesFp )
-		swapFpAnimation( self.fpAnimations, "unequip", "equip", 0.2 )
-	end
+	self:cl_equip( renderablesTp, renderablesFp, renderables )
 end
 
 function PotatoGatling.client_onUnequip( self, animate )
-
 	self.windupEffect:stop()
 	self.wantEquipped = false
 	self.equipped = false
@@ -502,7 +497,7 @@ function PotatoGatling.client_onUnequip( self, animate )
 			sm.audio.play( "PotatoRifle - Unequip", self.tool:getPosition() )
 		end
 		setTpAnimation( self.tpAnimations, "putdown" )
-		if self.tool:isLocal() then
+		if self.isLocal then
 			self.cl.visEffect:stop()
 
 			self.tool:setMovementSlowDown( false )
@@ -521,7 +516,7 @@ function PotatoGatling.sv_n_onAim( self, aiming )
 end
 
 function PotatoGatling.cl_n_onAim( self, aiming )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
+	if not self.isLocal and self.tool:isEquipped() then
 		self:onAim( aiming )
 	end
 end
@@ -533,121 +528,29 @@ function PotatoGatling.onAim( self, aiming )
 	end
 end
 
-function PotatoGatling.sv_n_onShoot( self, dir ) 
-	self.network:sendToClients( "cl_n_onShoot", dir )
+function PotatoGatling.sv_n_onShoot( self )
+	self.network:sendToClients( "cl_n_onShoot" )
 end
 
-function PotatoGatling.cl_n_onShoot( self, dir ) 
-	if not self.tool:isLocal() and self.tool:isEquipped() then
-		self:onShoot( dir )
+function PotatoGatling.cl_n_onShoot( self )
+	if not self.isLocal and self.tool:isEquipped() then
+		self:onShoot()
 	end
 end
 
-function PotatoGatling.onShoot( self, dir ) 
+function PotatoGatling.onShoot( self )
 	self.tpAnimations.animations.idle.time = 0
 	self.tpAnimations.animations.shoot.time = 0
 	self.tpAnimations.animations.aimShoot.time = 0
 
 	setTpAnimation( self.tpAnimations, self.aiming and "aimShoot" or "shoot", 10.0 )
-	
+
 	if self.tool:isInFirstPersonView() then
 		self.shootEffectFP:start()
 	else
 		self.shootEffect:start()
 	end
-
 end
-
-function PotatoGatling.calculateFirePosition( self )
-	local crouching = self.tool:isCrouching()
-	local firstPerson = self.tool:isInFirstPersonView()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )		
-	local right = sm.localPlayer.getRight()
-	
-	local fireOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	if crouching then
-		fireOffset.z = 0.15
-	else
-		fireOffset.z = 0.45
-	end
-
-	if firstPerson then
-		if not self.aiming then
-			fireOffset = fireOffset + right * 0.05
-		end
-	else
-		fireOffset = fireOffset + right * 0.25		
-		fireOffset = fireOffset:rotate( math.rad( pitch ), right )
-	end
-	local firePosition = GetOwnerPosition( self.tool ) + fireOffset
-	return firePosition
-end
-
-function PotatoGatling.calculateTpMuzzlePos( self )
-	local crouching = self.tool:isCrouching()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )		
-	local right = sm.localPlayer.getRight()
-	local up = right:cross(dir)
-	
-	local fakeOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-	
-	--General offset
-	fakeOffset = fakeOffset + right * 0.25
-	fakeOffset = fakeOffset + dir * 0.5
-	fakeOffset = fakeOffset + up * 0.25
-	
-	--Action offset
-	local pitchFraction = pitch / ( math.pi * 0.5 )
-	if crouching then
-		fakeOffset = fakeOffset + dir * 0.2
-		fakeOffset = fakeOffset + up * 0.1
-		fakeOffset = fakeOffset - right * 0.05
-		
-		if pitchFraction > 0.0 then
-			fakeOffset = fakeOffset - up * 0.2 * pitchFraction
-		else
-			fakeOffset = fakeOffset + up * 0.1 * math.abs( pitchFraction )
-		end		
-	else
-		fakeOffset = fakeOffset + up * 0.1 *  math.abs( pitchFraction )		
-	end
-	
-	local fakePosition = fakeOffset + GetOwnerPosition( self.tool )
-	return fakePosition
-end
-
-function PotatoGatling.calculateFpMuzzlePos( self )
-	local fovScale = ( sm.camera.getFov() - 45 ) / 45
-	
-	local up = sm.localPlayer.getUp()
-	local dir = sm.localPlayer.getDirection()
-	local right = sm.localPlayer.getRight()
-	
-	local muzzlePos45 = sm.vec3.new( 0.0, 0.0, 0.0 )
-	local muzzlePos90 = sm.vec3.new( 0.0, 0.0, 0.0 )
-		
-	if self.aiming then
-		muzzlePos45 = muzzlePos45 - up * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 0.5
-		
-		muzzlePos90 = muzzlePos90 - up * 0.5
-		muzzlePos90 = muzzlePos90 - dir * 0.6
-	else
-		muzzlePos45 = muzzlePos45 - up * 0.15
-		muzzlePos45 = muzzlePos45 + right * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 1.25
-		
-		muzzlePos90 = muzzlePos90 - up * 0.15
-		muzzlePos90 = muzzlePos90 + right * 0.2
-		muzzlePos90 = muzzlePos90 + dir * 0.25
-	end
-
-	return self.tool:getFpBonePos( "pejnt_barrel" ) + sm.vec3.lerp( muzzlePos45, muzzlePos90, fovScale )
-end
-
 
 function PotatoGatling.cl_updateGatling( self, dt )
 	local spinUp = mods[self.cl.mod].name == "Spin Up" and (self.cl.secState == 1 or self.cl.secState == 2 )
@@ -674,7 +577,7 @@ function PotatoGatling.cl_updateGatling( self, dt )
 	end
 
 	-- Update gatling animation
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.tool:updateFpAnimation( "spudgun_spinner_shoot_fp", self.gatlingTurnFraction, 1.0, true )
 	end
 	self.tool:updateAnimation( "spudgun_spinner_shoot_tp", self.gatlingTurnFraction, 1.0 )
@@ -749,16 +652,13 @@ function PotatoGatling.cl_fire( self )
 			sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
 		end
 
-		-- Timers
+
 		self.fireCooldownTimer = fireMode.fireCooldown
 		self.spreadCooldownTimer = math.min( self.spreadCooldownTimer + fireMode.spreadIncrement, fireMode.spreadCooldown )
 		self.sprintCooldownTimer = self.sprintCooldown
 
-		-- Send TP shoot over network and dircly to self
-		self:onShoot( dir )
-		self.network:sendToServer( "sv_n_onShoot", dir )
-
-		-- Play FP shoot animation
+		self:onShoot()
+		self.network:sendToServer( "sv_n_onShoot" )
 		setFpAnimation( self.fpAnimations, self.aiming and "aimShoot" or "shoot", 0.05 )
 	else
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
@@ -770,19 +670,11 @@ end
 function PotatoGatling.cl_onSecondaryUse( self, state )
 	if mods[self.cl.mod].name == "Spin Up" then return end
 
-	if state == sm.tool.interactState.start and not self.aiming then
-		self.aiming = true
+	local aiming = state == 1 or state == 2
+	if aiming ~= self.aiming then
+		self.aiming = aiming
 		self.tpAnimations.animations.idle.time = 0
-		
-		self:onAim( self.aiming )
-		self.tool:setMovementSlowDown( self.aiming )
-		self.network:sendToServer( "sv_n_onAim", self.aiming )
-	end
 
-	if self.aiming and (state == sm.tool.interactState.stop or state == sm.tool.interactState.null) then
-		self.aiming = false
-		self.tpAnimations.animations.idle.time = 0
-		
 		self:onAim( self.aiming )
 		self.tool:setMovementSlowDown( self.aiming )
 		self.network:sendToServer( "sv_n_onAim", self.aiming )
@@ -791,26 +683,23 @@ end
 
 
 function PotatoGatling.constructionRayCast( self )
-
 	local valid, result = sm.localPlayer.getRaycast( 7.5 )
 	if valid then
 		if result.type == "terrainSurface" then
-
-			local groundPointOffset = -( sm.construction.constants.subdivideRatio_2 - 0.04 + sm.construction.constants.shapeSpacing + 0.005 )
+			local constants = sm.construction.constants
+			local groundPointOffset = -( constants.subdivideRatio_2 - 0.04 + constants.shapeSpacing + 0.005 )
 			local pointLocal = result.pointLocal + result.normalLocal * groundPointOffset
-
-			-- Compute grid pos
 			local size = sm.vec3.new( 3, 3, 1 )
 			local size_2 = sm.vec3.new( 1, 1, 0 )
-			local a = pointLocal * sm.construction.constants.subdivisions
+			local a = pointLocal * constants.subdivisions
 			local gridPos = sm.vec3.new( math.floor( a.x ), math.floor( a.y ), a.z ) - size_2
 
-			-- Compute world pos
-			local worldPos = gridPos * sm.construction.constants.subdivideRatio + ( size * sm.construction.constants.subdivideRatio ) * 0.5
-
+			local ratio = constants.subdivideRatio
+			local worldPos = gridPos * ratio + ( size * ratio ) * 0.5
 			return valid, worldPos, result.normalWorld
 		end
 	end
+
 	return false
 end
 
@@ -818,10 +707,10 @@ end
 function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
 	if not sm.exists(self.tool) then return end
 
-	self.cl.primState = primaryState
-	self.cl.secState = secondaryState
+	self:cl_onEquippedUpdate( primaryState, secondaryState, forceBuild, false, nil )
 
-	if mods[self.cl.mod].name == "Turret" then
+	local name = mods[self.cl.mod].name
+	if name == "Turret" then
 		local hit, worldPos, worldNormal = ConstructionRayCast( { "terrainSurface" } )
 
 		if hit then
@@ -855,33 +744,41 @@ function PotatoGatling.client_onEquippedUpdate( self, primaryState, secondarySta
 	end
 
 	if self.cl.secState == 1 or self.cl.secState == 2 then
-		if mods[self.cl.mod].name == "Spin Up" then
+		if name == "Spin Up" then
 			sm.gui.setProgressFraction( self.cl.spinUpTime/#spinUpProjs )
 		end
 	end
 
-	self.gatlingActive = (primaryState == sm.tool.interactState.start or primaryState == sm.tool.interactState.hold) and not forceBuild
+	self.gatlingActive = (primaryState == 1 or primaryState == 2) and not forceBuild
 
 	if secondaryState ~= self.prevSecondaryState then
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
 
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, false, nil )
-
 	return true, true
 end
 
+---@class turretData
+---@field pos Vec3
+---@field rot Quat
+---@field player Player
+
+---@param args turretData
 function PotatoGatling:sv_placeTurret( args )
-	local turret = sm.shape.createPart(turretUUID, args.pos - sm.vec3.new(0.125,0.125,0), sm.quat.identity() --[[args.rot]], false, true )
-	turret.interactable:setPublicData(
-		{
-			owner = args.player
-		}
+	local turret = sm.shape.createPart(
+		turretUUID,
+		args.pos - sm.vec3.new(0.125,0.125,0),
+		sm.quat.identity() --[[args.rot]],
+		false,
+		true
 	)
 
+	local player = args.player
+	turret.interactable:setPublicData( { owner = player } )
+
 	sm.container.beginTransaction()
-	local inv = sm.game.getLimitedInventory() and args.player:getInventory() or args.player:getHotbar()
+	local inv = sm.game.getLimitedInventory() and player:getInventory() or player:getHotbar()
 	sm.container.spend(inv, g_gatling, 1)
 	sm.container.endTransaction()
 end

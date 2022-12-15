@@ -4,12 +4,13 @@ dofile( "$SURVIVAL_DATA/Scripts/game/survival_shapes.lua" )
 dofile( "$SURVIVAL_DATA/Scripts/game/survival_projectiles.lua" )
 
 dofile( "$SURVIVAL_DATA/Scripts/game/util/Timer.lua" )
+dofile "$CONTENT_DATA/Scripts/tools/BaseGun.lua"
 
 local Damage = 16
 local autoFireRate = 12 --ticks
 local hookRange = 30 --meters?
 local hookForceMult = 250
-local hookDetachDistance = 1.5
+local hookDetachDistance = 1.5^2
 local meathookDetachImpulse = 1250
 local hookUseCD = 200
 local mods = {
@@ -63,7 +64,12 @@ local flashColours = {
 	sm.color.new(0,0,0)
 }
 
-PotatoShotgun = class()
+---@class Shotgun_sv
+---@field hookTarget Character
+
+---@class PotatoShotgun : BaseGun
+---@field sv Shotgun_sv
+PotatoShotgun = class(BaseGun)
 
 local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Base/char_spudgun_base_basic.rend",
@@ -91,13 +97,14 @@ function PotatoShotgun.client_onCreate( self )
 
 	self.cl = {}
 	self.cl.uuid = g_shotgun
+	self.isLocal = self.tool:isLocal()
 	self.cl.hooks = {}
 	self.cl.flashing = false
 	self.cl.flashTimer = Timer()
 	self.cl.flashTimer:start( flashFrequency )
 	self.cl.flashCount = 1
 
-	if not self.tool:isLocal() then return end
+	if not self.isLocal then return end
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
@@ -109,8 +116,7 @@ function PotatoShotgun.client_onCreate( self )
 	self.cl.hookGui:setImage("Icon", "$CONTENT_DATA/susshake.png")
 	self.cl.hookTarget = nil
 
-	self.cl.baseGun = BaseGun()
-	self.cl.baseGun.cl_create( self, mods, hookUseCD )
+	self:cl_create( mods, hookUseCD )
 end
 
 function PotatoShotgun:server_onCreate()
@@ -174,38 +180,12 @@ function PotatoShotgun:cl_changeColour( data )
 end
 
 function PotatoShotgun:client_onReload()
-	local hit, result = sm.localPlayer.getRaycast( 25 )
-	if hit then
-		self.network:sendToServer("sv_onToggle2", result.pointWorld)
-	end
-
-	if true then return true end
-
-	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
-	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
-	sm.audio.play("PaintTool - ColorPick")
-
-	self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount })
-	self:cl_setWpnModGui()
-
+	self:cl_reload()
 	return true
 end
 
 function PotatoShotgun:client_onToggle()
-	local hit, result = sm.localPlayer.getRaycast( 25 )
-	if hit then
-		self.network:sendToServer("sv_onToggle", result.pointWorld)
-	end
-
 	return true
-end
-
-function PotatoShotgun:sv_onToggle( pos )
-	sm.unit.createUnit(sm.uuid.new("54b66a37-f987-4a4b-bbd5-23dfa5c151fa"), pos)
-end
-
-function PotatoShotgun:sv_onToggle2( pos )
-	sm.unit.createUnit(unit_totebot_green, pos)
 end
 
 function PotatoShotgun:sv_explode()
@@ -214,14 +194,13 @@ end
 
 function PotatoShotgun:client_onFixedUpdate( dt )
 	if not sm.exists(self.tool) or not self.tool:isEquipped() then return end
-	local localTool = self.tool:isLocal()
 
 	if self.cl.flashing then
 		self.cl.flashTimer:tick()
 		if self.cl.flashTimer:done() then
 			self.cl.flashTimer:start(flashFrequency)
 			self:cl_changeColour( { "flash", self.cl.flashCount } )
-			if localTool and self.cl.flashCount == 1 then
+			if self.isLocal and self.cl.flashCount == 1 then
 				sm.audio.play( "Retrobass" )
 			end
 
@@ -229,8 +208,8 @@ function PotatoShotgun:client_onFixedUpdate( dt )
 		end
 	end
 
-	if not localTool then return end
-	self.cl.baseGun.cl_fixedUpdate( self )
+	if not self.isLocal then return end
+	self:cl_fixedUpdate()
 
 	local player = sm.localPlayer.getPlayer()
 
@@ -325,16 +304,17 @@ end
 
 function PotatoShotgun:server_onFixedUpdate( dt )
 	if self.sv.hookTarget ~= nil and sm.exists(self.sv.hookTarget) then
-		local playerChar = self.tool:getOwner():getCharacter()
-		local dir = self.sv.hookTarget:getWorldPosition() - playerChar:getWorldPosition()
+		local playerChar = self.tool:getOwner().character
+		---@type Vec3
+		local dir = self.sv.hookTarget.worldPosition - playerChar.worldPosition
 
-		if dir:length() <= hookDetachDistance then
+		if dir:length2() <= hookDetachDistance then
 			self:sv_setHookTarget( { target = nil, player = self.tool:getOwner() })
 			self.network:sendToClients("cl_reset")
 			return
 		end
 
-		sm.physics.applyImpulse(playerChar, dir:normalize() * hookForceMult, true)
+		sm.physics.applyImpulse(playerChar, dir:normalize() * hookForceMult)
 	elseif self.sv.hookTarget ~= nil then
 		self:sv_setHookTarget( { target = nil, player = self.tool:getOwner() })
 		self.network:sendToClients("cl_reset")
@@ -346,7 +326,7 @@ function PotatoShotgun:sv_applyImpulse( args )
 end
 
 function PotatoShotgun:cl_reset()
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.cl.hookTarget = nil
 	end
 end
@@ -419,26 +399,18 @@ function PotatoShotgun:cl_shoot()
 			end
 		end
 
-		-- Timers
 		self.fireCooldownTimer = fireMode.fireCooldown
 		self.spreadCooldownTimer = math.min( self.spreadCooldownTimer + fireMode.spreadIncrement, fireMode.spreadCooldown )
 		self.sprintCooldownTimer = self.sprintCooldown
 
-		-- Send TP shoot over network and dircly to self
-		self:onShoot( dir )
-		self.network:sendToServer( "sv_n_onShoot", dir )
-
-		-- Play FP shoot animation
+		self:onShoot()
+		self.network:sendToServer( "sv_n_onShoot" )
 		setFpAnimation( self.fpAnimations, self.aiming and "aimShoot" or "shoot", 0.05 )
 	else
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
 		self.fireCooldownTimer = fireMode.fireCooldown
 		sm.audio.play( "PotatoRifle - NoAmmo" )
 	end
-end
-
-function PotatoShotgun.client_onRefresh( self )
-	self:loadAnimations()
 end
 
 function PotatoShotgun.loadAnimations( self )
@@ -481,7 +453,7 @@ function PotatoShotgun.loadAnimations( self )
 
 	setTpAnimation( self.tpAnimations, "idle", 5.0 )
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.fpAnimations = createFpAnimations(
 			self.tool,
 			{
@@ -556,8 +528,9 @@ function PotatoShotgun.client_onUpdate( self, dt )
 
 	for v, k in pairs(self.cl.hooks) do
 		if sm.exists(k.target) then
-			k.pos = k.player:getCharacter():getWorldPosition()
-			local targetPos = k.target:getWorldPosition()
+			k.pos = k.player.character.worldPosition
+			---@type Vec3
+			local targetPos = k.target.worldPosition
 			local delta = targetPos - k.pos
 			local rot = sm.vec3.getRotation(sm.vec3.new(0, 0, 1), delta)
 			local distance = sm.vec3.new(0.01, 0.01, delta:length())
@@ -572,7 +545,7 @@ function PotatoShotgun.client_onUpdate( self, dt )
 	local isSprinting =  self.tool:isSprinting()
 	local isCrouching =  self.tool:isCrouching()
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		if self.equipped then
 			if isSprinting and self.fpAnimations.currentAnimation ~= "sprintInto" and self.fpAnimations.currentAnimation ~= "sprintIdle" then
 				swapFpAnimation( self.fpAnimations, "sprintExit", "sprintInto", 0.0 )
@@ -599,14 +572,7 @@ function PotatoShotgun.client_onUpdate( self, dt )
 	end
 
 	local effectPos, rot
-
-	if self.tool:isLocal() then
-
-		local zOffset = 0.6
-		if self.tool:isCrouching() then
-			zOffset = 0.29
-		end
-
+	if self.isLocal then
 		local dir = sm.localPlayer.getDirection()
 		local firePos = self.tool:getFpBonePos( "pejnt_barrel" )
 
@@ -617,21 +583,14 @@ function PotatoShotgun.client_onUpdate( self, dt )
 		end
 
 		rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-
-
 		self.shootEffectFP:setPosition( effectPos )
 		self.shootEffectFP:setVelocity( self.tool:getMovementVelocity() )
 		self.shootEffectFP:setRotation( rot )
 	end
 	local pos = self.tool:getTpBonePos( "pejnt_barrel" )
-	--local dir = self.tool:getTpBoneDir( "pejnt_barrel" )
-	local dir = sm.localPlayer.getDirection()
-
+	local dir = self.tool:getTpBoneDir( "pejnt_barrel" )
 	effectPos = pos + dir * 0.2
-
 	rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-
-
 	self.shootEffect:setPosition( effectPos )
 	self.shootEffect:setVelocity( self.tool:getMovementVelocity() )
 	self.shootEffect:setRotation( rot )
@@ -642,7 +601,7 @@ function PotatoShotgun.client_onUpdate( self, dt )
 	self.sprintCooldownTimer = math.max( self.sprintCooldownTimer - dt, 0.0 )
 
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		local dispersion = 0.0
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
 		local recoilDispersion = 1.0 - ( math.max( fireMode.minDispersionCrouching, fireMode.minDispersionStanding ) + fireMode.maxMovementDispersion )
@@ -687,13 +646,6 @@ function PotatoShotgun.client_onUpdate( self, dt )
 
 	local playerDir = self.tool:getDirection()
 	local angle = math.asin( playerDir:dot( sm.vec3.new( 0, 0, 1 ) ) ) / ( math.pi / 2 )
-	local linareAngle = playerDir:dot( sm.vec3.new( 0, 0, 1 ) )
-
-	local linareAngleDown = clamp( -linareAngle, 0.0, 1.0 )
-
-	down = clamp( -angle, 0.0, 1.0 )
-	fwd = ( 1.0 - math.abs( angle ) )
-	up = clamp( angle, 0.0, 1.0 )
 
 	local crouchWeight = self.tool:isCrouching() and 1.0 or 0.0
 	local normalWeight = 1.0 - crouchWeight
@@ -773,11 +725,11 @@ function PotatoShotgun.client_onUpdate( self, dt )
 	-- Camera update
 	local bobbing = 1
 	if self.aiming then
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 1.0, blend )
 		bobbing = 0.12
 	else
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 0.0, blend )
 		bobbing = 1
 	end
@@ -787,7 +739,7 @@ function PotatoShotgun.client_onUpdate( self, dt )
 end
 
 function PotatoShotgun.client_onEquip( self, animate )
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.network:sendToServer("sv_changeColour", { self.cl.mod, self.cl.pumpCount } )
 		self:cl_setWpnModGui()
 	end
@@ -802,29 +754,11 @@ function PotatoShotgun.client_onEquip( self, animate )
 	self.aimWeight = math.max( cameraWeight, cameraFPWeight )
 	self.jointWeight = 0.0
 
-	currentRenderablesTp = {}
-	currentRenderablesFp = {}
-
-	for k,v in pairs( renderablesTp ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderablesFp ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
-
-	self.tool:setTpRenderables( currentRenderablesTp )
-
-	self:loadAnimations()
-
-	setTpAnimation( self.tpAnimations, "pickup", 0.0001 )
-
-	if self.tool:isLocal() then
-		-- Sets PotatoShotgun renderable, change this to change the mesh
-		self.tool:setFpRenderables( currentRenderablesFp )
-		swapFpAnimation( self.fpAnimations, "unequip", "equip", 0.2 )
-	end
+	self:cl_equip( renderablesTp, renderablesFp, renderables )
 end
 
 function PotatoShotgun.client_onUnequip( self, animate )
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.cl.hookGui:close()
 		self.network:sendToServer("sv_toggleFlash", false)
 		self.cl.pumpCount = 1
@@ -839,7 +773,7 @@ function PotatoShotgun.client_onUnequip( self, animate )
 			sm.audio.play( "PotatoRifle - Unequip", self.tool:getPosition() )
 		end
 		setTpAnimation( self.tpAnimations, "putdown" )
-		if self.tool:isLocal() then
+		if self.isLocal then
 			self.tool:setMovementSlowDown( false )
 			self.tool:setBlockSprint( false )
 			self.tool:setCrossHairAlpha( 1.0 )
@@ -851,17 +785,17 @@ function PotatoShotgun.client_onUnequip( self, animate )
 	end
 end
 
-function PotatoShotgun.sv_n_onShoot( self, dir )
-	self.network:sendToClients( "cl_n_onShoot", dir )
+function PotatoShotgun.sv_n_onShoot( self )
+	self.network:sendToClients( "cl_n_onShoot" )
 end
 
-function PotatoShotgun.cl_n_onShoot( self, dir )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
-		self:onShoot( dir )
+function PotatoShotgun.cl_n_onShoot( self )
+	if not self.isLocal and self.tool:isEquipped() then
+		self:onShoot()
 	end
 end
 
-function PotatoShotgun.onShoot( self, dir )
+function PotatoShotgun.onShoot( self )
 	self.tpAnimations.animations.idle.time = 0
 	self.tpAnimations.animations.shoot.time = 0
 	self.tpAnimations.animations.aimShoot.time = 0
@@ -873,7 +807,6 @@ function PotatoShotgun.onShoot( self, dir )
 	else
 		self.shootEffect:start()
 	end
-
 end
 
 function PotatoShotgun.sv_n_onPump( self )
@@ -881,7 +814,7 @@ function PotatoShotgun.sv_n_onPump( self )
 end
 
 function PotatoShotgun.cl_n_onPump( self )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
+	if not self.isLocal and self.tool:isEquipped() then
 		self:onPump()
 	end
 end
@@ -893,96 +826,6 @@ function PotatoShotgun.onPump( self )
 
 	sm.audio.play("Button on", self.tool:getOwner():getCharacter():getWorldPosition())
 	setTpAnimation( self.tpAnimations, self.aiming and "aimShoot" or "shoot", 10.0 )
-end
-
-function PotatoShotgun.calculateFirePosition( self )
-	local crouching = self.tool:isCrouching()
-	local firstPerson = self.tool:isInFirstPersonView()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )
-	local right = sm.localPlayer.getRight()
-
-	local fireOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	if crouching then
-		fireOffset.z = 0.15
-	else
-		fireOffset.z = 0.45
-	end
-
-	if firstPerson then
-		if not self.aiming then
-			fireOffset = fireOffset + right * 0.05
-		end
-	else
-		fireOffset = fireOffset + right * 0.25
-		fireOffset = fireOffset:rotate( math.rad( pitch ), right )
-	end
-	local firePosition = GetOwnerPosition( self.tool ) + fireOffset
-	return firePosition
-end
-
-function PotatoShotgun.calculateTpMuzzlePos( self )
-	local crouching = self.tool:isCrouching()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )
-	local right = sm.localPlayer.getRight()
-	local up = right:cross(dir)
-
-	local fakeOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	--General offset
-	fakeOffset = fakeOffset + right * 0.25
-	fakeOffset = fakeOffset + dir * 0.5
-	fakeOffset = fakeOffset + up * 0.25
-
-	--Action offset
-	local pitchFraction = pitch / ( math.pi * 0.5 )
-	if crouching then
-		fakeOffset = fakeOffset + dir * 0.2
-		fakeOffset = fakeOffset + up * 0.1
-		fakeOffset = fakeOffset - right * 0.05
-
-		if pitchFraction > 0.0 then
-			fakeOffset = fakeOffset - up * 0.2 * pitchFraction
-		else
-			fakeOffset = fakeOffset + up * 0.1 * math.abs( pitchFraction )
-		end
-	else
-		fakeOffset = fakeOffset + up * 0.1 *  math.abs( pitchFraction )
-	end
-
-	local fakePosition = fakeOffset + GetOwnerPosition( self.tool )
-	return fakePosition
-end
-
-function PotatoShotgun.calculateFpMuzzlePos( self )
-	local fovScale = ( sm.camera.getFov() - 45 ) / 45
-
-	local up = sm.localPlayer.getUp()
-	local dir = sm.localPlayer.getDirection()
-	local right = sm.localPlayer.getRight()
-
-	local muzzlePos45 = sm.vec3.new( 0.0, 0.0, 0.0 )
-	local muzzlePos90 = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	if self.aiming then
-		muzzlePos45 = muzzlePos45 - up * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 0.5
-
-		muzzlePos90 = muzzlePos90 - up * 0.5
-		muzzlePos90 = muzzlePos90 - dir * 0.6
-	else
-		muzzlePos45 = muzzlePos45 - up * 0.15
-		muzzlePos45 = muzzlePos45 + right * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 1.25
-
-		muzzlePos90 = muzzlePos90 - up * 0.15
-		muzzlePos90 = muzzlePos90 + right * 0.2
-		muzzlePos90 = muzzlePos90 + dir * 0.25
-	end
-
-	return self.tool:getFpBonePos( "pejnt_barrel" ) + sm.vec3.lerp( muzzlePos45, muzzlePos90, fovScale )
 end
 
 function PotatoShotgun.cl_onPrimaryUse( self, state )
@@ -1014,8 +857,7 @@ function PotatoShotgun.cl_onSecondaryUse( self, state )
 end
 
 function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
-	self.cl.primState = primaryState
-	self.cl.secState = secondaryState
+	self:cl_onEquippedUpdate( primaryState, secondaryState, forceBuild, true, "Meathook" )
 
 	if primaryState ~= self.prevPrimaryState then
 		self:cl_onPrimaryUse( primaryState )
@@ -1026,8 +868,6 @@ function PotatoShotgun.client_onEquippedUpdate( self, primaryState, secondarySta
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
-
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, true, "Meathook" )
 
 	return true, true
 end

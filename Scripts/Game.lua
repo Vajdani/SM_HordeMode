@@ -11,6 +11,7 @@ g_disableScrapHarvest = true
 g_god = false
 g_pvp = false
 g_up = sm.vec3.new(0,0,1)
+---@type Shape[]
 g_coins = {}
 g_hammer = sm.uuid.new("4b591539-4f1b-49f2-8ede-3d0aa07cb51e")
 g_spudgun = sm.uuid.new("fc1acd1b-611b-44b0-bff7-4b71509abe4c")
@@ -238,7 +239,7 @@ function Game:sv_changeArenaTo( index )
 	for k, player in pairs( sm.player.getAllPlayers() ) do
 		local playerChar = player:getCharacter()
 		if sm.exists( playerChar ) then
-			local newChar = sm.character.createCharacter( player, newWorld, sm.vec3.new( 32, 32, 5 ), _, _, playerChar )
+			local newChar = sm.character.createCharacter( player, newWorld, sm.vec3.new( 32, 32, 5 ) )
 			player:setCharacter( nil )
 			player:setCharacter( newChar )
 		end

@@ -657,10 +657,10 @@ function Healer_ai.server_onFixedUpdate( self, dt )
 			self.predictedVelocity = sm.vec3.new( 0, 0, 0 )
 		end
 
-		--[[self.currentState:onFixedUpdate( dt )
+		self.currentState:onFixedUpdate( dt )
 		self.unit:setMovementDirection( self.currentState:getMovementDirection() )
 		self.unit:setMovementType( self.currentState:getMovementType() )
-		self.unit:setFacingDirection( self.currentState:getFacingDirection() )]]
+		self.unit:setFacingDirection( self.currentState:getFacingDirection() )
 
 		-- Random roaming during idle
 		if self.currentState == self.idleState then

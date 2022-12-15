@@ -24,10 +24,50 @@ local coinColours = {
 	full = sm.color.new("#16e30b")
 }
 local mods = {
-	{ name = "Charged Burst", fpCol = sm.color.new(0,0.4,0.9), tpCol = sm.color.new(0,0.4,0.9), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 24, 24 }, cost = { 1, 1 }, auto = true },
-	--{ name = "Coins", prim_projectile = "hitscan", sec_projectile = "hitscan", damage = { 20, 20 }, cost = { 1, 1 }, auto = true },
-	--{ name = "Sniper", prim_projectile = projectile_potato, sec_projectile = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff"), damage = { 20, 164 }, cost = { 1, 12 }, auto = true },
-	{ name = "Spread Shot", fpCol = sm.color.new(0.78,0.03,0.03), tpCol = sm.color.new(0.78,0.03,0.03), prim_projectile = projectile_potato, sec_projectile = projectile_potato, damage = { 24, 24 }, cost = { 1, 1 }, auto = true }
+	{
+        name = "Charged Burst",
+        fpCol = sm.color.new(0, 0.4, 0.9),
+        tpCol = sm.color.new(0, 0.4, 0.9),
+        prim_projectile = projectile_potato,
+        sec_projectile = projectile_potato,
+        damage = { 24, 24 },
+         cost = { 1, 1 },
+        auto = true
+    },
+	--[[
+    {
+        name = "Coins",
+		fpCol = sm.color.new("#11ab0c"),
+		tpCol = sm.color.new("#11ab0c"),
+        prim_projectile = "hitscan",
+        sec_projectile = "hitscan",
+        damage = { 20, 20 },
+        cost = { 1, 1 },
+        auto = true
+    },
+	]]
+	--[[
+    {
+        name = "Sniper",
+		fpCol = sm.color.new("#e1b40f"),
+		tpCol = sm.color.new("#e1b40f"),
+        prim_projectile = projectile_potato,
+        sec_projectile = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff"),
+        damage = { 20, 164 },
+        cost = { 1, 12 },
+        auto = true
+    },
+	]]
+    {
+        name = "Spread Shot",
+        fpCol = sm.color.new(0.78, 0.03, 0.03),
+        tpCol = sm.color.new(0.78, 0.03, 0.03),
+        prim_projectile = projectile_potato,
+        sec_projectile = projectile_potato,
+        damage = { 24, 24 },
+        cost = { 1, 1 },
+        auto = true
+    }
 }
 
 local function colourLerp(c1, c2, t)
@@ -37,7 +77,8 @@ local function colourLerp(c1, c2, t)
 	return sm.color.new(r,g,b)
 end
 
-PotatoRifle = class()
+---@class PotatoRifle : BaseGun
+PotatoRifle = class(BaseGun)
 
 local renderables = {
 	"$GAME_DATA/Character/Char_Tools/Char_spudgun/Base/char_spudgun_base_basic.rend",
@@ -65,8 +106,9 @@ function PotatoRifle.client_onCreate( self )
 
 	self.cl = {}
 	self.cl.uuid = g_spudgun
+	self.isLocal = self.tool:isLocal()
 
-	if not self.tool:isLocal() then return end
+	if not self.isLocal then return end
 	self.cl.mod = 1
 	self.cl.primState = nil
 	self.cl.secState = nil
@@ -74,7 +116,7 @@ function PotatoRifle.client_onCreate( self )
 	self.cl.autoFire:start( autoFireRate )
 	self.cl.blastCharge = 0
 	self.cl.blasting = false
-	self.cl.spreadShotSpread = maxSpreadShotSpread
+	self.cl.spreadShotSpread = 0
 
 	self.cl.coin = {}
 	self.cl.coin.ammo = 4
@@ -96,8 +138,7 @@ function PotatoRifle.client_onCreate( self )
 	)]]
 	--self.cl.chargeHud:createHorizontalSlider("chargeSlider", maxBlastCharge, 0, false, "cl_bruh")
 
-	self.cl.baseGun = BaseGun()
-	self.cl.baseGun.cl_create( self, mods, chargedBurstUseCD )
+	self:cl_create( mods, chargedBurstUseCD )
 end
 
 function PotatoRifle:cl_bruh()
@@ -143,13 +184,7 @@ function PotatoRifle:cl_changeColour( data )
 end
 
 function PotatoRifle:client_onReload()
-	self.cl.mod = self.cl.mod == #mods and 1 or self.cl.mod + 1
-	sm.event.sendToPlayer(sm.localPlayer.getPlayer(), "cl_queueMsg", "#ffffffCurrent weapon mod: #df7f00"..mods[self.cl.mod].name )
-	sm.audio.play("PaintTool - ColorPick")
-
-	self.network:sendToServer("sv_changeColour", self.cl.mod)
-	self:cl_setWpnModGui()
-
+	self:cl_reload()
 	return true
 end
 
@@ -158,7 +193,7 @@ function PotatoRifle:client_onToggle()
 end
 
 function PotatoRifle:client_onFixedUpdate( dt )
-	if not sm.exists(self.tool) or not self.tool:isLocal() then return end
+	if not sm.exists(self.tool) or not self.isLocal then return end
 
 	if self.cl.coin.ammo < 4 then
 		self.cl.coin.recharge = self.cl.coin.recharge - 1
@@ -175,7 +210,7 @@ function PotatoRifle:client_onFixedUpdate( dt )
 		return
 	end
 
-	self.cl.baseGun.cl_fixedUpdate( self )
+	self:cl_fixedUpdate()
 
 	if mods[self.cl.mod].name == "Coins" then
 		self.cl.coin.hud:open()
@@ -247,13 +282,28 @@ function PotatoRifle:client_onFixedUpdate( dt )
 	end
 end
 
+---@class ImpulseData
+---@field body Body
+---@field dir Vec3 
+
+---@param args ImpulseData
 function PotatoRifle:sv_applyImpulse( args )
 	sm.physics.applyImpulse(args.body, args.dir * 1000, true)
 end
 
+---@class CoinData
+---@field uuid Uuid
+---@field pos Vec3 
+---@field rot Quat 
+---@field dynamic boolean
+---@field forceSpawn boolean 
+---@field dir Vec3
+---@field player Player
+
+---@param args CoinData
 function PotatoRifle:sv_throwCoin( args )
 	local grenade = sm.shape.createPart( args.uuid, args.pos, args.rot, args.dynamic, args.forceSpawn )
-	sm.physics.applyImpulse(grenade, args.dir + args.player:getCharacter():getVelocity() * 5, true)
+	sm.physics.applyImpulse(grenade, args.dir + args.player.character.velocity * 5, true)
 
 	sm.container.beginTransaction()
 	sm.container.spend( args.player:getInventory(), obj_plantables_potato, coinCost )
@@ -279,11 +329,8 @@ function PotatoRifle:cl_shoot()
 	local index = aiming and 2 or 1
 
 	if not sm.game.getEnableAmmoConsumption() or sm.container.canSpend( sm.localPlayer.getInventory(), obj_plantables_potato, mods[self.cl.mod].cost[index] ) then
-
 		local firstPerson = self.tool:isInFirstPersonView()
-
 		local dir = sm.localPlayer.getDirection()
-
 		local firePos = self:calculateFirePosition()
 		local fakePosition = self:calculateTpMuzzlePos()
 		local fakePositionSelf = fakePosition
@@ -322,7 +369,10 @@ function PotatoRifle:cl_shoot()
 
 		local owner = self.tool:getOwner()
 		if owner then
-			local projectile = aiming and mods[self.cl.mod].sec_projectile or mods[self.cl.mod].prim_projectile
+			local mod = mods[self.cl.mod]
+			local projectile = aiming and mod.sec_projectile or mod.prim_projectile
+			local damage = mod.damage[index]
+
 			if projectile == "hitscan" then
 				local hit, result = sm.localPlayer.getRaycast(hitscanRange)
 				if hit then
@@ -332,7 +382,7 @@ function PotatoRifle:cl_shoot()
 						self.network:sendToServer("sv_onUnitHit", { char = char, index = index } )
 					elseif shape ~= nil then
 						if shape:getShapeUuid() == coinUUID then
-							self.network:sendToServer("sv_onCoinHit", { shape = shape, damage = mods[self.cl.mod].damage[index] } )
+							self.network:sendToServer("sv_onCoinHit", { shape = shape, damage = damage } )
 						else
 							self.network:sendToServer("sv_applyImpulse", { body = shape, dir = sm.localPlayer.getDirection() })
 						end
@@ -342,38 +392,31 @@ function PotatoRifle:cl_shoot()
 				local scale = hit and (result.pointWorld - firePos):length() * 4 or hitscanRange
 				self.network:sendToServer("sv_onHitscanShot", { pos = firePos + dir * (scale / 8), dir = dir, scale = scale })
 			else
-				if mods[self.cl.mod].name == "Spread Shot" then
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir:rotate(math.rad(self.cl.spreadShotSpread*2), sm.camera.getUp()) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+				if mod.name == "Spread Shot" then
+					local up = sm.camera.getUp()
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread*2), up) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir:rotate(math.rad(-self.cl.spreadShotSpread), up) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir:rotate(math.rad(self.cl.spreadShotSpread), up) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir:rotate(math.rad(self.cl.spreadShotSpread*2), up) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
 				else
-					sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+					sm.projectile.projectileAttack( projectile, damage, firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
 				end
 			end
 		end
 
-		-- Timers
 		self.fireCooldownTimer = fireMode.fireCooldown
 		self.spreadCooldownTimer = math.min( self.spreadCooldownTimer + fireMode.spreadIncrement, fireMode.spreadCooldown )
 		self.sprintCooldownTimer = self.sprintCooldown
 
-		-- Send TP shoot over network and dircly to self
-		self:onShoot( dir )
-		self.network:sendToServer( "sv_n_onShoot", dir )
-
-		-- Play FP shoot animation
+		self:onShoot()
+		self.network:sendToServer( "sv_n_onShoot" )
 		setFpAnimation( self.fpAnimations, self.aiming and "aimShoot" or "shoot", 0.05 )
 	else
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
 		self.fireCooldownTimer = fireMode.fireCooldown
 		sm.audio.play( "PotatoRifle - NoAmmo" )
 	end
-end
-
-function PotatoRifle.client_onRefresh( self )
-	self:loadAnimations()
 end
 
 function PotatoRifle.loadAnimations( self )
@@ -418,7 +461,7 @@ function PotatoRifle.loadAnimations( self )
 
 	setTpAnimation( self.tpAnimations, "idle", 5.0 )
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.fpAnimations = createFpAnimations(
 			self.tool,
 			{
@@ -497,7 +540,7 @@ function PotatoRifle.client_onUpdate( self, dt )
 	local isSprinting =  self.tool:isSprinting()
 	local isCrouching =  self.tool:isCrouching()
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		if self.equipped then
 			if isSprinting and self.fpAnimations.currentAnimation ~= "sprintInto" and self.fpAnimations.currentAnimation ~= "sprintIdle" then
 				swapFpAnimation( self.fpAnimations, "sprintExit", "sprintInto", 0.0 )
@@ -524,14 +567,7 @@ function PotatoRifle.client_onUpdate( self, dt )
 	end
 
 	local effectPos, rot
-
-	if self.tool:isLocal() then
-
-		local zOffset = 0.6
-		if self.tool:isCrouching() then
-			zOffset = 0.29
-		end
-
+	if self.isLocal then
 		local dir = sm.localPlayer.getDirection()
 		local firePos = self.tool:getFpBonePos( "pejnt_barrel" )
 
@@ -542,20 +578,14 @@ function PotatoRifle.client_onUpdate( self, dt )
 		end
 
 		rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-
-
 		self.shootEffectFP:setPosition( effectPos )
 		self.shootEffectFP:setVelocity( self.tool:getMovementVelocity() )
 		self.shootEffectFP:setRotation( rot )
 	end
 	local pos = self.tool:getTpBonePos( "pejnt_barrel" )
 	local dir = self.tool:getTpBoneDir( "pejnt_barrel" )
-
 	effectPos = pos + dir * 0.2
-
 	rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
-
-
 	self.shootEffect:setPosition( effectPos )
 	self.shootEffect:setVelocity( self.tool:getMovementVelocity() )
 	self.shootEffect:setRotation( rot )
@@ -566,7 +596,7 @@ function PotatoRifle.client_onUpdate( self, dt )
 	self.sprintCooldownTimer = math.max( self.sprintCooldownTimer - dt, 0.0 )
 
 
-	if self.tool:isLocal() then
+	if self.isLocal then
 		local dispersion = 0.0
 		local fireMode = self.aiming and self.aimFireMode or self.normalFireMode
 		local recoilDispersion = 1.0 - ( math.max( fireMode.minDispersionCrouching, fireMode.minDispersionStanding ) + fireMode.maxMovementDispersion )
@@ -673,14 +703,10 @@ function PotatoRifle.client_onUpdate( self, dt )
 	local crouchTotalOffsetX = clamp( ( angle * 60.0 ) -15.0, -60.0, 40.0 )
 	local normalTotalOffsetX = clamp( ( angle * 50.0 ), -45.0, 50.0 )
 	local totalOffsetX = lerp( normalTotalOffsetX, crouchTotalOffsetX , crouchWeight )
-
 	local finalJointWeight = ( self.jointWeight )
-
-
 	self.tool:updateJoint( "jnt_hips", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), 0.35 * finalJointWeight * ( normalWeight ) )
 
 	local crouchSpineWeight = ( 0.35 / 3 ) * crouchWeight
-
 	self.tool:updateJoint( "jnt_spine1", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight )  * finalJointWeight )
 	self.tool:updateJoint( "jnt_spine2", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight ) * finalJointWeight )
 	self.tool:updateJoint( "jnt_spine3", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.45 + crouchSpineWeight ) * finalJointWeight )
@@ -690,11 +716,11 @@ function PotatoRifle.client_onUpdate( self, dt )
 	-- Camera update
 	local bobbing = 1
 	if self.aiming then
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 1.0, blend )
 		bobbing = 0.12
 	else
-		local blend = 1 - math.pow( 1 - 1 / self.aimBlendSpeed, dt * 60 )
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
 		self.aimWeight = sm.util.lerp( self.aimWeight, 0.0, blend )
 		bobbing = 1
 	end
@@ -704,7 +730,7 @@ function PotatoRifle.client_onUpdate( self, dt )
 end
 
 function PotatoRifle.client_onEquip( self, animate )
-	if self.tool:isLocal() then
+	if self.isLocal then
 		self.network:sendToServer("sv_changeColour", self.cl.mod)
 		self:cl_setWpnModGui()
 	end
@@ -719,28 +745,10 @@ function PotatoRifle.client_onEquip( self, animate )
 	self.aimWeight = math.max( cameraWeight, cameraFPWeight )
 	self.jointWeight = 0.0
 
-	currentRenderablesTp = {}
-	currentRenderablesFp = {}
-
-	for k,v in pairs( renderablesTp ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderablesFp ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesTp[#currentRenderablesTp+1] = v end
-	for k,v in pairs( renderables ) do currentRenderablesFp[#currentRenderablesFp+1] = v end
-	self.tool:setTpRenderables( currentRenderablesTp )
-
-	self:loadAnimations()
-
-	setTpAnimation( self.tpAnimations, "pickup", 0.0001 )
-
-	if self.tool:isLocal() then
-		-- Sets PotatoRifle renderable, change this to change the mesh
-		self.tool:setFpRenderables( currentRenderablesFp )
-		swapFpAnimation( self.fpAnimations, "unequip", "equip", 0.2 )
-	end
+	self:cl_equip( renderablesTp, renderablesFp, renderables )
 end
 
 function PotatoRifle.client_onUnequip( self, animate )
-
 	self.wantEquipped = false
 	self.equipped = false
 	self.aiming = false
@@ -749,7 +757,7 @@ function PotatoRifle.client_onUnequip( self, animate )
 			sm.audio.play( "PotatoRifle - Unequip", self.tool:getPosition() )
 		end
 		setTpAnimation( self.tpAnimations, "putdown" )
-		if self.tool:isLocal() then
+		if self.isLocal then
 			self.tool:setMovementSlowDown( false )
 			self.tool:setBlockSprint( false )
 			self.tool:setCrossHairAlpha( 1.0 )
@@ -766,7 +774,7 @@ function PotatoRifle.sv_n_onAim( self, aiming )
 end
 
 function PotatoRifle.cl_n_onAim( self, aiming )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
+	if not self.isLocal and self.tool:isEquipped() then
 		self:onAim( aiming )
 	end
 end
@@ -778,18 +786,17 @@ function PotatoRifle.onAim( self, aiming )
 	end
 end
 
-function PotatoRifle.sv_n_onShoot( self, dir )
-	self.network:sendToClients( "cl_n_onShoot", dir )
+function PotatoRifle.sv_n_onShoot( self )
+	self.network:sendToClients( "cl_n_onShoot" )
 end
 
-function PotatoRifle.cl_n_onShoot( self, dir )
-	if not self.tool:isLocal() and self.tool:isEquipped() then
-		self:onShoot( dir )
+function PotatoRifle.cl_n_onShoot( self )
+	if not self.isLocal and self.tool:isEquipped() then
+		self:onShoot()
 	end
 end
 
-function PotatoRifle.onShoot( self, dir )
-
+function PotatoRifle.onShoot( self )
 	self.tpAnimations.animations.idle.time = 0
 	self.tpAnimations.animations.shoot.time = 0
 	self.tpAnimations.animations.aimShoot.time = 0
@@ -797,101 +804,10 @@ function PotatoRifle.onShoot( self, dir )
 	setTpAnimation( self.tpAnimations, self.aiming and "aimShoot" or "shoot", 10.0 )
 
 	if self.tool:isInFirstPersonView() then
-			self.shootEffectFP:start()
-		else
-			self.shootEffect:start()
-	end
-
-end
-
-function PotatoRifle.calculateFirePosition( self )
-	local crouching = self.tool:isCrouching()
-	local firstPerson = self.tool:isInFirstPersonView()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )
-	local right = sm.localPlayer.getRight()
-
-	local fireOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	if crouching then
-		fireOffset.z = 0.15
+		self.shootEffectFP:start()
 	else
-		fireOffset.z = 0.45
+		self.shootEffect:start()
 	end
-
-	if firstPerson then
-		if not self.aiming then
-			fireOffset = fireOffset + right * 0.05
-		end
-	else
-		fireOffset = fireOffset + right * 0.25
-		fireOffset = fireOffset:rotate( math.rad( pitch ), right )
-	end
-	local firePosition = GetOwnerPosition( self.tool ) + fireOffset
-	return firePosition
-end
-
-function PotatoRifle.calculateTpMuzzlePos( self )
-	local crouching = self.tool:isCrouching()
-	local dir = sm.localPlayer.getDirection()
-	local pitch = math.asin( dir.z )
-	local right = sm.localPlayer.getRight()
-	local up = right:cross(dir)
-
-	local fakeOffset = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	--General offset
-	fakeOffset = fakeOffset + right * 0.25
-	fakeOffset = fakeOffset + dir * 0.5
-	fakeOffset = fakeOffset + up * 0.25
-
-	--Action offset
-	local pitchFraction = pitch / ( math.pi * 0.5 )
-	if crouching then
-		fakeOffset = fakeOffset + dir * 0.2
-		fakeOffset = fakeOffset + up * 0.1
-		fakeOffset = fakeOffset - right * 0.05
-
-		if pitchFraction > 0.0 then
-			fakeOffset = fakeOffset - up * 0.2 * pitchFraction
-		else
-			fakeOffset = fakeOffset + up * 0.1 * math.abs( pitchFraction )
-		end
-	else
-		fakeOffset = fakeOffset + up * 0.1 *  math.abs( pitchFraction )
-	end
-
-	local fakePosition = fakeOffset + GetOwnerPosition( self.tool )
-	return fakePosition
-end
-
-function PotatoRifle.calculateFpMuzzlePos( self )
-	local fovScale = ( sm.camera.getFov() - 45 ) / 45
-
-	local up = sm.localPlayer.getUp()
-	local dir = sm.localPlayer.getDirection()
-	local right = sm.localPlayer.getRight()
-
-	local muzzlePos45 = sm.vec3.new( 0.0, 0.0, 0.0 )
-	local muzzlePos90 = sm.vec3.new( 0.0, 0.0, 0.0 )
-
-	if self.aiming then
-		muzzlePos45 = muzzlePos45 - up * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 0.5
-
-		muzzlePos90 = muzzlePos90 - up * 0.5
-		muzzlePos90 = muzzlePos90 - dir * 0.6
-	else
-		muzzlePos45 = muzzlePos45 - up * 0.15
-		muzzlePos45 = muzzlePos45 + right * 0.2
-		muzzlePos45 = muzzlePos45 + dir * 1.25
-
-		muzzlePos90 = muzzlePos90 - up * 0.15
-		muzzlePos90 = muzzlePos90 + right * 0.2
-		muzzlePos90 = muzzlePos90 + dir * 0.25
-	end
-
-	return self.tool:getFpBonePos( "pejnt_barrel" ) + sm.vec3.lerp( muzzlePos45, muzzlePos90, fovScale )
 end
 
 function PotatoRifle.cl_onPrimaryUse( self, state )
@@ -905,9 +821,10 @@ function PotatoRifle.cl_onPrimaryUse( self, state )
 end
 
 function PotatoRifle.cl_onSecondaryUse( self, state )
-	if mods[self.cl.mod].name ~= "Sniper" and mods[self.cl.mod].name ~= "Spread Shot" then
+	local name = mods[self.cl.mod].name
+	if name ~= "Sniper" and name ~= "Spread Shot" then
 		if state == 1 then
-			if mods[self.cl.mod].name == "Coins" and self.cl.coin.ammo > 0 then
+			if name == "Coins" and self.cl.coin.ammo > 0 then
 				local dir = sm.localPlayer.getDirection()
 				self.network:sendToServer("sv_throwCoin",
 					{
@@ -931,17 +848,9 @@ function PotatoRifle.cl_onSecondaryUse( self, state )
 		return
 	end
 
-	if state == sm.tool.interactState.start and not self.aiming then
-		self.aiming = true
-		self.tpAnimations.animations.idle.time = 0
-
-		self:onAim( self.aiming )
-		self.tool:setMovementSlowDown( self.aiming )
-		self.network:sendToServer( "sv_n_onAim", self.aiming )
-	end
-
-	if self.aiming and (state == sm.tool.interactState.stop or state == sm.tool.interactState.null) then
-		self.aiming = false
+	local aiming = state == 1 or state == 2
+	if aiming ~= self.aiming then
+		self.aiming = aiming
 		self.tpAnimations.animations.idle.time = 0
 
 		self:onAim( self.aiming )
@@ -951,13 +860,13 @@ function PotatoRifle.cl_onSecondaryUse( self, state )
 end
 
 function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState, forceBuild )
-	self.cl.primState = primaryState
-	self.cl.secState = secondaryState
+	self:cl_onEquippedUpdate( primaryState, secondaryState, forceBuild, false, nil )
 
 	if (self.cl.secState == 1 or self.cl.secState == 2) and not self.cl.useCD.active then
-		if mods[self.cl.mod].name == "Sniper" then
+		local name = mods[self.cl.mod].name
+		if name == "Sniper" then
 			sm.gui.setProgressFraction( self.fireCooldownTimer/sniperShotFireCooldown )
-		elseif mods[self.cl.mod].name == "Charged Burst" and not self.cl.blasting then
+		elseif name == "Charged Burst" and not self.cl.blasting then
 			sm.gui.setProgressFraction( self.cl.blastCharge/maxBlastCharge )
 		end
 	end
@@ -971,8 +880,6 @@ function PotatoRifle.client_onEquippedUpdate( self, primaryState, secondaryState
 		self:cl_onSecondaryUse( secondaryState )
 		self.prevSecondaryState = secondaryState
 	end
-
-	self.cl.baseGun.cl_onEquippedUpdate( self, primaryState, secondaryState, forceBuild, false, nil )
 
 	return true, true
 end
