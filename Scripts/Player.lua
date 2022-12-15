@@ -1,4 +1,7 @@
-Player = class( nil )
+---@class Player : PlayerClass
+---@field sv table
+---@field cl table
+Player = class()
 
 local airControlImpulse = 30
 local dashCooldown = 40 --ticks
@@ -49,7 +52,7 @@ function Player:server_onFixedUpdate( dt )
 end
 
 function Player:sv_applyImpulse( dir )
-	sm.physics.applyImpulse(self.player.character, dir, true)
+	sm.physics.applyImpulse(self.player.character, dir)
 end
 
 function Player.server_onProjectile( self, position, airTime, velocity, projectileName, attacker, damage, customData, normal, uuid )
@@ -485,10 +488,11 @@ function Player.cl_blockModWheel( self )
     self.cl.blockWeaponWheel = true
 end
 
+---@param char Character
 function Player:cl_getMoveDir( char )
 	local moveDir = sm.vec3.zero()
 
-	local dir = char:getDirection()
+	local dir = char.direction
 	local camUp = dir:rotate(math.rad(90), dir:cross(g_up))
 
 	local left = camUp:cross(dir)
@@ -497,10 +501,10 @@ function Player:cl_getMoveDir( char )
 	local bwd = fwd * -1
 
 	local moveDirs = {
-		{ id = sm.interactable.actions.forward, dir = fwd },
-		{ id = sm.interactable.actions.backward, dir = bwd },
-		{ id = sm.interactable.actions.left, dir = left },
-		{ id = sm.interactable.actions.right, dir = right },
+		{ id = 1, dir = left },
+		{ id = 2, dir = right },
+		{ id = 3, dir = fwd },
+		{ id = 4, dir = bwd },
 	}
 
 	local publicData = sm.localPlayer.getPlayer():getClientPublicData()
@@ -527,8 +531,9 @@ function Player:cl_toggleAirControl()
 	self:cl_queueMsg("Air Control: #df7f00"..(self.cl.airControl and "ON" or "OFF"))
 end
 
+---@param dir Vec3
 function Player:cl_vis( dir )
-	sm.particle.createParticle("paint_smoke", self.player:getCharacter():getWorldPosition() + dir)
+	sm.particle.createParticle("paint_smoke", self.player.character.worldPosition + dir)
 end
 
 function Player:cl_queueMsg(msg)

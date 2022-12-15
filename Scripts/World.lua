@@ -17,7 +17,7 @@ World.enableKinematics = true
 
 dofile( "$SURVIVAL_DATA/Scripts/game/managers/PesticideManager.lua" )
 dofile "$SURVIVAL_DATA/Scripts/blueprint_util.lua"
-dofile "$SURVIVAL_DATA/Scripts/game/survival_harvestables.lua"
+dofile "$SURVIVAL_DATA/Scripts/game/survival_harvestable.lua"
 
 g_potatoProjectiles = {
     projectile_potato,
