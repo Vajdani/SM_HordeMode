@@ -16,6 +16,8 @@
 ---@field cl_fixedUpdate function
 ---@field cl_onEquippedUpdate function
 ---@field cl_reload function
+---@field cl_updateShootFX function
+---@field cl_updateTimers function
 ---@field loadAnimations function
 ---@field cl table
 ---@field tpAnimations table
@@ -30,9 +32,11 @@
 ---@field sprintCooldown number
 ---@field shootEffect Effect
 ---@field shootEffectFP Effect
+---@field windupEffect Effect
 ---@field blendTime number
 ---@field aimBlendSpeed number
 ---@field fireCooldownTimer number
+---@field sprintCooldownTimer number
 BaseGun = class()
 
 function BaseGun.cl_create( self, mods, useCD )
@@ -114,6 +118,139 @@ function BaseGun.cl_fixedUpdate( self )
 
 		self.cl.blockModWheel = false
 	end]]
+end
+
+function BaseGun.cl_updateTimers( self, dt )
+    self.fireCooldownTimer = math.max( self.fireCooldownTimer - dt, 0.0 )
+	self.spreadCooldownTimer = math.max( self.spreadCooldownTimer - dt, 0.0 )
+	self.sprintCooldownTimer = math.max( self.sprintCooldownTimer - dt, 0.0 )
+end
+
+function BaseGun.cl_updateShootFX( self )
+    local effectPos, rot
+	if self.isLocal then
+		local dir = sm.localPlayer.getDirection()
+		local firePos = self.tool:getFpBonePos( "pejnt_barrel" )
+
+		if not self.aiming then
+			effectPos = firePos + dir * 0.2
+		else
+			effectPos = firePos + dir * 0.45
+		end
+
+		rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
+
+		self.shootEffectFP:setPosition( effectPos )
+		self.shootEffectFP:setVelocity( self.tool:getMovementVelocity() )
+		self.shootEffectFP:setRotation( rot )
+	end
+	local pos = self.tool:getTpBonePos( "pejnt_barrel" )
+	local dir = self.tool:getTpBoneDir( "pejnt_barrel" )
+	effectPos = pos + dir * 0.2
+	rot = sm.vec3.getRotation( sm.vec3.new( 0, 0, 1 ), dir )
+
+	self.shootEffect:setPosition( effectPos )
+	self.shootEffect:setVelocity( self.tool:getMovementVelocity() )
+	self.shootEffect:setRotation( rot )
+
+    if self.windupEffect then
+	    self.windupEffect:setPosition( effectPos )
+    end
+end
+
+function BaseGun.cl_updateTP( self, dt, isSprinting, isCrouching )
+    -- Sprint block
+	local blockSprint = self.aiming or self.sprintCooldownTimer > 0.0
+	self.tool:setBlockSprint( blockSprint )
+
+	local playerDir = self.tool:getDirection()
+	local angle = math.asin( playerDir:dot( sm.vec3.new( 0, 0, 1 ) ) ) / ( math.pi / 2 )
+
+	local crouchWeight = self.tool:isCrouching() and 1.0 or 0.0
+	local normalWeight = 1.0 - crouchWeight
+
+	local totalWeight = 0.0
+	for name, animation in pairs( self.tpAnimations.animations ) do
+		animation.time = animation.time + dt
+
+		if name == self.tpAnimations.currentAnimation then
+			animation.weight = math.min( animation.weight + ( self.tpAnimations.blendSpeed * dt ), 1.0 )
+
+			if animation.time >= animation.info.duration - self.blendTime then
+				if ( name == "shoot" or name == "aimShoot" ) then
+					setTpAnimation( self.tpAnimations, self.aiming and "aim" or "idle", 10.0 )
+				elseif name == "pickup" then
+					setTpAnimation( self.tpAnimations, self.aiming and "aim" or "idle", 0.001 )
+				elseif animation.nextAnimation ~= "" then
+					setTpAnimation( self.tpAnimations, animation.nextAnimation, 0.001 )
+				end
+			end
+		else
+			animation.weight = math.max( animation.weight - ( self.tpAnimations.blendSpeed * dt ), 0.0 )
+		end
+
+		totalWeight = totalWeight + animation.weight
+	end
+
+	totalWeight = totalWeight == 0 and 1.0 or totalWeight
+	for name, animation in pairs( self.tpAnimations.animations ) do
+		local weight = animation.weight / totalWeight
+		if name == "idle" then
+			self.tool:updateMovementAnimation( animation.time, weight )
+		elseif animation.crouch then
+			self.tool:updateAnimation( animation.info.name, animation.time, weight * normalWeight )
+			self.tool:updateAnimation( animation.crouch.name, animation.time, weight * crouchWeight )
+		else
+			self.tool:updateAnimation( animation.info.name, animation.time, weight )
+		end
+	end
+
+	-- Third Person joint lock
+	local relativeMoveDirection = self.tool:getRelativeMoveDirection()
+	if ( ( ( isAnyOf( self.tpAnimations.currentAnimation, { "aimInto", "aim", "shoot" } ) and ( relativeMoveDirection:length() > 0 or isCrouching) ) or ( self.aiming and ( relativeMoveDirection:length() > 0 or isCrouching) ) ) and not isSprinting ) then
+		self.jointWeight = math.min( self.jointWeight + ( 10.0 * dt ), 1.0 )
+	else
+		self.jointWeight = math.max( self.jointWeight - ( 6.0 * dt ), 0.0 )
+	end
+
+	if ( not isSprinting ) then
+		self.spineWeight = math.min( self.spineWeight + ( 10.0 * dt ), 1.0 )
+	else
+		self.spineWeight = math.max( self.spineWeight - ( 10.0 * dt ), 0.0 )
+	end
+
+	local finalAngle = ( 0.5 + angle * 0.5 )
+	self.tool:updateAnimation( "spudgun_spine_bend", finalAngle, self.spineWeight )
+
+	local totalOffsetZ = lerp( -22.0, -26.0, crouchWeight )
+	local totalOffsetY = lerp( 6.0, 12.0, crouchWeight )
+	local crouchTotalOffsetX = clamp( ( angle * 60.0 ) -15.0, -60.0, 40.0 )
+	local normalTotalOffsetX = clamp( ( angle * 50.0 ), -45.0, 50.0 )
+	local totalOffsetX = lerp( normalTotalOffsetX, crouchTotalOffsetX , crouchWeight )
+	local finalJointWeight = ( self.jointWeight )
+	self.tool:updateJoint( "jnt_hips", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), 0.35 * finalJointWeight * ( normalWeight ) )
+
+	local crouchSpineWeight = ( 0.35 / 3 ) * crouchWeight
+	self.tool:updateJoint( "jnt_spine1", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight )  * finalJointWeight )
+	self.tool:updateJoint( "jnt_spine2", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.10 + crouchSpineWeight ) * finalJointWeight )
+	self.tool:updateJoint( "jnt_spine3", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), ( 0.45 + crouchSpineWeight ) * finalJointWeight )
+	self.tool:updateJoint( "jnt_head", sm.vec3.new( totalOffsetX, totalOffsetY, totalOffsetZ ), 0.3 * finalJointWeight )
+
+
+	-- Camera update
+	local bobbing = 1
+	if self.aiming then
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
+		self.aimWeight = sm.util.lerp( self.aimWeight, 1.0, blend )
+		bobbing = 0.12
+	else
+		local blend = 1 - (1 - 1 / self.aimBlendSpeed) ^ (dt * 60)
+		self.aimWeight = sm.util.lerp( self.aimWeight, 0.0, blend )
+		bobbing = 1
+	end
+
+	self.tool:updateCamera( 2.8, 30.0, sm.vec3.new( 0.65, 0.0, 0.05 ), self.aimWeight )
+	self.tool:updateFpCamera( 30.0, sm.vec3.new( 0.0, 0.0, 0.0 ), self.aimWeight, bobbing )
 end
 
 function BaseGun.cl_onEquippedUpdate( self, mouse0, mouse1, f, cdVisCheck, mod )
