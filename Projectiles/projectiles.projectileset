@@ -1,7 +1,7 @@
 {
     "projectiles": [
         {
-			"uuid": "d48f73b3-521a-4f60-b4d3-0ff08b145cff",
+			"uuid": "0ee21fec-16f6-44f4-b104-458c06941c5e",
 			"name": "sniperpotato",
 			"mass": 3.0,
 			"radius": 0.25,

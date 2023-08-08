@@ -13,10 +13,10 @@ g_pvp = false
 g_up = sm.vec3.new(0,0,1)
 ---@type Shape[]
 g_coins = {}
-g_hammer = sm.uuid.new("4b591539-4f1b-49f2-8ede-3d0aa07cb51e")
-g_spudgun = sm.uuid.new("fc1acd1b-611b-44b0-bff7-4b71509abe4c")
-g_shotgun = sm.uuid.new("117344bd-c628-485a-8e89-ab51d57e8528")
-g_gatling = sm.uuid.new("d48f73b3-521a-4f60-b4d3-0ff08b145cff")
+g_spudgun = sm.uuid.new("c5ea0c2f-185b-48d6-b4df-45c386a575cc")
+g_shotgun = sm.uuid.new("f6250bf4-9726-406f-a29a-945c06e460e5")
+g_gatling = sm.uuid.new("9fde0601-c2ba-4c70-8d5c-2a7a9fdd122b")
+g_hammer = sm.uuid.new("bb641a4f-e391-441c-bc6d-0ae21a069476")
 
 function Game.server_onCreate( self )
 	print("Game.server_onCreate")
@@ -214,6 +214,10 @@ function Game.server_onPlayerJoined( self, player, isNewPlayer )
 	end
 
 	g_unitManager:sv_onPlayerJoined( player )
+end
+
+function Game:sv_onPlayerDeath()
+	sm.event.sendToWorld(self.sv.saved.world, "sv_onPlayerDeath")
 end
 
 function Game.sv_createPlayerCharacter( self, world, x, y, player, params )

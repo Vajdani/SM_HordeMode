@@ -82,21 +82,6 @@ function World:server_onFixedUpdate( dt )
 	if not self.sv.progressWaves then return end
 
     self:sv_handleWaves()
-
-    local everyoneDied = true
-    for v, k in pairs(sm.player.getAllPlayers()) do
-        if sm.exists(k.character) and not k.character:isDowned() then
-            everyoneDied = false
-        end
-    end
-
-    if everyoneDied and self.sv.sendDeadMessage then
-        self.sv.sendDeadMessage = false
-        for v, k in pairs(sm.player.getAllPlayers()) do
-            sm.event.sendToPlayer(k, "sv_queueMsg", "#ffffffEveryone is dead! #df7f00Game over. #ffffffYou survived for #df7f00"..tostring(self.sv.currentWave).." #ffffffwaves out of #df7f00"..tostring(#g_waves))
-        end
-        self.sv.progressWaves = false
-    end
 end
 
 function World:sv_pickup_onPickup( trigger, result )
@@ -244,11 +229,12 @@ function World:sv_handleWaves()
     if self.sv.currentWave == #g_waves and #remainingUnits == 0 then
         if not self.sv.hasSentCompleteMessage then
             for v, k in pairs(sm.player.getAllPlayers()) do
-                sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Congratulations! You survived all waves.")
+                sm.event.sendToPlayer(k, "sv_chatMsg", "#df7f00Congratulations! You survived all waves.")
             end
+
+            self.sv.hasSentCompleteMessage = true
+            self.sv.progressWaves = false
         end
-        self.sv.hasSentCompleteMessage = true
-        self.sv.progressWaves = false
 
         return
     end
@@ -273,7 +259,6 @@ function World:sv_handleWaves()
                 for v, k in pairs(g_arenaData[g_currentArena].waves.enemies) do
                     if k.startWave == self.sv.currentWave and k.bewareMsg.enabled then
                         bewareMsg = string.format("#%sBeware of %s!", k.bewareMsg.colour, k.name)
-                        print(k.bewareMsg.colour)
                         break
                     end
                 end
@@ -291,14 +276,14 @@ function World:sv_startWaves()
     if not self.sv.progressWaves --[[and self.sv.currentWave == 0]] then
         self.sv.progressWaves = true --not self.sv.progressWaves
         for v, k in pairs(sm.player.getAllPlayers()) do
-            sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Let the waves begin!")
+            sm.event.sendToPlayer(k, "sv_chatMsg", "#df7f00Let the waves begin!")
         end
 
         self:sv_generateWaves()
         self:sv_createPickups()
     else
         for v, k in pairs(sm.player.getAllPlayers()) do
-            sm.event.sendToPlayer(k, "sv_queueMsg", "Use #df7f00/restart #ffffffto restart the waves!")
+            sm.event.sendToPlayer(k, "sv_chatMsg", "Use #df7f00/restart #ffffffto restart the waves!")
         end
     end
 end
@@ -306,7 +291,7 @@ end
 function World:sv_stopWaves()
     self.sv.progressWaves = false
     for v, k in pairs(sm.player.getAllPlayers()) do
-        sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Waves stopped!")
+        sm.event.sendToPlayer(k, "sv_chatMsg", "#df7f00Waves stopped!")
     end
 end
 
@@ -335,7 +320,24 @@ function World:sv_gotoWave( wave )
     self:sv_resetPickups()
 
     for v, k in pairs(sm.player.getAllPlayers()) do
-        sm.event.sendToPlayer(k, "sv_queueMsg", "#df7f00Current wave has been set to: #ffffff"..tostring(wave))
+        sm.event.sendToPlayer(k, "sv_chatMsg", "#df7f00Current wave has been set to: #ffffff"..tostring(wave))
+    end
+end
+
+function World:sv_onPlayerDeath()
+    local everyoneDied = true
+    local players = sm.player.getAllPlayers()
+    for v, k in pairs(players) do
+        if sm.exists(k.character) and not k.character:isDowned() then
+            everyoneDied = false
+        end
+    end
+
+    if everyoneDied then
+        for v, k in pairs(players) do
+            sm.event.sendToPlayer(k, "sv_chatMsg", "#ffffffEveryone is dead! #df7f00Game over. #ffffffYou survived for #df7f00"..tostring(self.sv.currentWave - 1).." #ffffffwaves out of #df7f00"..tostring(#g_waves))
+        end
+        self.sv.progressWaves = false
     end
 end
 

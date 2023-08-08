@@ -3,127 +3,127 @@
       {
          "offsetX" : 0,
          "offsetY" : 0,
-         "path" : "",
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -2,
          "y" : -2
       },
       {
-         "offsetX" : 0,
+         "offsetX" : 1,
          "offsetY" : 0,
-         "path" : "",
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -1,
          "y" : -2
       },
       {
-         "offsetX" : 0,
+         "offsetX" : 2,
          "offsetY" : 0,
-         "path" : "",
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 0,
          "y" : -2
       },
       {
-         "offsetX" : 0,
+         "offsetX" : 3,
          "offsetY" : 0,
-         "path" : "",
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 1,
          "y" : -2
       },
       {
          "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetY" : 1,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -2,
          "y" : -1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 1,
+         "offsetY" : 1,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -1,
          "y" : -1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 2,
+         "offsetY" : 1,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 0,
          "y" : -1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 3,
+         "offsetY" : 1,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 1,
          "y" : -1
       },
       {
          "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetY" : 2,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -2,
          "y" : 0
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 1,
+         "offsetY" : 2,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -1,
          "y" : 0
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
+         "offsetX" : 2,
+         "offsetY" : 2,
          "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 0,
          "y" : 0
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 3,
+         "offsetY" : 2,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 1,
          "y" : 0
       },
       {
          "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetY" : 3,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -2,
          "y" : 1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 1,
+         "offsetY" : 3,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : -1,
          "y" : 1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 2,
+         "offsetY" : 3,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 0,
          "y" : 1
       },
       {
-         "offsetX" : 0,
-         "offsetY" : 0,
-         "path" : "",
+         "offsetX" : 3,
+         "offsetY" : 3,
+         "path" : "$CONTENT_DATA/Terrain/Tiles/arena_dustpot_01.tile",
          "rotation" : 0,
          "x" : 1,
          "y" : 1

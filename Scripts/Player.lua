@@ -9,7 +9,7 @@ local dashImpulse = 2500
 local armourDamageReduction = 0.75 --percent
 local PoisonDamage = 10
 local PoisonDamageCooldown = 40
-local queuedMsgRemoveTime = 60
+local queuedMsgRemoveTime = 3 * 40
 local pvpDamageReduction = 0.2
 
 local weaponWheelGuns = {
@@ -110,6 +110,7 @@ function Player.sv_takeDamage( self, damage, source )
 		self.player.character:setTumbling( true )
 		self.player.character:setDowned( true )
 		self.sv.dead = true
+		sm.event.sendToGame("sv_onPlayerDeath")
 	end
 
 	self.network:setClientData( self.sv )

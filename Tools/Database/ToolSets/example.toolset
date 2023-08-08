@@ -2,55 +2,47 @@
 	"toolList":
 	[
 		{
-			"uuid": "fc1acd1b-611b-44b0-bff7-4b71509abe4c",
+			"uuid": "c5ea0c2f-185b-48d6-b4df-45c386a575cc",
 			"name": "Spudgun",
 			"previewRenderable": "$GAME_DATA/Character/Char_Tools/char_spudgun_preview.rend",
 			"previewRotation": [ 1, 0, 0, 0, 0, -1, 0, 1, 0 ],
 			"script": {
 				"file": "$CONTENT_DATA/Scripts/tools/PotatoRifle.lua",
 				"class": "PotatoRifle",
-				"data": {
-
-				}
+				"data": {}
 			}
 		},
 		{
-			"uuid": "117344bd-c628-485a-8e89-ab51d57e8528",
+			"uuid": "f6250bf4-9726-406f-a29a-945c06e460e5",
 			"name": "Shotgun",
 			"previewRenderable": "$GAME_DATA/Character/Char_Tools/char_spudgun_frier_preview.rend",
 			"previewRotation": [ 1, 0, 0, 0, 0, -1, 0, 1, 0 ],
 			"script": {
 				"file": "$CONTENT_DATA/Scripts/tools/PotatoShotgun.lua",
 				"class": "PotatoShotgun",
-				"data": {
-
-				}
+				"data": {}
 			}
 		},
 		{
-			"uuid": "d48f73b3-521a-4f60-b4d3-0ff08b145cff",
+			"uuid": "9fde0601-c2ba-4c70-8d5c-2a7a9fdd122b",
 			"name": "Gatling gun",
 			"previewRenderable": "$GAME_DATA/Character/Char_Tools/char_spudgun_spinner_preview.rend",
 			"previewRotation": [ 1, 0, 0, 0, 0, -1, 0, 1, 0 ],
 			"script": {
 				"file": "$CONTENT_DATA/Scripts/tools/PotatoGatling.lua",
 				"class": "PotatoGatling",
-				"data": {
-
-				}
+				"data": {}
 			}
 		},
 		{
-			"uuid": "4b591539-4f1b-49f2-8ede-3d0aa07cb51e",
+			"uuid": "bb641a4f-e391-441c-bc6d-0ae21a069476",
 			"name": "Hammer",
 			"previewRenderable": "$GAME_DATA/Character/Char_Tools/char_sledgehammer_preview.rend",
 			"previewRotation": [  -1, 0, 0, 0, 0, 1, 0, 1, 0 ],
 			"script": {
 				"file": "$CONTENT_DATA/Scripts/tools/Sledgehammer.lua",
 				"class": "Sledgehammer",
-				"data": {
-
-				}
+				"data": {}
 			}
 		}
 	]
