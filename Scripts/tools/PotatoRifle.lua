@@ -31,7 +31,7 @@ local mods = {
         prim_projectile = projectile_potato,
         sec_projectile = projectile_potato,
         damage = { 24, 24 },
-         cost = { 1, 1 },
+        cost = { 1, 1 },
         auto = true
     },
 	--[[

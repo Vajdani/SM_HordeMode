@@ -28,6 +28,15 @@ local mods = {
 		cost = { 1, 1 }
 	},
 	]]
+	--[[{
+		name = "osu!",
+		fpCol = sm.color.new(0.35,0.93,0.537),
+		tpCol = sm.color.new(0.35,0.93,0.537),
+		prim_projectile = projectile_smallpotato,
+		sec_projectile = projectile_smallpotato,
+		damage = { 20, 20 },
+		cost = { 1, 1 }
+	},]]
 	{
 		name = "Turret",
 		fpCol = sm.color.new(0,0.4,0.9),
@@ -433,7 +442,8 @@ function PotatoGatling.onShoot( self )
 end
 
 function PotatoGatling.cl_updateGatling( self, dt )
-	local spinUp = mods[self.cl.mod].name == "Spin Up" and (self.cl.secState == 1 or self.cl.secState == 2 )
+	local name =  mods[self.cl.mod].name
+	local spinUp = name == "Spin Up" and (self.cl.secState == 1 or self.cl.secState == 2 )
 	local mult = spinUp and spinUpMult or 1
 	if spinUp and not self.gatlingActive and self.cl.spinUpCanLevelUp then
 		self.cl.spinUpTime = sm.util.clamp(self.cl.spinUpTime + dt / 2, 0, #spinUpProjs)
@@ -462,12 +472,77 @@ function PotatoGatling.cl_updateGatling( self, dt )
 	end
 	self.tool:updateAnimation( "spudgun_spinner_shoot_tp", self.gatlingTurnFraction, 1.0 )
 
-	if self.fireCooldownTimer <= 0.0 and self.gatlingWeight >= 1.0 and self.gatlingActive then
-		self:cl_fire()
+	if self.gatlingWeight >= 1.0 and self.gatlingActive then
+		if self.isLocal and name == "osu!" then
+			self.osuCounter = (self.osuCounter or 0) + dt * 2
+			local progress = math.abs(math.sin(self.osuCounter))
+
+			if not self.osuTarget then
+				self.osuTarget = math.random(150, 850) * 0.001
+			end
+
+			local bound_min, bound_max = self.osuTarget - 0.1, self.osuTarget + 0.1
+			--[[sm.gui.setInteractionText(("<p textShadow='false' bg='gui_keybinds_bg_white' color='#444444' spacing='9'>[%s%s%s%s%s#444444]</p>"):format(
+				string.rep("#444444|", round(bound_min / 0.1) - 1),
+						   "#df7f00|",
+						   "#ff0000|",
+						   "#df7f00|",
+				string.rep("#444444|", 10 - round(bound_max / 0.1))
+			))]]
+
+			local at = round(progress / 0.01)
+			--[[sm.gui.setInteractionText(("<p textShadow='false' bg='gui_keybinds_bg_white' color='#444444' spacing='9'>[%s%s%s#444444]</p>"):format(
+				string.rep("#444444|", at),
+				string.rep("#ff00ff|", 1),
+				string.rep("#444444|", 100 - at)
+			))]]
+
+			local left = round(bound_min / 0.01)
+			local right = round(bound_max / 0.01)
+
+			local colours = {}
+			for i = 1, left do
+				colours[#colours+1] = "#444444"
+			end
+
+			colours[#colours+1] = "#ff0000"
+
+			for i = 1, right - left do
+				colours[#colours+1] = "#df7f00"
+			end
+
+			colours[#colours+1] = "#ff0000"
+
+			for i = 1, 100 - right do
+				colours[#colours+1] = "#444444"
+			end
+
+			colours[at] = "#00ff00"
+
+			local display = ""
+			for k, v in pairs(colours) do
+				display = display..v.."|"
+			end
+
+			sm.gui.setInteractionText(("<p textShadow='false' bg='gui_keybinds_bg_white' color='#444444' spacing='9'>[%s#444444]</p>"):format(display))
+
+			if self.cl.secState == 1 then
+				self.osuTarget = math.random(150, 850) * 0.001
+				if progress >= bound_min and progress <= bound_max then
+					sm.audio.play("Retrofmblip")
+
+					self:cl_fire(true)
+				end
+			end
+		end
+
+		if self.fireCooldownTimer <= 0.0 then
+			self:cl_fire(false)
+		end
 	end
 end
 
-function PotatoGatling.cl_fire( self )
+function PotatoGatling.cl_fire( self, mega )
 	if self.tool:getOwner().character == nil then
 		return
 	end
@@ -515,8 +590,6 @@ function PotatoGatling.cl_fire( self )
 		spreadFactor = clamp( self.movementDispersion + spreadFactor * recoilDispersion, 0.0, 1.0 )
 		local spreadDeg =  fireMode.spreadMinAngle + ( fireMode.spreadMaxAngle - fireMode.spreadMinAngle ) * spreadFactor
 
-		dir = sm.noise.gunSpread( dir, spreadDeg )
-
 		local owner = self.tool:getOwner()
 		if owner then
 			local projectile
@@ -529,7 +602,10 @@ function PotatoGatling.cl_fire( self )
 				if projectile == nil then projectile = projectile_smallpotato end
 			end
 
-			sm.projectile.projectileAttack( projectile, mods[self.cl.mod].damage[index], firePos, dir * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+			local damage = mods[self.cl.mod].damage[index]
+			for i = 1, mega and 50 or 1 do
+				sm.projectile.projectileAttack( projectile, damage, firePos, sm.noise.gunSpread( dir, spreadDeg ) * fireMode.fireVelocity, owner, fakePosition, fakePositionSelf )
+			end
 		end
 
 
@@ -548,7 +624,7 @@ function PotatoGatling.cl_fire( self )
 end
 
 function PotatoGatling.cl_onSecondaryUse( self, state )
-	if mods[self.cl.mod].name == "Spin Up" then return end
+	if mods[self.cl.mod].name ~= "Turret" then return end
 
 	local aiming = state == 1 or state == 2
 	if aiming ~= self.aiming then
